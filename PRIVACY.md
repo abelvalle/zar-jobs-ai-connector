@@ -8,6 +8,8 @@ Zar Jobs AI Connector se encuentra en desarrollo local. Esta versión no ofrece 
 
 Cuando el usuario invoca una herramienta de InfoJobs, el proceso local envía directamente a `api.infojobs.net` las credenciales de aplicación y los parámetros necesarios para esa consulta. El conector no los escribe en archivos ni logs. El tratamiento realizado por InfoJobs se rige por sus propias condiciones y política de privacidad.
 
+Cuando se consulta una alerta RSS de Tecnoempleo, el proceso local solicita directamente la URL personalizada configurada por el usuario. El conector no registra esa URL ni persiste las ofertas recibidas.
+
 ## Integraciones futuras
 
 Antes de activar un servicio público u OAuth, esta política se actualizará para identificar:

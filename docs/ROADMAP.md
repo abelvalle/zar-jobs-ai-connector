@@ -64,7 +64,19 @@ Criterios de aceptación:
 - evidencia de ejecución documentada sin credenciales ni datos personales;
 - compatibilidad de búsqueda y detalle confirmada con respuestas actuales de producción.
 
-## Hito 3 — Feed autorizado de Tecnoempleo
+## Hito 3A — Alertas RSS propias de Tecnoempleo ✅
+
+Objetivo: consultar ofertas reales desde el canal RSS oficial de una alerta creada por el usuario.
+
+Criterios de aceptación:
+
+- herramienta MCP `list_tecnoempleo_alert_jobs`;
+- URL leída exclusivamente desde el entorno y restringida a HTTPS en `tecnoempleo.com`;
+- parser RSS con entidades deshabilitadas, límite de 2 MB y máximo de 50 resultados;
+- enlaces externos o elementos inválidos omitidos y contabilizados;
+- sin credenciales personales, scraping, persistencia ni inscripción.
+
+## Hito 3B — API general autorizado de Tecnoempleo
 
 Dependencia externa: autorización escrita para el uso del feed XML/JSON en un plugin público.
 

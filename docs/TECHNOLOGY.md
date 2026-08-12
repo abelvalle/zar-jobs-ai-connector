@@ -8,6 +8,7 @@
 | Lenguaje | JavaScript ESM con JSDoc | MVP pequeño, sin fase de compilación |
 | MCP | `@modelcontextprotocol/sdk` | SDK oficial para herramientas y transportes MCP |
 | Validación | `zod` | Esquemas explícitos compartidos con el SDK |
+| XML | `fast-xml-parser` | Lectura acotada del RSS de Tecnoempleo sin implementar un parser casero |
 | Pruebas | `node:test` | Incluido en Node.js, sin framework adicional |
 | Calidad | `node --check` y pruebas | Controles mínimos, rápidos y reproducibles |
 | Transporte local | `stdio` | Desarrollo y pruebas sin infraestructura |
@@ -40,7 +41,8 @@ Las credenciales se suministran mediante variables de entorno o, en un futuro ho
 
 - `INFOJOBS_CLIENT_ID`
 - `INFOJOBS_CLIENT_SECRET`
-- credenciales que Tecnoempleo defina al autorizar la integración, todavía no implementadas
+- `TECNOEMPLEO_RSS_URL`
+- credenciales que Tecnoempleo defina al autorizar su API general, todavía no implementadas
 
 Los usuarios nunca introducirán contraseñas de portales en el plugin.
 

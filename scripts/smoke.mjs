@@ -12,7 +12,7 @@ const transport = new StdioClientTransport({
   cwd: root,
   stderr: "pipe"
 });
-const client = new Client({ name: "zar-jobs-smoke", version: "0.2.0" });
+const client = new Client({ name: "zar-jobs-smoke", version: "0.3.0" });
 
 try {
   await client.connect(transport);
@@ -23,6 +23,7 @@ try {
     [
       "get_infojobs_job",
       "get_portal_capabilities",
+      "list_tecnoempleo_alert_jobs",
       "normalize_job_url",
       "search_infojobs_jobs"
     ]
@@ -42,6 +43,15 @@ try {
   assert.equal(
     infoJobsCapabilities.structuredContent.capabilities[0].status,
     "implemented-auth-required"
+  );
+
+  const tecnoempleoCapabilities = await client.callTool({
+    name: "get_portal_capabilities",
+    arguments: { portal: "tecnoempleo" }
+  });
+  assert.equal(
+    tecnoempleoCapabilities.structuredContent.capabilities[0].status,
+    "implemented-user-rss-required"
   );
 
   const normalized = await client.callTool({

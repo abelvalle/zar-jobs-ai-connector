@@ -6,7 +6,7 @@ Conector de empleo para asistentes de IA, empaquetado como plugin de Codex y bas
 
 ## Estado
 
-Los hitos 0 y 1 están completos. El Hito 2A añade búsqueda y detalle de ofertas mediante la API oficial de InfoJobs; la prueba en vivo del Hito 2B queda pendiente de credenciales de aplicación. El conector no persiste consultas, ofertas ni credenciales.
+Los hitos 0 y 1 están completos. InfoJobs dispone de búsqueda y detalle mediante su API oficial, y Tecnoempleo puede leerse mediante el RSS personalizado de una alerta del usuario. Las pruebas en vivo dependen de configurar los accesos correspondientes. El conector no persiste consultas, ofertas ni credenciales.
 
 ## Objetivo
 
@@ -23,7 +23,7 @@ Zar Jobs AI Connector permitirá que un asistente de IA:
 | Portal | Primera integración | Condición |
 | --- | --- | --- |
 | InfoJobs | Búsqueda oficial de ofertas | Registrar una aplicación y respetar sus condiciones de API |
-| Tecnoempleo | Feed XML/JSON oficial | Obtener autorización escrita y credenciales |
+| Tecnoempleo | RSS personalizado de una alerta propia | Configurar la URL del canal; el API general sigue sujeto a autorización escrita |
 | LinkedIn | Importación manual de URL o alertas propias | Sin scraping; API directa solo con aprobación de LinkedIn |
 
 La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PORTAL-CAPABILITIES.md).
@@ -58,8 +58,11 @@ El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enume
 - `normalize_job_url`: valida una URL HTTPS sin abrirla, elimina parámetros de seguimiento conocidos e identifica el portal.
 - `search_infojobs_jobs`: busca ofertas mediante el endpoint oficial de InfoJobs, con paginación y un máximo de 50 resultados.
 - `get_infojobs_job`: obtiene y normaliza el detalle público de una oferta de InfoJobs.
+- `list_tecnoempleo_alert_jobs`: devuelve ofertas del RSS oficial de una alerta propia de Tecnoempleo.
 
 Las dos herramientas de InfoJobs requieren `INFOJOBS_CLIENT_ID` y `INFOJOBS_CLIENT_SECRET` en el entorno del servidor. Consulta la [guía de configuración de InfoJobs](docs/INFOJOBS-SETUP.md); nunca compartas esos valores en un chat ni los confirmes en Git.
+
+Tecnoempleo requiere `TECNOEMPLEO_RSS_URL`. Consulta la [guía de configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md); la URL puede ser privada y tampoco debe publicarse.
 
 ## Documentación
 
@@ -68,6 +71,7 @@ Las dos herramientas de InfoJobs requieren `INFOJOBS_CLIENT_ID` y `INFOJOBS_CLIE
 - [Roadmap e hitos](docs/ROADMAP.md)
 - [Capacidades por portal](docs/PORTAL-CAPABILITIES.md)
 - [Configuración de InfoJobs](docs/INFOJOBS-SETUP.md)
+- [Configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Contribución y ramas](CONTRIBUTING.md)
 

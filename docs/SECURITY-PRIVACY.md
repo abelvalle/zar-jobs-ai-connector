@@ -36,8 +36,9 @@ El MVP local:
 
 - no usa cuentas;
 - no almacena consultas ni ofertas;
-- solo ejecuta llamadas externas cuando se invocan las herramientas de InfoJobs configuradas;
+- solo ejecuta llamadas externas cuando se invocan herramientas configuradas de InfoJobs o Tecnoempleo;
 - limita las llamadas a `https://api.infojobs.net/api/7`;
+- restringe el RSS configurado por el usuario a HTTPS bajo `tecnoempleo.com`, sin redirecciones;
 - no incluye telemetría.
 
 ## Requisitos antes del servicio público

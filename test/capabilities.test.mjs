@@ -26,6 +26,13 @@ test("reports the implemented read-only InfoJobs tools", () => {
   assert.ok(result.unavailableNow.includes("application-submission"));
 });
 
+test("reports the user-authorized Tecnoempleo RSS capability", () => {
+  const [result] = getPortalCapabilities("tecnoempleo");
+  assert.equal(result.status, "implemented-user-rss-required");
+  assert.ok(result.availableNow.includes("alert-job-listing"));
+  assert.ok(result.unavailableNow.includes("general-api-search"));
+});
+
 test("rejects an unknown portal", () => {
   assert.throws(() => getPortalCapabilities("example"), /Unsupported portal/);
 });

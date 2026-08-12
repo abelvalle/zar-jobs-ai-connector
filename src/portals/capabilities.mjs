@@ -24,13 +24,26 @@ const CAPABILITIES = Object.freeze([
   }),
   Object.freeze({
     portal: "tecnoempleo",
-    status: "blocked-pending-provider-authorization",
-    accessMode: "authorized-xml-or-json-feed",
-    availableNow: ["url-normalization", "capability-reporting"],
-    unavailableNow: ["job-search", "application-status"],
-    dependency: "Obtain written authorization for public plugin use and feed credentials.",
-    safeNextAction: "Contact Tecnoempleo with the documented public-plugin use case.",
-    sources: ["https://www.tecnoempleo.com/api-integraciones.php"]
+    status: "implemented-user-rss-required",
+    accessMode: "user-authorized-rss-alert",
+    availableNow: [
+      "url-normalization",
+      "capability-reporting",
+      "alert-job-listing"
+    ],
+    unavailableNow: [
+      "general-api-search",
+      "application-status",
+      "application-submission"
+    ],
+    dependency:
+      "The user must create a Tecnoempleo alert and configure its personalized RSS URL.",
+    safeNextAction:
+      "Configure TECNOEMPLEO_RSS_URL with the user's own alert feed, then list its jobs.",
+    sources: [
+      "https://www.tecnoempleo.com/buscar-trabajo/encuentra-ofertas-empleo.php",
+      "https://www.tecnoempleo.com/api-integraciones.php"
+    ]
   }),
   Object.freeze({
     portal: "linkedin",

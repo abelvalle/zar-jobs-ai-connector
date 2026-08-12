@@ -22,7 +22,7 @@ Servidor MCP
         v
 Adaptadores de portal
   - InfoJobs API
-  - Tecnoempleo feed autorizado
+  - Tecnoempleo RSS propio / feed autorizado
   - LinkedIn importación segura
 ```
 
@@ -47,7 +47,8 @@ El servidor expondrá herramientas pequeñas, orientadas a objetivos. El MVP com
 Las herramientas de red se añadirán únicamente cuando exista acceso oficial:
 
 - `search_infojobs_jobs` y `get_infojobs_job`, implementadas con la API oficial y credenciales de aplicación;
-- `search_tecnoempleo_jobs`;
+- `list_tecnoempleo_alert_jobs`, implementada sobre el RSS propio del usuario;
+- `search_tecnoempleo_jobs`, reservada para un futuro API general autorizado;
 - `list_infojobs_applications` en modo de solo lectura y con consentimiento.
 
 No habrá herramientas `apply`, `submit`, `send` ni equivalentes.
