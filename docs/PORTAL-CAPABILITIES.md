@@ -8,7 +8,7 @@ Estado revisado el 12 de agosto de 2026. Antes de implementar un adaptador se vo
 | --- | --- | --- | --- | --- |
 | InfoJobs | Implementada mediante API oficial; requiere credenciales de aplicación | API con OAuth del candidato | La API lo permite, pero Zar Jobs AI Connector no lo automatizará | Búsqueda y detalle disponibles; verificación en vivo pendiente |
 | Tecnoempleo | RSS propio implementado; API XML/JSON general bajo solicitud | Integraciones empresariales según acuerdo | No definido para este caso | Usar alertas RSS propias; esperar autorización para el API general |
-| LinkedIn | No se ha identificado una API pública general para búsqueda de candidatos | APIs Talent restringidas a partners | Integraciones restringidas | Solo URL manual o alertas propias; nunca scraping |
+| LinkedIn | Sin API pública general identificada; importación manual implementada | APIs Talent restringidas a partners | Integraciones restringidas | URL y datos aportados por el usuario; nunca scraping |
 
 ## InfoJobs
 
@@ -58,7 +58,8 @@ Fuentes oficiales:
 Las APIs de empleo documentadas están orientadas a partners autorizados. LinkedIn prohíbe medios automatizados de scraping o extracción salvo autorización escrita. Por ello el plugin:
 
 - acepta enlaces que el usuario aporte voluntariamente;
-- puede procesar alertas propias recibidas por el usuario cuando ese flujo sea autorizado;
+- estructura título, empresa y otros datos que el usuario aporte;
+- marca cada importación como no verificada hasta revisar la ficha original;
 - no inicia sesión, navega, busca ni aplica automáticamente en LinkedIn;
 - no simula una integración oficial.
 

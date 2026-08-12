@@ -30,6 +30,8 @@ El producto no expone herramientas de envío de candidaturas. Si en el futuro se
 
 Cada resultado conserva fuente, URL y fecha cuando estén disponibles. Un estado ambiguo se marca como no verificado y no se transforma en una decisión de candidatura.
 
+Las importaciones manuales de LinkedIn se etiquetan siempre como `user-provided` y `unverified`: estructurar los datos no demuestra que la oferta siga activa.
+
 ## Datos del MVP
 
 El MVP local:

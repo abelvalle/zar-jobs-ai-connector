@@ -12,7 +12,7 @@ const transport = new StdioClientTransport({
   cwd: root,
   stderr: "pipe"
 });
-const client = new Client({ name: "zar-jobs-smoke", version: "0.3.0" });
+const client = new Client({ name: "zar-jobs-smoke", version: "0.4.0" });
 
 try {
   await client.connect(transport);
@@ -23,6 +23,7 @@ try {
     [
       "get_infojobs_job",
       "get_portal_capabilities",
+      "import_linkedin_job",
       "list_tecnoempleo_alert_jobs",
       "normalize_job_url",
       "search_infojobs_jobs"
@@ -34,7 +35,10 @@ try {
     arguments: { portal: "linkedin" }
   });
   assert.equal(capabilities.isError, undefined);
-  assert.equal(capabilities.structuredContent.capabilities[0].status, "manual-only");
+  assert.equal(
+    capabilities.structuredContent.capabilities[0].status,
+    "implemented-manual-import"
+  );
 
   const infoJobsCapabilities = await client.callTool({
     name: "get_portal_capabilities",
@@ -62,6 +66,17 @@ try {
   });
   assert.equal(normalized.isError, undefined);
   assert.equal(normalized.structuredContent.result.externalId, "123456789");
+
+  const imported = await client.callTool({
+    name: "import_linkedin_job",
+    arguments: {
+      url: "https://www.linkedin.com/jobs/view/123456789/?trk=feed",
+      title: "Backend Engineer",
+      company: "Example Tech"
+    }
+  });
+  assert.equal(imported.isError, undefined);
+  assert.equal(imported.structuredContent.result.verificationStatus, "unverified");
 
   console.log("MCP smoke test passed.");
 } finally {

@@ -6,7 +6,7 @@ Conector de empleo para asistentes de IA, empaquetado como plugin de Codex y bas
 
 ## Estado
 
-Los hitos 0 y 1 están completos. InfoJobs dispone de búsqueda y detalle mediante su API oficial, y Tecnoempleo puede leerse mediante el RSS personalizado de una alerta del usuario. Las pruebas en vivo dependen de configurar los accesos correspondientes. El conector no persiste consultas, ofertas ni credenciales.
+Los hitos 0, 1, 2A, 3A y 4 están completos. InfoJobs dispone de búsqueda y detalle mediante su API oficial, Tecnoempleo puede leerse mediante el RSS personalizado de una alerta propia y LinkedIn admite importación manual sin conectarse al portal. Las pruebas en vivo dependen de configurar los accesos correspondientes. El conector no persiste consultas, ofertas ni credenciales.
 
 ## Objetivo
 
@@ -59,6 +59,7 @@ El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enume
 - `search_infojobs_jobs`: busca ofertas mediante el endpoint oficial de InfoJobs, con paginación y un máximo de 50 resultados.
 - `get_infojobs_job`: obtiene y normaliza el detalle público de una oferta de InfoJobs.
 - `list_tecnoempleo_alert_jobs`: devuelve ofertas del RSS oficial de una alerta propia de Tecnoempleo.
+- `import_linkedin_job`: normaliza una oferta de LinkedIn aportada por el usuario y la marca como no verificada.
 
 Las dos herramientas de InfoJobs requieren `INFOJOBS_CLIENT_ID` y `INFOJOBS_CLIENT_SECRET` en el entorno del servidor. Consulta la [guía de configuración de InfoJobs](docs/INFOJOBS-SETUP.md); nunca compartas esos valores en un chat ni los confirmes en Git.
 
@@ -72,6 +73,7 @@ Tecnoempleo requiere `TECNOEMPLEO_RSS_URL`. Consulta la [guía de configuración
 - [Capacidades por portal](docs/PORTAL-CAPABILITIES.md)
 - [Configuración de InfoJobs](docs/INFOJOBS-SETUP.md)
 - [Configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md)
+- [Uso seguro con LinkedIn](docs/LINKEDIN-USAGE.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Contribución y ramas](CONTRIBUTING.md)
 

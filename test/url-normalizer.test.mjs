@@ -13,6 +13,15 @@ test("normalizes a LinkedIn job URL and extracts its ID", () => {
   assert.equal(result.url, "https://www.linkedin.com/jobs/view/123456789/");
 });
 
+test("extracts a LinkedIn currentJobId from collection URLs", () => {
+  const result = normalizeJobUrl(
+    "https://www.linkedin.com/jobs/collections/recommended/?currentJobId=987654321&trk=feed"
+  );
+
+  assert.equal(result.portal, "linkedin");
+  assert.equal(result.externalId, "987654321");
+});
+
 test("preserves functional query parameters", () => {
   const result = normalizeJobUrl(
     "https://www.infojobs.net/job/example?offerId=abc&utm_campaign=digest"

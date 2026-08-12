@@ -87,14 +87,15 @@ Criterios de aceptación:
 - prueba de cambios de esquema y fallos parciales;
 - atribución y enlaces conservados.
 
-## Hito 4 — LinkedIn seguro
+## Hito 4 — LinkedIn seguro ✅
 
 Objetivo: aportar valor sin automatizar ni extraer datos de LinkedIn sin permiso.
 
 Criterios de aceptación:
 
 - importación manual de enlaces compartidos por el usuario;
-- opción documentada para alertas propias recibidas por email;
+- campos mínimos de título y empresa exigidos para evitar importaciones ambiguas;
+- resultado marcado como `user-provided` y `unverified`;
 - rechazo explícito de búsquedas automatizadas o scraping;
 - cualquier API nueva requiere aprobación verificable de LinkedIn.
 

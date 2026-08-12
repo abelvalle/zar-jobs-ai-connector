@@ -14,7 +14,8 @@ test("returns all documented portals", () => {
 test("filters a single portal", () => {
   const result = getPortalCapabilities("linkedin");
   assert.equal(result.length, 1);
-  assert.equal(result[0].status, "manual-only");
+  assert.equal(result[0].status, "implemented-manual-import");
+  assert.ok(result[0].availableNow.includes("manual-job-import"));
   assert.ok(result[0].unavailableNow.includes("scraping"));
 });
 

@@ -20,10 +20,11 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 1. Call `get_portal_capabilities` before promising access to a portal or account.
 2. For an InfoJobs search, use `search_infojobs_jobs`; use `get_infojobs_job` only when the user needs one offer's full public detail.
 3. For Tecnoempleo, use `list_tecnoempleo_alert_jobs` only for the user's configured RSS alert. Do not claim it is a general portal search.
-4. If the user provides a job link, call `normalize_job_url` before using or presenting it.
-5. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
-6. Preserve the source URL and distinguish portal-provided facts from model inference.
-7. Respond in the user's language.
+4. For LinkedIn, use `import_linkedin_job` only when the user provides the job URL, title, and company. Keep its status `unverified` until the user checks the original posting.
+5. If the user provides another job link, call `normalize_job_url` before using or presenting it.
+6. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
+7. Preserve the source URL and distinguish portal-provided facts from model inference.
+8. Respond in the user's language.
 
 ## Current version
 
@@ -34,8 +35,9 @@ The current version is read-only. It can:
 - identify supported portal domains.
 - search and retrieve public InfoJobs offers through its official API when application credentials are configured.
 - list jobs from the user's own Tecnoempleo RSS alert when its URL is configured.
+- import user-provided LinkedIn job data without making a network request.
 
-The general Tecnoempleo API and account-linked status checks remain unavailable until their corresponding authorization requirements and milestones are complete.
+Automated LinkedIn search, the general Tecnoempleo API, and account-linked status checks remain unavailable until their authorization requirements and milestones are complete.
 
 ## Output
 

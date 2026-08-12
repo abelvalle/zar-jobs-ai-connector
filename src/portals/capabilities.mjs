@@ -47,12 +47,17 @@ const CAPABILITIES = Object.freeze([
   }),
   Object.freeze({
     portal: "linkedin",
-    status: "manual-only",
-    accessMode: "user-provided-url",
-    availableNow: ["url-normalization", "capability-reporting"],
+    status: "implemented-manual-import",
+    accessMode: "user-provided-job",
+    availableNow: [
+      "url-normalization",
+      "capability-reporting",
+      "manual-job-import"
+    ],
     unavailableNow: ["automated-search", "automated-application", "scraping"],
     dependency: "Direct Talent API access requires LinkedIn approval.",
-    safeNextAction: "Ask the user to provide a job URL or review their own alert email.",
+    safeNextAction:
+      "Ask the user to provide a LinkedIn job URL plus title and company, then verify the original posting manually.",
     sources: [
       "https://learn.microsoft.com/en-us/linkedin/talent/",
       "https://www.linkedin.com/legal/crawling-terms"

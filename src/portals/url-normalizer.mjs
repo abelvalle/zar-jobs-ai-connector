@@ -19,9 +19,13 @@ function detectPortal(hostname) {
   return "unknown";
 }
 
-function extractExternalId(portal, pathname) {
+function extractExternalId(portal, pathname, searchParams) {
   if (portal !== "linkedin") return null;
-  return pathname.match(/\/jobs\/view\/(\d+)/i)?.[1] ?? null;
+  return (
+    pathname.match(/\/jobs\/view\/(\d+)/i)?.[1] ??
+    searchParams.get("currentJobId")?.match(/^\d+$/)?.[0] ??
+    null
+  );
 }
 
 export function normalizeJobUrl(input) {
@@ -57,6 +61,6 @@ export function normalizeJobUrl(input) {
     url: parsed.toString(),
     portal,
     supported: portal !== "unknown",
-    externalId: extractExternalId(portal, parsed.pathname)
+    externalId: extractExternalId(portal, parsed.pathname, parsed.searchParams)
   };
 }
