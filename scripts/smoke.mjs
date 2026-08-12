@@ -12,7 +12,7 @@ const transport = new StdioClientTransport({
   cwd: root,
   stderr: "pipe"
 });
-const client = new Client({ name: "zar-jobs-smoke", version: "0.4.0" });
+const client = new Client({ name: "zar-jobs-smoke", version: "0.5.0" });
 
 try {
   await client.connect(transport);
@@ -24,6 +24,7 @@ try {
       "get_infojobs_job",
       "get_portal_capabilities",
       "import_linkedin_job",
+      "import_tecnoempleo_rss",
       "list_tecnoempleo_alert_jobs",
       "normalize_job_url",
       "search_infojobs_jobs"

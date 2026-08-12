@@ -21,6 +21,10 @@ $env:TECNOEMPLEO_RSS_URL = $tecnoempleoCredential.GetNetworkCredential().Passwor
 
 El conector exige HTTPS, restringe el host a `tecnoempleo.com`, no sigue redirecciones y limita la respuesta a 2 MB.
 
+### Alternativa para el MCP remoto
+
+El servidor público no acepta ni conserva la URL personalizada. El usuario puede descargar o copiar el XML de su propio canal y pasarlo a `import_tecnoempleo_rss`. La herramienta procesa el contenido en memoria, rechaza enlaces externos, devuelve como máximo 50 ofertas y descarta la entrada al finalizar la llamada.
+
 ## 3. Verificación en vivo
 
 ```powershell
@@ -38,6 +42,6 @@ Remove-Variable tecnoempleoCredential
 
 ## Alcance
 
-La herramienta `list_tecnoempleo_alert_jobs` devuelve hasta 50 elementos del RSS y conserva el enlace original. Los elementos ajenos a Tecnoempleo o inválidos se omiten y se cuentan en `diagnostics.skippedItems`.
+Las herramientas `list_tecnoempleo_alert_jobs` e `import_tecnoempleo_rss` devuelven hasta 50 elementos y conservan el enlace original. Los elementos ajenos a Tecnoempleo o inválidos se omiten y se cuentan en `diagnostics.skippedItems`.
 
 El API general XML/JSON anunciado por Tecnoempleo es otra integración distinta. Continúa pendiente de autorización escrita, credenciales, esquema y condiciones específicas para distribuirlo mediante un plugin público.

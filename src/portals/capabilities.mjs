@@ -29,7 +29,8 @@ const CAPABILITIES = Object.freeze([
     availableNow: [
       "url-normalization",
       "capability-reporting",
-      "alert-job-listing"
+      "alert-job-listing",
+      "rss-content-import"
     ],
     unavailableNow: [
       "general-api-search",
@@ -37,9 +38,9 @@ const CAPABILITIES = Object.freeze([
       "application-submission"
     ],
     dependency:
-      "The user must create a Tecnoempleo alert and configure its personalized RSS URL.",
+      "The user must create a Tecnoempleo alert and either configure its personalized RSS URL locally or provide its RSS content to the remote tool.",
     safeNextAction:
-      "Configure TECNOEMPLEO_RSS_URL with the user's own alert feed, then list its jobs.",
+      "Use import_tecnoempleo_rss remotely, or configure TECNOEMPLEO_RSS_URL locally, then review the source links.",
     sources: [
       "https://www.tecnoempleo.com/buscar-trabajo/encuentra-ofertas-empleo.php",
       "https://www.tecnoempleo.com/api-integraciones.php"

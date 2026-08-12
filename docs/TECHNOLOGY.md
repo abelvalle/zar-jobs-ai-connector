@@ -24,6 +24,7 @@ La documentación oficial de OpenAI recomienda los SDK oficiales de TypeScript o
 .mcp.json
 skills/zar-jobs/SKILL.md
 src/server.mjs
+src/http-server.mjs
 src/domain/job.mjs
 src/portals/capabilities.mjs
 src/portals/url-normalizer.mjs
@@ -37,14 +38,14 @@ Solo se incorporarán dependencias necesarias para el protocolo MCP o validació
 
 ## Configuración de portales
 
-Las credenciales se suministran mediante variables de entorno o, en un futuro hosting, mediante su gestor de secretos:
+Las credenciales de aplicación se suministran mediante variables de entorno o mediante el gestor de secretos del hosting:
 
 - `INFOJOBS_CLIENT_ID`
 - `INFOJOBS_CLIENT_SECRET`
 - `TECNOEMPLEO_RSS_URL`
 - credenciales que Tecnoempleo defina al autorizar su API general, todavía no implementadas
 
-Los usuarios nunca introducirán contraseñas de portales en el plugin.
+`TECNOEMPLEO_RSS_URL` solo se usa en el transporte local. El servicio remoto no carga una URL de alerta global: recibe el contenido RSS como entrada efímera. Los usuarios nunca introducirán contraseñas de portales en el plugin.
 
 ## Compatibilidad
 

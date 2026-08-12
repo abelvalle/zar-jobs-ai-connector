@@ -48,6 +48,7 @@ Las herramientas de red se añadirán únicamente cuando exista acceso oficial:
 
 - `search_infojobs_jobs` y `get_infojobs_job`, implementadas con la API oficial y credenciales de aplicación;
 - `list_tecnoempleo_alert_jobs`, implementada sobre el RSS propio del usuario;
+- `import_tecnoempleo_rss`, implementada sobre contenido RSS aportado por el usuario y disponible también en el transporte remoto;
 - `search_tecnoempleo_jobs`, reservada para un futuro API general autorizado;
 - `import_linkedin_job`, implementada sin llamadas de red ni persistencia;
 - `list_infojobs_applications` en modo de solo lectura y con consentimiento.
@@ -75,13 +76,15 @@ Los campos desconocidos se omiten o usan `null`; nunca se inventan.
 ## Transporte
 
 - Desarrollo local: MCP por `stdio`.
-- Publicación: MCP remoto mediante Streamable HTTP sobre HTTPS.
+- Publicación: MCP remoto sin estado mediante Streamable HTTP; TLS termina en la plataforma de alojamiento.
 
-La lógica de herramientas no dependerá del transporte para permitir el cambio sin reescritura.
+La lógica de herramientas no depende del transporte. `src/server.mjs` construye el servidor y mantiene el punto de entrada local por `stdio`; `src/http-server.mjs` crea una instancia sin estado por petición.
+
+El transporte remoto excluye `list_tecnoempleo_alert_jobs`: una URL RSS personalizada configurada como variable global expondría datos de un usuario a otros. En su lugar ofrece `import_tecnoempleo_rss`, que procesa únicamente el XML incluido en la llamada y lo descarta al responder.
 
 ## Estado y almacenamiento
 
-El MVP no utiliza base de datos ni almacena cuentas. Las respuestas viven únicamente en la sesión del cliente.
+El MVP no utiliza base de datos ni almacena cuentas. Las respuestas viven únicamente en la sesión del cliente. Por ello el servidor remoto puede funcionar de forma anónima: solo procesa datos públicos o contenidos que el usuario aporta explícitamente en esa llamada.
 
 Un servicio público futuro solo persistirá tokens cifrados y el mínimo estado necesario para OAuth. Cualquier retención adicional requerirá una decisión documentada y una actualización previa de la política de privacidad.
 

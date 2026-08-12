@@ -7,7 +7,7 @@ Estado revisado el 12 de agosto de 2026. Antes de implementar un adaptador se vo
 | Portal | Búsqueda | Estado de candidaturas | Envío | Decisión del proyecto |
 | --- | --- | --- | --- | --- |
 | InfoJobs | Implementada mediante API oficial; requiere credenciales de aplicación | API con OAuth del candidato | La API lo permite, pero Zar Jobs AI Connector no lo automatizará | Búsqueda y detalle disponibles; verificación en vivo pendiente |
-| Tecnoempleo | RSS propio implementado; API XML/JSON general bajo solicitud | Integraciones empresariales según acuerdo | No definido para este caso | Usar alertas RSS propias; esperar autorización para el API general |
+| Tecnoempleo | RSS propio implementado por URL local o contenido aportado al MCP remoto; API XML/JSON general bajo solicitud | Integraciones empresariales según acuerdo | No definido para este caso | Usar alertas RSS propias; esperar autorización para el API general |
 | LinkedIn | Sin API pública general identificada; importación manual implementada | APIs Talent restringidas a partners | Integraciones restringidas | URL y datos aportados por el usuario; nunca scraping |
 
 ## InfoJobs
@@ -42,7 +42,7 @@ Fuente oficial:
 
 - API, integraciones y partners: https://www.tecnoempleo.com/api-integraciones.php
 
-La ayuda para candidatos indica que cada alerta configurada ofrece un canal RSS personalizado. El plugin puede leer ese canal cuando el propio usuario configura su URL, sin iniciar sesión ni automatizar el buscador.
+La ayuda para candidatos indica que cada alerta configurada ofrece un canal RSS personalizado. El plugin puede leer ese canal cuando el propio usuario configura su URL localmente, o procesar el XML que aporte al MCP remoto, sin iniciar sesión ni automatizar el buscador.
 
 La página de integraciones también anuncia un feed XML/JSON general y solicita contacto para proporcionar acceso. La autorización para mostrar ofertas en una web no se asumirá como autorización automática para distribuirlas mediante un plugin público. Esa variante queda bloqueada hasta obtener confirmación escrita del uso previsto, credenciales, esquema, límites y requisitos de atribución.
 

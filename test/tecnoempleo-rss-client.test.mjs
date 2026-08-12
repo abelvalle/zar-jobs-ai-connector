@@ -3,9 +3,10 @@ import test from "node:test";
 
 import {
   createTecnoempleoRssClientFromEnv,
+  importTecnoempleoRss,
   TecnoempleoRssClient,
   TecnoempleoRssConfigError,
-  TecnoempleoRssError
+  TecnoempleoRssError,
 } from "../src/portals/tecnoempleo-rss-client.mjs";
 
 const RSS_FIXTURE = `<?xml version="1.0" encoding="UTF-8"?>
@@ -39,7 +40,7 @@ test("reads and normalizes the user's official Tecnoempleo RSS alert", async () 
     fetchImpl: async (url, options) => {
       calls.push({ url, options });
       return xmlResponse(RSS_FIXTURE);
-    }
+    },
   });
 
   const result = await client.listJobs();
@@ -62,21 +63,35 @@ test("reads and normalizes the user's official Tecnoempleo RSS alert", async () 
     publishedAt: "Wed, 12 Aug 2026 07:00:00 GMT",
     description: "External job description",
     categories: ["Project Management", "Cloud"],
-    evidence: "user-authorized-rss-alert"
+    evidence: "user-authorized-rss-alert",
   });
+});
+
+test("imports user-provided RSS content without making a network request", () => {
+  const result = importTecnoempleoRss(RSS_FIXTURE, { limit: 1 });
+
+  assert.equal(result.source, "tecnoempleo");
+  assert.equal(result.jobs.length, 1);
+  assert.equal(result.jobs[0].externalId, "te-123");
+  assert.equal(result.jobs[0].evidence, "user-authorized-rss-alert");
+});
+
+test("rejects empty and oversized RSS imports", () => {
+  assert.throws(() => importTecnoempleoRss(""), /content is required/);
+  assert.throws(() => importTecnoempleoRss("x".repeat(2_000_001)), /2 MB safety limit/);
 });
 
 test("rejects missing or non-Tecnoempleo feed URLs", () => {
   assert.throws(
     () => createTecnoempleoRssClientFromEnv({}),
-    (error) => error instanceof TecnoempleoRssConfigError
+    (error) => error instanceof TecnoempleoRssConfigError,
   );
   assert.throws(
     () =>
       new TecnoempleoRssClient({
-        feedUrl: "https://feeds.example.com/jobs.xml"
+        feedUrl: "https://feeds.example.com/jobs.xml",
       }),
-    /must point to tecnoempleo\.com/
+    /must point to tecnoempleo\.com/,
   );
 });
 
@@ -87,7 +102,7 @@ test("enforces the local item limit before requesting the feed", async () => {
     fetchImpl: async () => {
       called = true;
       return xmlResponse(RSS_FIXTURE);
-    }
+    },
   });
 
   await assert.rejects(() => client.listJobs({ limit: 51 }), /between 1 and 50/);
@@ -97,21 +112,19 @@ test("enforces the local item limit before requesting the feed", async () => {
 test("fails closed on unsupported XML", async () => {
   const client = new TecnoempleoRssClient({
     feedUrl: "https://www.tecnoempleo.com/rss/alert.xml",
-    fetchImpl: async () => xmlResponse("<html><body>Not RSS</body></html>")
+    fetchImpl: async () => xmlResponse("<html><body>Not RSS</body></html>"),
   });
 
   await assert.rejects(
     () => client.listJobs(),
-    (error) =>
-      error instanceof TecnoempleoRssError &&
-      /unsupported RSS/.test(error.message)
+    (error) => error instanceof TecnoempleoRssError && /unsupported RSS/.test(error.message),
   );
 });
 
 test("returns a sanitized HTTP error without exposing the feed URL", async () => {
   const client = new TecnoempleoRssClient({
     feedUrl: "https://www.tecnoempleo.com/rss/alert.xml?secret=fake-secret",
-    fetchImpl: async () => xmlResponse("Unauthorized fake-secret", 401)
+    fetchImpl: async () => xmlResponse("Unauthorized fake-secret", 401),
   });
 
   await assert.rejects(
@@ -122,13 +135,13 @@ test("returns a sanitized HTTP error without exposing the feed URL", async () =>
       assert.match(error.message, /HTTP 401/);
       assert.doesNotMatch(error.message, /secret|alert\.xml/i);
       return true;
-    }
+    },
   );
 });
 
 function xmlResponse(xml, status = 200) {
   return new Response(xml, {
     status,
-    headers: { "content-type": "application/rss+xml" }
+    headers: { "content-type": "application/rss+xml" },
   });
 }

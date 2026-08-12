@@ -6,7 +6,9 @@ const DEFAULT_TIMEOUT_MS = 10_000;
 const MAX_FEED_BYTES = 2_000_000;
 
 export class TecnoempleoRssConfigError extends Error {
-  constructor(message = "Tecnoempleo RSS is not configured. Set TECNOEMPLEO_RSS_URL in the MCP server environment.") {
+  constructor(
+    message = "Tecnoempleo RSS is not configured. Set TECNOEMPLEO_RSS_URL in the MCP server environment.",
+  ) {
     super(message);
     this.name = "TecnoempleoRssConfigError";
     this.code = "TECNOEMPLEO_RSS_NOT_CONFIGURED";
@@ -46,72 +48,79 @@ export class TecnoempleoRssClient {
       response = await this.fetchImpl(this.feedUrl, {
         method: "GET",
         headers: {
-          Accept: "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8"
+          Accept: "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8",
         },
         redirect: "error",
-        signal: AbortSignal.timeout(this.timeoutMs)
+        signal: AbortSignal.timeout(this.timeoutMs),
       });
     } catch (error) {
       const timedOut = error?.name === "TimeoutError";
       throw new TecnoempleoRssError(
         timedOut
           ? "Tecnoempleo RSS request timed out."
-          : "Tecnoempleo RSS request failed before receiving a response."
+          : "Tecnoempleo RSS request failed before receiving a response.",
       );
     }
 
     if (!response.ok) {
       throw new TecnoempleoRssError(
         `Tecnoempleo RSS request failed with HTTP ${response.status}.`,
-        { status: response.status }
+        { status: response.status },
       );
     }
 
     const xml = await response.text();
-    if (Buffer.byteLength(xml, "utf8") > MAX_FEED_BYTES) {
-      throw new TecnoempleoRssError("Tecnoempleo RSS response exceeded the 2 MB safety limit.");
-    }
-
-    const channel = parseChannel(xml);
-    const items = toArray(channel.item);
-    const normalized = [];
-    let skippedItems = 0;
-
-    for (const item of items) {
-      const job = normalizeItem(item);
-      if (job === null) {
-        skippedItems += 1;
-        continue;
-      }
-      normalized.push(job);
-      if (normalized.length === limit) {
-        break;
-      }
-    }
-
-    return {
-      source: "tecnoempleo",
-      jobs: normalized,
-      feed: {
-        title: asText(channel.title),
-        updatedAt: asText(channel.lastBuildDate) ?? asText(channel.pubDate)
-      },
-      diagnostics: {
-        receivedItems: items.length,
-        returnedItems: normalized.length,
-        skippedItems
-      }
-    };
+    return importTecnoempleoRss(xml, { limit });
   }
 }
 
-export function createTecnoempleoRssClientFromEnv(
-  environment = process.env,
-  options = {}
-) {
+export function importTecnoempleoRss(xml, { limit = 20 } = {}) {
+  if (typeof xml !== "string" || !xml.trim()) {
+    throw new TecnoempleoRssError("Tecnoempleo RSS content is required.");
+  }
+  if (!Number.isInteger(limit) || limit < 1 || limit > 50) {
+    throw new TypeError("limit must be an integer between 1 and 50.");
+  }
+  if (Buffer.byteLength(xml, "utf8") > MAX_FEED_BYTES) {
+    throw new TecnoempleoRssError("Tecnoempleo RSS content exceeded the 2 MB safety limit.");
+  }
+
+  const channel = parseChannel(xml);
+  const items = toArray(channel.item);
+  const normalized = [];
+  let skippedItems = 0;
+
+  for (const item of items) {
+    const job = normalizeItem(item);
+    if (job === null) {
+      skippedItems += 1;
+      continue;
+    }
+    normalized.push(job);
+    if (normalized.length === limit) {
+      break;
+    }
+  }
+
+  return {
+    source: "tecnoempleo",
+    jobs: normalized,
+    feed: {
+      title: asText(channel.title),
+      updatedAt: asText(channel.lastBuildDate) ?? asText(channel.pubDate),
+    },
+    diagnostics: {
+      receivedItems: items.length,
+      returnedItems: normalized.length,
+      skippedItems,
+    },
+  };
+}
+
+export function createTecnoempleoRssClientFromEnv(environment = process.env, options = {}) {
   return new TecnoempleoRssClient({
     feedUrl: environment.TECNOEMPLEO_RSS_URL,
-    ...options
+    ...options,
   });
 }
 
@@ -132,14 +141,12 @@ function validateFeedUrl(feedUrl) {
   }
   if (parsed.username || parsed.password) {
     throw new TecnoempleoRssConfigError(
-      "TECNOEMPLEO_RSS_URL must not contain embedded credentials."
+      "TECNOEMPLEO_RSS_URL must not contain embedded credentials.",
     );
   }
   const hostname = parsed.hostname.toLowerCase();
   if (hostname !== "tecnoempleo.com" && !hostname.endsWith(".tecnoempleo.com")) {
-    throw new TecnoempleoRssConfigError(
-      "TECNOEMPLEO_RSS_URL must point to tecnoempleo.com."
-    );
+    throw new TecnoempleoRssConfigError("TECNOEMPLEO_RSS_URL must point to tecnoempleo.com.");
   }
 
   return parsed;
@@ -151,7 +158,7 @@ function parseChannel(xml) {
     parsed = new XMLParser({
       ignoreAttributes: false,
       processEntities: false,
-      trimValues: true
+      trimValues: true,
     }).parse(xml);
   } catch {
     throw new TecnoempleoRssError("Tecnoempleo returned invalid RSS XML.");
@@ -194,7 +201,7 @@ function normalizeItem(item) {
     publishedAt: asText(item.pubDate) ?? asText(item["dc:date"]),
     description: asText(item.description),
     categories: toArray(item.category).map(asText).filter(Boolean),
-    evidence: "user-authorized-rss-alert"
+    evidence: "user-authorized-rss-alert",
   };
 }
 
