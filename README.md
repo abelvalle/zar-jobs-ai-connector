@@ -6,7 +6,7 @@ Conector de empleo para asistentes de IA, empaquetado como plugin de Codex y bas
 
 ## Estado
 
-El proyecto está en fase inicial. La documentación define primero el alcance, las restricciones por portal y los hitos verificables. El primer MVP será local, de solo lectura y sin credenciales.
+Los hitos 0 y 1 están implementados: documentación fundacional, plugin de Codex, skill y servidor MCP local de solo lectura. El MVP no utiliza credenciales, red ni persistencia.
 
 ## Objetivo
 
@@ -37,6 +37,28 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - Datos mínimos, trazabilidad de la fuente y resultados verificables.
 - Funcionar sin depender de una instalación de `career-ops`.
 
+## Inicio rápido para desarrollo
+
+Requisitos: Node.js 22 o superior.
+
+```powershell
+git clone https://github.com/abelvalle/zar-jobs-ai-connector.git
+Set-Location zar-jobs-ai-connector
+npm.cmd install
+npm.cmd run check
+npm.cmd test
+npm.cmd run smoke
+```
+
+El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enumera las herramientas y ejecuta ambas capacidades del MVP.
+
+## Herramientas actuales
+
+- `get_portal_capabilities`: devuelve el estado, dependencias y siguiente acción segura de InfoJobs, Tecnoempleo y LinkedIn.
+- `normalize_job_url`: valida una URL HTTPS sin abrirla, elimina parámetros de seguimiento conocidos e identifica el portal.
+
+Las búsquedas reales llegarán únicamente después de obtener las autorizaciones documentadas.
+
 ## Documentación
 
 - [Arquitectura](docs/ARCHITECTURE.md)
@@ -52,6 +74,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `master`: último hito estable y verificado.
 
 El repositorio se inicializa con la documentación en `master`; el desarrollo posterior parte de `develop` y solo se promociona a `master` tras superar sus comprobaciones.
+
+La publicación actual es el código fuente público en GitHub. La aparición en el directorio universal de plugins de OpenAI corresponde al Hito 6 y requiere un MCP remoto, identidad verificada y revisión externa.
 
 ## Licencia
 

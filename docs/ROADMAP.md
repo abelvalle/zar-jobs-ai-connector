@@ -2,7 +2,7 @@
 
 Cada hito debe ser independiente, verificable y tener su propio commit. El trabajo se realiza en `develop`; solo un hito estable se promociona a `master`.
 
-## Hito 0 — Fundación documental
+## Hito 0 — Fundación documental ✅
 
 Objetivo: fijar alcance, arquitectura, tecnología, restricciones legales y flujo Git antes de implementar.
 
@@ -13,7 +13,7 @@ Criterios de aceptación:
 - política explícita de no scraping y no autoaplicación;
 - ramas `master` y `develop` definidas.
 
-## Hito 1 — Plugin y MCP local mínimo
+## Hito 1 — Plugin y MCP local mínimo ✅
 
 Objetivo: disponer de un plugin instalable localmente y un servidor MCP funcional sin credenciales.
 
@@ -25,6 +25,14 @@ Criterios de aceptación:
 - herramientas `get_portal_capabilities` y `normalize_job_url`;
 - pruebas unitarias y smoke test en verde;
 - cero llamadas externas y cero persistencia.
+
+Evidencia local:
+
+- validación oficial de `plugin-creator` superada;
+- skill validada;
+- 8 pruebas unitarias superadas;
+- smoke test MCP cliente-servidor superado;
+- auditoría de dependencias sin vulnerabilidades conocidas.
 
 ## Hito 2 — Búsqueda oficial en InfoJobs
 

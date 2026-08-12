@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "zar-jobs": {
+      "command": "node",
+      "args": ["./src/server.mjs"],
+      "cwd": ".",
+      "tool_timeout_sec": 30
+    }
+  }
+}

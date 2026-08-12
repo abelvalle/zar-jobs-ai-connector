@@ -1,0 +1,42 @@
+{
+  "name": "zar-jobs-ai-connector",
+  "version": "0.1.0",
+  "description": "Read-only job discovery workflows for AI assistants, backed by MCP.",
+  "author": {
+    "name": "abelvalle",
+    "email": "26121474+abelvalle@users.noreply.github.com",
+    "url": "https://github.com/abelvalle"
+  },
+  "homepage": "https://github.com/abelvalle/zar-jobs-ai-connector",
+  "repository": "https://github.com/abelvalle/zar-jobs-ai-connector",
+  "license": "MIT",
+  "keywords": [
+    "jobs",
+    "employment",
+    "mcp",
+    "codex",
+    "ai"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Zar Jobs AI Connector",
+    "shortDescription": "Connect AI assistants to authorized job sources.",
+    "longDescription": "Discover and review job opportunities through official or explicitly authorized sources, with read-only tools and human verification.",
+    "developerName": "abelvalle",
+    "category": "Productivity",
+    "capabilities": [
+      "Job discovery",
+      "Read only",
+      "MCP"
+    ],
+    "websiteURL": "https://github.com/abelvalle/zar-jobs-ai-connector",
+    "privacyPolicyURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/PRIVACY.md",
+    "termsOfServiceURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/TERMS.md",
+    "defaultPrompt": [
+      "Which job portals can Zar Jobs use safely?",
+      "Normalize this job offer URL and identify its portal.",
+      "¿Qué integraciones de empleo están disponibles?"
+    ]
+  },
+  "mcpServers": "./.mcp.json"
+}
