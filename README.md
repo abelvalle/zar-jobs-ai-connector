@@ -6,7 +6,7 @@ Conector de empleo para asistentes de IA, empaquetado como plugin de Codex y bas
 
 ## Estado
 
-Los hitos 0, 1, 2A, 3A y 4 están completos. InfoJobs dispone de búsqueda y detalle mediante su API oficial, Tecnoempleo puede leerse mediante el RSS personalizado de una alerta propia y LinkedIn admite importación manual sin conectarse al portal. Las pruebas en vivo dependen de configurar los accesos correspondientes. El conector no persiste consultas, ofertas ni credenciales.
+Los hitos 0, 1, 2A, 3A, 4, 5A y 6A están completos. InfoJobs dispone de búsqueda y detalle local mediante su API oficial, Tecnoempleo admite RSS propio por URL local o XML aportado al MCP remoto y LinkedIn admite importación manual sin conectarse al portal. El servidor público es anónimo, sin estado y no persiste consultas, ofertas ni credenciales. El despliegue HTTPS y la revisión del directorio requieren cuentas y decisiones externas.
 
 ## Objetivo
 
@@ -50,7 +50,7 @@ npm.cmd test
 npm.cmd run smoke
 ```
 
-El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enumera las cuatro herramientas y ejecuta las capacidades que no requieren credenciales.
+El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real y ejecuta las capacidades que no requieren credenciales. Las pruebas incluyen además un cliente real conectado al transporte Streamable HTTP.
 
 ## Herramientas actuales
 
@@ -59,11 +59,18 @@ El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enume
 - `search_infojobs_jobs`: busca ofertas mediante el endpoint oficial de InfoJobs, con paginación y un máximo de 50 resultados.
 - `get_infojobs_job`: obtiene y normaliza el detalle público de una oferta de InfoJobs.
 - `list_tecnoempleo_alert_jobs`: devuelve ofertas del RSS oficial de una alerta propia de Tecnoempleo.
+- `import_tecnoempleo_rss`: procesa en memoria el XML de una alerta propia aportado por el usuario, sin hacer una llamada de red.
 - `import_linkedin_job`: normaliza una oferta de LinkedIn aportada por el usuario y la marca como no verificada.
 
 Las dos herramientas de InfoJobs requieren `INFOJOBS_CLIENT_ID` y `INFOJOBS_CLIENT_SECRET` en el entorno del servidor. Consulta la [guía de configuración de InfoJobs](docs/INFOJOBS-SETUP.md); nunca compartas esos valores en un chat ni los confirmes en Git.
 
-Tecnoempleo requiere `TECNOEMPLEO_RSS_URL`. Consulta la [guía de configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md); la URL puede ser privada y tampoco debe publicarse.
+La lectura local de Tecnoempleo requiere `TECNOEMPLEO_RSS_URL`. Consulta la [guía de configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md); la URL puede ser privada y tampoco debe publicarse. El MCP remoto utiliza contenido RSS aportado en la llamada y no necesita esa variable.
+
+## MCP remoto
+
+`npm.cmd run start:http` sirve `/mcp` mediante Streamable HTTP y `/health` para monitorización. Su superficie pública incluye capacidades, normalización e importaciones seguras de Tecnoempleo y LinkedIn; excluye las herramientas que dependen de secretos locales.
+
+Consulta [despliegue remoto](docs/REMOTE-MCP.md), [evaluaciones](docs/PUBLICATION-EVALS.md) y [checklist de publicación](docs/PUBLICATION-CHECKLIST.md).
 
 ## Documentación
 
@@ -75,6 +82,10 @@ Tecnoempleo requiere `TECNOEMPLEO_RSS_URL`. Consulta la [guía de configuración
 - [Configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md)
 - [Uso seguro con LinkedIn](docs/LINKEDIN-USAGE.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
+- [MCP remoto](docs/REMOTE-MCP.md)
+- [Checklist de publicación](docs/PUBLICATION-CHECKLIST.md)
+- [Autorizaciones de proveedores](docs/PROVIDER-AUTHORIZATION.md)
+- [Soporte](SUPPORT.md)
 - [Contribución y ramas](CONTRIBUTING.md)
 
 ## Ramas
@@ -84,7 +95,7 @@ Tecnoempleo requiere `TECNOEMPLEO_RSS_URL`. Consulta la [guía de configuración
 
 El repositorio se inicializa con la documentación en `master`; el desarrollo posterior parte de `develop` y solo se promociona a `master` tras superar sus comprobaciones.
 
-La publicación actual es el código fuente público en GitHub. La aparición en el directorio universal de plugins de OpenAI corresponde al Hito 6 y requiere un MCP remoto, identidad verificada y revisión externa.
+La publicación actual es el código fuente público y el servidor remoto reproducible. La aparición en el directorio universal de plugins de OpenAI corresponde al Hito 6B y requiere un endpoint HTTPS estable, identidad verificada y revisión externa.
 
 ## Licencia
 

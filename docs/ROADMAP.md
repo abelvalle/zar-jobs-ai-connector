@@ -99,17 +99,30 @@ Criterios de aceptación:
 - rechazo explícito de búsquedas automatizadas o scraping;
 - cualquier API nueva requiere aprobación verificable de LinkedIn.
 
-## Hito 5 — MCP remoto y OAuth
+## Hito 5A — MCP remoto anónimo y sin estado ✅
 
-Objetivo: permitir instalación pública sin ejecutar un proceso local.
+Objetivo: permitir conexión remota sin ejecutar un proceso local y sin custodiar datos privados de usuarios.
 
 Criterios de aceptación:
 
-- endpoint público HTTPS con Streamable HTTP;
-- OAuth de mínimo privilegio;
+- Streamable HTTP sin estado en `/mcp` y health check mínimo en `/health`;
+- servidor ligado a loopback por defecto y `ALLOWED_HOSTS` obligatorio al publicar;
+- límite de petición de 3 MB, errores sanitizados y cero logs de contenidos;
+- `import_tecnoempleo_rss` e `import_linkedin_job` sin red ni persistencia;
+- la herramienta de URL RSS privada queda excluida del servidor remoto;
+- imagen Docker reproducible y pruebas de cliente MCP reales.
+
+## Hito 5B — OAuth y datos privados por usuario
+
+Solo será necesario si el servicio remoto guarda URLs RSS, tokens o accede a datos de cuenta. No forma parte de la versión pública anónima.
+
+Dependencias externas: proveedor de identidad, dominio, hosting y decisión formal sobre almacenamiento.
+
+Criterios de aceptación:
+
+- OAuth 2.1 compatible con MCP y mínimo privilegio;
 - tokens cifrados, rotación y revocación;
-- política de retención y eliminación operativa;
-- observabilidad sin PII ni secretos;
+- retención y eliminación operativa probadas;
 - revisión de seguridad completada.
 
 ## Hito 6 — Publicación en el directorio de plugins
@@ -122,6 +135,17 @@ Criterios de aceptación:
 - casos de prueba y países disponibles declarados;
 - revisión de OpenAI aprobada;
 - versión etiquetada y notas de publicación.
+
+## Hito 6A — Paquete de revisión pública ✅
+
+- instrucciones de despliegue y endurecimiento;
+- cinco pruebas positivas y tres negativas documentadas;
+- privacidad, términos, soporte y alcance enlazados;
+- solicitudes externas y bloqueos trazables sin afirmar autorizaciones inexistentes.
+
+## Hito 6B — Despliegue, revisión y publicación
+
+Dependencias externas no presentes en el repositorio: dominio HTTPS, cuenta de hosting, identidad de desarrollador verificada y aprobación de OpenAI. El código no puede sustituir esas decisiones ni simular su resultado.
 
 ## Fuera de alcance
 
