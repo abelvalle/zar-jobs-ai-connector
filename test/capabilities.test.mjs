@@ -18,6 +18,14 @@ test("filters a single portal", () => {
   assert.ok(result[0].unavailableNow.includes("scraping"));
 });
 
+test("reports the implemented read-only InfoJobs tools", () => {
+  const [result] = getPortalCapabilities("infojobs");
+  assert.equal(result.status, "implemented-auth-required");
+  assert.ok(result.availableNow.includes("job-search"));
+  assert.ok(result.availableNow.includes("job-detail"));
+  assert.ok(result.unavailableNow.includes("application-submission"));
+});
+
 test("rejects an unknown portal", () => {
   assert.throws(() => getPortalCapabilities("example"), /Unsupported portal/);
 });

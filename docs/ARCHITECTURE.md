@@ -46,7 +46,7 @@ El servidor expondrá herramientas pequeñas, orientadas a objetivos. El MVP com
 
 Las herramientas de red se añadirán únicamente cuando exista acceso oficial:
 
-- `search_infojobs_jobs`;
+- `search_infojobs_jobs` y `get_infojobs_job`, implementadas con la API oficial y credenciales de aplicación;
 - `search_tecnoempleo_jobs`;
 - `list_infojobs_applications` en modo de solo lectura y con consentimiento.
 

@@ -6,7 +6,7 @@ Conector de empleo para asistentes de IA, empaquetado como plugin de Codex y bas
 
 ## Estado
 
-Los hitos 0 y 1 están implementados: documentación fundacional, plugin de Codex, skill y servidor MCP local de solo lectura. El MVP no utiliza credenciales, red ni persistencia.
+Los hitos 0 y 1 están completos. El Hito 2A añade búsqueda y detalle de ofertas mediante la API oficial de InfoJobs; la prueba en vivo del Hito 2B queda pendiente de credenciales de aplicación. El conector no persiste consultas, ofertas ni credenciales.
 
 ## Objetivo
 
@@ -50,14 +50,16 @@ npm.cmd test
 npm.cmd run smoke
 ```
 
-El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enumera las herramientas y ejecuta ambas capacidades del MVP.
+El smoke test inicia el servidor MCP por `stdio`, conecta un cliente real, enumera las cuatro herramientas y ejecuta las capacidades que no requieren credenciales.
 
 ## Herramientas actuales
 
 - `get_portal_capabilities`: devuelve el estado, dependencias y siguiente acción segura de InfoJobs, Tecnoempleo y LinkedIn.
 - `normalize_job_url`: valida una URL HTTPS sin abrirla, elimina parámetros de seguimiento conocidos e identifica el portal.
+- `search_infojobs_jobs`: busca ofertas mediante el endpoint oficial de InfoJobs, con paginación y un máximo de 50 resultados.
+- `get_infojobs_job`: obtiene y normaliza el detalle público de una oferta de InfoJobs.
 
-Las búsquedas reales llegarán únicamente después de obtener las autorizaciones documentadas.
+Las dos herramientas de InfoJobs requieren `INFOJOBS_CLIENT_ID` y `INFOJOBS_CLIENT_SECRET` en el entorno del servidor. Consulta la [guía de configuración de InfoJobs](docs/INFOJOBS-SETUP.md); nunca compartas esos valores en un chat ni los confirmes en Git.
 
 ## Documentación
 
@@ -65,6 +67,7 @@ Las búsquedas reales llegarán únicamente después de obtener las autorizacion
 - [Tecnología](docs/TECHNOLOGY.md)
 - [Roadmap e hitos](docs/ROADMAP.md)
 - [Capacidades por portal](docs/PORTAL-CAPABILITIES.md)
+- [Configuración de InfoJobs](docs/INFOJOBS-SETUP.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Contribución y ramas](CONTRIBUTING.md)
 

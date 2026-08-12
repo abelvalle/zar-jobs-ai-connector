@@ -12,7 +12,7 @@ const transport = new StdioClientTransport({
   cwd: root,
   stderr: "pipe"
 });
-const client = new Client({ name: "zar-jobs-smoke", version: "0.1.0" });
+const client = new Client({ name: "zar-jobs-smoke", version: "0.2.0" });
 
 try {
   await client.connect(transport);
@@ -20,7 +20,12 @@ try {
   const listed = await client.listTools();
   assert.deepEqual(
     listed.tools.map((tool) => tool.name).sort(),
-    ["get_portal_capabilities", "normalize_job_url"]
+    [
+      "get_infojobs_job",
+      "get_portal_capabilities",
+      "normalize_job_url",
+      "search_infojobs_jobs"
+    ]
   );
 
   const capabilities = await client.callTool({
@@ -29,6 +34,15 @@ try {
   });
   assert.equal(capabilities.isError, undefined);
   assert.equal(capabilities.structuredContent.capabilities[0].status, "manual-only");
+
+  const infoJobsCapabilities = await client.callTool({
+    name: "get_portal_capabilities",
+    arguments: { portal: "infojobs" }
+  });
+  assert.equal(
+    infoJobsCapabilities.structuredContent.capabilities[0].status,
+    "implemented-auth-required"
+  );
 
   const normalized = await client.callTool({
     name: "normalize_job_url",

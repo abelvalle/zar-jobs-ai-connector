@@ -6,6 +6,8 @@
 
 Zar Jobs AI Connector se encuentra en desarrollo local. Esta versión no ofrece un servicio alojado, no crea cuentas, no recopila telemetría y no almacena consultas, ofertas, credenciales ni datos personales.
 
+Cuando el usuario invoca una herramienta de InfoJobs, el proceso local envía directamente a `api.infojobs.net` las credenciales de aplicación y los parámetros necesarios para esa consulta. El conector no los escribe en archivos ni logs. El tratamiento realizado por InfoJobs se rige por sus propias condiciones y política de privacidad.
+
 ## Integraciones futuras
 
 Antes de activar un servicio público u OAuth, esta política se actualizará para identificar:

@@ -1,6 +1,6 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Read-only job discovery workflows for AI assistants, backed by MCP.",
   "author": {
     "name": "abelvalle",
@@ -26,6 +26,7 @@
     "category": "Productivity",
     "capabilities": [
       "Job discovery",
+      "InfoJobs search",
       "Read only",
       "MCP"
     ],
@@ -33,7 +34,7 @@
     "privacyPolicyURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/PRIVACY.md",
     "termsOfServiceURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/TERMS.md",
     "defaultPrompt": [
-      "Which job portals can Zar Jobs use safely?",
+      "Find backend jobs on InfoJobs in Zaragoza.",
       "Normalize this job offer URL and identify its portal.",
       "¿Qué integraciones de empleo están disponibles?"
     ]

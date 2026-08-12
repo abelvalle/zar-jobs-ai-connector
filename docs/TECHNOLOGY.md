@@ -34,13 +34,13 @@ docs/
 
 Solo se incorporarán dependencias necesarias para el protocolo MCP o validación de esquemas. HTTP utilizará `fetch` nativo. No se añadirá un framework web hasta que el hito del servidor remoto lo necesite.
 
-## Configuración futura
+## Configuración de portales
 
-Las credenciales se suministrarán mediante variables de entorno o un gestor de secretos del proveedor de hosting:
+Las credenciales se suministran mediante variables de entorno o, en un futuro hosting, mediante su gestor de secretos:
 
 - `INFOJOBS_CLIENT_ID`
 - `INFOJOBS_CLIENT_SECRET`
-- credenciales que Tecnoempleo defina al autorizar la integración
+- credenciales que Tecnoempleo defina al autorizar la integración, todavía no implementadas
 
 Los usuarios nunca introducirán contraseñas de portales en el plugin.
 

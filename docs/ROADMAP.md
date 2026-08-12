@@ -34,17 +34,35 @@ Evidencia local:
 - smoke test MCP cliente-servidor superado;
 - auditoría de dependencias sin vulnerabilidades conocidas.
 
-## Hito 2 — Búsqueda oficial en InfoJobs
+## Hito 2A — Adaptador oficial de InfoJobs ✅
+
+Objetivo: implementar búsqueda y detalle de ofertas públicas sin almacenar datos ni exponer secretos.
+
+Criterios de aceptación:
+
+- herramientas MCP `search_infojobs_jobs` y `get_infojobs_job`;
+- autenticación Basic de aplicación solo mediante variables de entorno;
+- límites, errores, paginación y normalización cubiertos con fixtures;
+- smoke MCP sin credenciales en verde;
+- ninguna inscripción automática.
+
+Evidencia local:
+
+- 15 pruebas unitarias superadas;
+- búsqueda, detalle, autenticación, límite y error sanitizado cubiertos;
+- smoke MCP cliente-servidor superado;
+- auditoría de dependencias sin vulnerabilidades conocidas.
+
+## Hito 2B — Verificación en vivo de InfoJobs
 
 Dependencia externa: registrar la aplicación y obtener credenciales válidas.
 
 Criterios de aceptación:
 
-- búsqueda y detalle mediante endpoints oficiales;
-- secretos fuera del código y los logs;
-- límites, errores y paginación probados;
-- resultados normalizados con fuente y enlace;
-- ninguna inscripción automática.
+- `npm run smoke:infojobs` responde correctamente contra el endpoint oficial;
+- la prueba no registra secretos ni contenido de ofertas;
+- evidencia de ejecución documentada sin credenciales ni datos personales;
+- compatibilidad de búsqueda y detalle confirmada con respuestas actuales de producción.
 
 ## Hito 3 — Feed autorizado de Tecnoempleo
 

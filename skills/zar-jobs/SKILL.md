@@ -18,20 +18,22 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 ## Workflow
 
 1. Call `get_portal_capabilities` before promising access to a portal or account.
-2. If the user provides a job link, call `normalize_job_url` before using or presenting it.
-3. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
-4. Preserve the source URL and distinguish portal-provided facts from model inference.
-5. Respond in the user's language.
+2. For an InfoJobs search, use `search_infojobs_jobs`; use `get_infojobs_job` only when the user needs one offer's full public detail.
+3. If the user provides a job link, call `normalize_job_url` before using or presenting it.
+4. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
+5. Preserve the source URL and distinguish portal-provided facts from model inference.
+6. Respond in the user's language.
 
 ## Current version
 
-The initial version is read-only and performs no network requests. It can:
+The current version is read-only. It can:
 
 - report the planned and currently allowed integration mode for each portal;
 - validate and normalize job URLs without opening them;
 - identify supported portal domains.
+- search and retrieve public InfoJobs offers through its official API when application credentials are configured.
 
-InfoJobs API search, Tecnoempleo feeds, and account-linked status checks are unavailable until their corresponding milestone and authorization requirements are complete.
+Tecnoempleo feeds and account-linked status checks remain unavailable until their corresponding authorization requirements and milestones are complete.
 
 ## Output
 

@@ -3,14 +3,22 @@ export const PORTALS = ["infojobs", "tecnoempleo", "linkedin"];
 const CAPABILITIES = Object.freeze([
   Object.freeze({
     portal: "infojobs",
-    status: "planned-auth-required",
+    status: "implemented-auth-required",
     accessMode: "official-api",
-    availableNow: ["url-normalization", "capability-reporting"],
-    unavailableNow: ["job-search", "application-status"],
-    dependency: "Register an InfoJobs application and provide approved credentials.",
-    safeNextAction: "Register the application, then implement read-only offer search.",
+    availableNow: [
+      "url-normalization",
+      "capability-reporting",
+      "job-search",
+      "job-detail"
+    ],
+    unavailableNow: ["application-status", "application-submission"],
+    dependency:
+      "Register an InfoJobs application and configure its Client ID and Client secret.",
+    safeNextAction:
+      "Configure INFOJOBS_CLIENT_ID and INFOJOBS_CLIENT_SECRET, then run the live smoke test.",
     sources: [
-      "https://developer.infojobs.net/documentation/operation-list/index.xhtml",
+      "https://developer.infojobs.net/documentation/operation/offer-list-7.xhtml",
+      "https://developer.infojobs.net/documentation/operation/offer-get-7.xhtml",
       "https://developer.infojobs.net/documentation/quick-start/index.xhtml"
     ]
   }),

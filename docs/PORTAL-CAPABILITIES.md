@@ -6,7 +6,7 @@ Estado revisado el 12 de agosto de 2026. Antes de implementar un adaptador se vo
 
 | Portal | Búsqueda | Estado de candidaturas | Envío | Decisión del proyecto |
 | --- | --- | --- | --- | --- |
-| InfoJobs | API oficial con credenciales de aplicación | API con OAuth del candidato | La API lo permite, pero Zar Jobs AI Connector no lo automatizará | Implementar búsqueda; seguimiento solo lectura en un hito posterior |
+| InfoJobs | Implementada mediante API oficial; requiere credenciales de aplicación | API con OAuth del candidato | La API lo permite, pero Zar Jobs AI Connector no lo automatizará | Búsqueda y detalle disponibles; verificación en vivo pendiente |
 | Tecnoempleo | Feed XML/JSON bajo solicitud | Integraciones empresariales según acuerdo | No definido para este caso | Esperar autorización escrita específica |
 | LinkedIn | No se ha identificado una API pública general para búsqueda de candidatos | APIs Talent restringidas a partners | Integraciones restringidas | Solo URL manual o alertas propias; nunca scraping |
 
@@ -27,6 +27,14 @@ Restricciones incorporadas al diseño:
 - no almacenar datos de candidatos salvo lo estrictamente permitido;
 - no crear un portal que sustituya a InfoJobs;
 - no inscribir a una persona sin permiso explícito.
+
+Implementación actual:
+
+- `GET https://api.infojobs.net/api/7/offer` para búsqueda paginada;
+- `GET https://api.infojobs.net/api/7/offer/{offerId}` para detalle;
+- máximo local de 50 resultados por llamada y diez provincias;
+- autenticación de aplicación desde variables de entorno;
+- sin OAuth de candidato, persistencia ni operaciones de inscripción.
 
 ## Tecnoempleo
 

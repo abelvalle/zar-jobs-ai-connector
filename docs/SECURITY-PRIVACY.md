@@ -36,7 +36,8 @@ El MVP local:
 
 - no usa cuentas;
 - no almacena consultas ni ofertas;
-- no ejecuta llamadas externas;
+- solo ejecuta llamadas externas cuando se invocan las herramientas de InfoJobs configuradas;
+- limita las llamadas a `https://api.infojobs.net/api/7`;
 - no incluye telemetría.
 
 ## Requisitos antes del servicio público
