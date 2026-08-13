@@ -19,7 +19,7 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 
 1. Call `get_portal_capabilities` before promising access to a portal or account.
 2. For an InfoJobs search, use `search_infojobs_jobs`; use `get_infojobs_job` only when the user needs one offer's full public detail.
-3. For Tecnoempleo, use `list_tecnoempleo_alert_jobs` only when the local server has the user's RSS URL configured. On the public server, use `import_tecnoempleo_rss` only with RSS XML deliberately supplied by the user. Do not claim either path is a general portal search.
+3. For Tecnoempleo, use `list_tecnoempleo_alert_jobs` only when the local connector has the user's RSS URL configured. Alternatively, use `import_tecnoempleo_rss` only with RSS XML deliberately supplied by the user. Do not claim either path is a general portal search.
 4. For LinkedIn, use `import_linkedin_job` only when the user provides the job URL, title, and company. Keep its status `unverified` until the user checks the original posting.
 5. For Indeed, use `import_indeed_job` only when the user provides a `viewjob` URL, title, and company. Never search or open Indeed through this plugin.
 6. If the user provides another job link, call `normalize_job_url` before using or presenting it.

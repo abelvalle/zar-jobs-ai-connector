@@ -2,54 +2,31 @@
 
 ## Principios
 
-- Mínimo privilegio.
-- Consentimiento explícito.
-- Validación en el servidor, no solo en el modelo.
-- Sin secretos ni PII en logs.
-- Confirmación humana para cualquier futura escritura.
-- Las ofertas y páginas externas se consideran contenido no confiable.
+- Mínimo privilegio y solo lectura.
+- Consentimiento explícito para datos aportados por el usuario.
+- Validación en código, no solo en el modelo.
+- Sin secretos ni datos personales en logs.
+- Ofertas y páginas externas tratadas como contenido no confiable.
 
-## Modelo de amenazas inicial
+## Superficie local
 
-### Inyección de instrucciones
+El conector se ejecuta como subproceso del cliente MCP mediante `stdio`. No abre puertos, no expone endpoints y no acepta conexiones entrantes.
 
-Una descripción de empleo puede contener texto dirigido al asistente. Los adaptadores la tratan como dato, nunca como instrucción. Las herramientas devuelven campos estructurados y el skill prohíbe obedecer instrucciones embebidas en ofertas.
+No utiliza base de datos, cuentas ni telemetría. Las consultas y resultados no se escriben en disco. La caché de npm contiene código y dependencias del release, no datos de empleo.
 
-### Robo o exposición de credenciales
+## Credenciales
 
-- no se aceptan contraseñas de portales;
-- el desarrollo local usa variables de entorno;
-- el servicio remoto usará OAuth y almacenamiento cifrado;
-- los mensajes de error y logs se redactan antes de persistirlos.
+- No se aceptan contraseñas, cookies ni tokens de sesión de portales.
+- InfoJobs usa credenciales de aplicación desde variables de entorno.
+- Tecnoempleo usa, opcionalmente, la URL de una alerta propia desde el entorno.
+- Los errores nunca incluyen secretos ni URLs RSS privadas.
 
-### Acciones no deseadas
+## Acciones
 
-El producto no expone herramientas de envío de candidaturas. Si en el futuro se añade una escritura reversible, requerirá una herramienta separada, un alcance OAuth específico y confirmación de la plataforma anfitriona.
+El plugin no ofrece herramientas para enviar candidaturas, mensajes o cambios de perfil. Las importaciones manuales de LinkedIn e Indeed se etiquetan `user-provided` y `unverified`.
 
-### Datos obsoletos o ambiguos
+## Cadena de suministro
 
-Cada resultado conserva fuente, URL y fecha cuando estén disponibles. Un estado ambiguo se marca como no verificado y no se transforma en una decisión de candidatura.
+`.mcp.json` fija una etiqueta de release de GitHub. Las actualizaciones requieren una nueva versión explícita; no se ejecuta silenciosamente la punta cambiante de una rama.
 
-Las importaciones manuales de LinkedIn e Indeed se etiquetan siempre como `user-provided` y `unverified`: estructurar los datos no demuestra que la oferta siga activa.
-
-## Datos del MVP
-
-El MVP local:
-
-- no usa cuentas;
-- no almacena consultas ni ofertas;
-- solo ejecuta llamadas externas cuando se invocan herramientas configuradas de InfoJobs o Tecnoempleo;
-- limita las llamadas a `https://api.infojobs.net/api/7`;
-- restringe el RSS configurado por el usuario a HTTPS bajo `tecnoempleo.com`, sin redirecciones;
-- no incluye telemetría.
-
-## Requisitos antes del servicio público
-
-- inventario de datos y base legal;
-- flujo de eliminación y revocación probado;
-- política de retención publicada;
-- cifrado en tránsito y reposo;
-- rotación de secretos;
-- límites de tasa y protección contra abuso;
-- alertas operativas sin registrar contenido sensible;
-- evaluación de dependencias y respuesta a incidentes.
+Antes de instalar, el usuario debe revisar el repositorio y sus releases. Las vulnerabilidades se comunican mediante el canal privado descrito en [SECURITY.md](../SECURITY.md).

@@ -21,7 +21,7 @@ $env:INFOJOBS_CLIENT_ID = $infoJobsCredential.UserName
 $env:INFOJOBS_CLIENT_SECRET = $infoJobsCredential.GetNetworkCredential().Password
 ```
 
-La configuración del plugin pasa únicamente esas dos variables al proceso MCP. En un despliegue alojado deberán proceder del gestor de secretos del proveedor.
+La configuración del plugin hereda esas dos variables del entorno de Codex o Claude Code. No se envían a ningún servicio intermedio.
 
 ## 3. Verificación en vivo
 

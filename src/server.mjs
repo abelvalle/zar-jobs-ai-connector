@@ -1,6 +1,4 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { pathToFileURL } from "node:url";
 import { z } from "zod";
 
 import { getPortalCapabilities, PORTALS } from "./portals/capabilities.mjs";
@@ -112,14 +110,11 @@ const indeedManualJobSchema = z.object({
   safeNextAction: z.string(),
 });
 
-export function createZarJobsServer({
-  includeInfoJobsTools = true,
-  includePrivateFeedTool = true,
-} = {}) {
+export function createZarJobsServer() {
   const server = new McpServer(
     {
       name: "zar-jobs-ai-connector",
-      version: "0.6.0",
+      version: "0.7.0",
     },
     {
       instructions:
@@ -259,8 +254,7 @@ export function createZarJobsServer({
     },
   );
 
-  if (includePrivateFeedTool) {
-    server.registerTool(
+  server.registerTool(
       "list_tecnoempleo_alert_jobs",
       {
         title: "List jobs from a Tecnoempleo alert",
@@ -306,10 +300,8 @@ export function createZarJobsServer({
         }
       },
     );
-  }
 
-  if (includeInfoJobsTools) {
-    server.registerTool(
+  server.registerTool(
       "search_infojobs_jobs",
       {
         title: "Search InfoJobs offers",
@@ -369,7 +361,7 @@ export function createZarJobsServer({
       },
     );
 
-    server.registerTool(
+  server.registerTool(
       "get_infojobs_job",
       {
         title: "Get an InfoJobs offer",
@@ -407,7 +399,6 @@ export function createZarJobsServer({
         }
       },
     );
-  }
 
   server.registerTool(
     "get_portal_capabilities",
@@ -429,10 +420,7 @@ export function createZarJobsServer({
       },
     },
     async ({ portal }) => {
-      const capabilities = getServerCapabilities(portal, {
-        includeInfoJobsTools,
-        includePrivateFeedTool,
-      });
+      const capabilities = getPortalCapabilities(portal);
       return {
         content: [{ type: "text", text: JSON.stringify(capabilities, null, 2) }],
         structuredContent: { capabilities },
@@ -478,45 +466,6 @@ export function createZarJobsServer({
   return server;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const server = createZarJobsServer();
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-}
-
 function safeErrorMessage(error) {
   return error instanceof Error ? error.message : "Unexpected connector error.";
-}
-
-function getServerCapabilities(portal, options) {
-  return getPortalCapabilities(portal).map((capability) => {
-    if (capability.portal === "infojobs" && !options.includeInfoJobsTools) {
-      return {
-        ...capability,
-        status: "available-local-only",
-        accessMode: "official-api-local",
-        availableNow: ["url-normalization", "capability-reporting"],
-        unavailableNow: [...capability.unavailableNow, "remote-job-search", "remote-job-detail"],
-        dependency:
-          "InfoJobs tools are intentionally local to protect application credentials and API quota.",
-        safeNextAction:
-          "Run the local stdio server with INFOJOBS_CLIENT_ID and INFOJOBS_CLIENT_SECRET.",
-      };
-    }
-
-    if (capability.portal === "tecnoempleo" && !options.includePrivateFeedTool) {
-      return {
-        ...capability,
-        status: "implemented-rss-import",
-        accessMode: "user-provided-rss-content",
-        availableNow: ["url-normalization", "capability-reporting", "rss-content-import"],
-        unavailableNow: [...capability.unavailableNow, "remote-feed-url-access"],
-        dependency:
-          "The user must provide RSS XML from their own Tecnoempleo alert in the current call.",
-        safeNextAction: "Use import_tecnoempleo_rss, then review the returned source links.",
-      };
-    }
-
-    return capability;
-  });
 }

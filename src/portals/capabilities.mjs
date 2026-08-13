@@ -38,9 +38,9 @@ const CAPABILITIES = Object.freeze([
       "application-submission"
     ],
     dependency:
-      "The user must create a Tecnoempleo alert and either configure its personalized RSS URL locally or provide its RSS content to the remote tool.",
+      "The user must create a Tecnoempleo alert and either configure its personalized RSS URL or provide its RSS content to the local tool.",
     safeNextAction:
-      "Use import_tecnoempleo_rss remotely, or configure TECNOEMPLEO_RSS_URL locally, then review the source links.",
+      "Use import_tecnoempleo_rss with your XML, or configure TECNOEMPLEO_RSS_URL, then review the source links.",
     sources: [
       "https://www.tecnoempleo.com/buscar-trabajo/encuentra-ofertas-empleo.php"
     ]

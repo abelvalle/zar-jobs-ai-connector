@@ -1,51 +1,46 @@
 # Tecnología
 
-## Stack seleccionado
+## Stack
 
 | Área | Elección | Motivo |
 | --- | --- | --- |
-| Runtime | Node.js 22 o superior | `fetch` nativo, ecosistema MCP y despliegue sencillo |
-| Lenguaje | JavaScript ESM con JSDoc | MVP pequeño, sin fase de compilación |
-| MCP | `@modelcontextprotocol/sdk` | SDK oficial para herramientas y transportes MCP |
-| Validación | `zod` | Esquemas explícitos compartidos con el SDK |
-| XML | `fast-xml-parser` | Lectura acotada del RSS de Tecnoempleo sin implementar un parser casero |
-| Pruebas | `node:test` | Incluido en Node.js, sin framework adicional |
-| Calidad | `node --check` y pruebas | Controles mínimos, rápidos y reproducibles |
-| Transporte local | `stdio` | Desarrollo y pruebas sin infraestructura |
-| Transporte público | Streamable HTTP sobre HTTPS | Requisito operativo para un MCP remoto revisable |
+| Runtime | Node.js 22 o superior | `fetch` nativo y ejecución multiplataforma |
+| Lenguaje | JavaScript ESM con JSDoc | Sin compilación ni toolchain adicional |
+| MCP | `@modelcontextprotocol/sdk` | Implementación estándar de herramientas y `stdio` |
+| Validación | `zod` | Esquemas explícitos de entrada y salida |
+| XML | `fast-xml-parser` | Lectura acotada del RSS sin parser propio |
+| Pruebas | `node:test` | Incluido en Node.js |
+| Distribución | Marketplaces Git + `npx` | Instalación desde GitHub sin servicio alojado |
 | Automatización | GitHub Actions | Validación en `develop` y `master` |
 
-La documentación oficial de OpenAI recomienda los SDK oficiales de TypeScript o Python y el transporte Streamable HTTP para servidores MCP. Este proyecto usa el SDK de TypeScript desde JavaScript ESM para mantener un MVP mínimo.
-
-## Estructura prevista
+## Estructura
 
 ```text
+.agents/plugins/marketplace.json
 .codex-plugin/plugin.json
+.claude-plugin/plugin.json
+.claude-plugin/marketplace.json
 .mcp.json
 skills/zar-jobs/SKILL.md
+src/cli.mjs
 src/server.mjs
-src/http-server.mjs
-src/domain/job.mjs
-src/portals/capabilities.mjs
-src/portals/url-normalizer.mjs
+src/portals/*.mjs
 test/*.test.mjs
 docs/
 ```
 
-## Dependencias aceptadas
+## Dependencias y arranque
 
-Solo se incorporarán dependencias necesarias para el protocolo MCP o validación de esquemas. HTTP utilizará `fetch` nativo. No se añadirá un framework web hasta que el hito del servidor remoto lo necesite.
+La instalación del plugin no necesita copiar `node_modules` al marketplace. `npx` obtiene la etiqueta fijada en `.mcp.json`, instala sus dependencias en la caché local y ejecuta el binario declarado por el paquete.
 
-## Configuración de portales
+El desarrollo desde un clon usa `npm ci`. No hay framework web, contenedor ni transporte de red para MCP.
 
-Las credenciales de aplicación se suministran mediante variables de entorno o mediante el gestor de secretos del hosting:
+## Configuración
 
-- `INFOJOBS_CLIENT_ID`
-- `INFOJOBS_CLIENT_SECRET`
-- `TECNOEMPLEO_RSS_URL`
+Las capacidades manuales funcionan sin credenciales. Las integraciones opcionales leen estas variables del entorno:
 
-`TECNOEMPLEO_RSS_URL` solo se usa en el transporte local. El servicio remoto no carga una URL de alerta global: recibe el contenido RSS como entrada efímera. Los usuarios nunca introducirán contraseñas de portales en el plugin.
+- `INFOJOBS_CLIENT_ID`;
+- `INFOJOBS_CLIENT_SECRET`;
+- `TECNOEMPLEO_RSS_URL`.
 
-## Compatibilidad
-
-El plugin se diseña para Codex y para clientes compatibles con MCP. Las capacidades que dependan de una superficie concreta se declararán de forma explícita en lugar de asumir que están disponibles en todos los clientes.
+Los usuarios nunca introducirán contraseñas de portales en el plugin.

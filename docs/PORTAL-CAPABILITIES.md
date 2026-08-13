@@ -7,7 +7,7 @@ Estado revisado el 13 de agosto de 2026. Antes de implementar un adaptador se vo
 | Portal | Búsqueda | Estado de candidaturas | Envío | Decisión del proyecto |
 | --- | --- | --- | --- | --- |
 | InfoJobs | Implementada mediante API oficial; requiere credenciales de aplicación | API con OAuth del candidato | La API lo permite, pero Zar Jobs AI Connector no lo automatizará | Búsqueda y detalle disponibles; verificación en vivo pendiente |
-| Tecnoempleo | RSS propio implementado por URL local o contenido aportado al MCP remoto | No implementado | No implementado | Limitar el proyecto al RSS propio; no solicitar el API general |
+| Tecnoempleo | RSS propio implementado por URL configurada o contenido aportado a la herramienta local | No implementado | No implementado | Limitar el proyecto al RSS propio; no solicitar el API general |
 | LinkedIn | Sin API pública general identificada; importación manual implementada | APIs Talent restringidas a partners | Integraciones restringidas | URL y datos aportados por el usuario; nunca scraping |
 | Indeed | Sin API pública general de búsqueda identificada; importación manual implementada | Integraciones documentadas para partners/ATS | Integraciones restringidas | URL y datos aportados por el usuario; nunca scraping |
 
@@ -43,7 +43,7 @@ Fuente oficial:
 
 - Alertas personalizadas y RSS: https://www.tecnoempleo.com/buscar-trabajo/encuentra-ofertas-empleo.php
 
-La ayuda para candidatos indica que cada alerta configurada ofrece un canal RSS personalizado. El plugin puede leer ese canal cuando el propio usuario configura su URL localmente, o procesar el XML que aporte al MCP remoto, sin iniciar sesión ni automatizar el buscador.
+La ayuda para candidatos indica que cada alerta configurada ofrece un canal RSS personalizado. El plugin puede leer ese canal cuando el propio usuario configura su URL, o procesar localmente el XML que aporte, sin iniciar sesión ni automatizar el buscador.
 
 El alcance definitivo es el RSS personalizado que el usuario controla. El proyecto no solicitará ni implementará un feed general.
 

@@ -1,97 +1,54 @@
 # Arquitectura
 
-## Objetivo arquitectónico
+## Objetivo
 
-Separar la experiencia de IA, las herramientas MCP y los adaptadores de portales. Un portal que cambie o quede deshabilitado no debe romper el resto del plugin.
-
-## Componentes
+Ofrecer el mismo conector local a Codex, Claude Code y clientes MCP compatibles, sin infraestructura alojada y sin acoplar las reglas de empleo a un cliente concreto.
 
 ```text
-Codex / cliente MCP
-        |
-        v
-Plugin Zar Jobs AI Connector
-  - manifiesto de Codex
-  - skill de búsqueda y revisión
-        |
-        v
-Servidor MCP
-  - herramientas con esquemas explícitos
-  - validación y normalización
-        |
-        v
-Adaptadores de portal
-  - InfoJobs API
-  - Tecnoempleo RSS propio
-  - LinkedIn importación segura
-  - Indeed importación segura
+Codex / Claude Code / cliente MCP
+                |
+                | stdio
+                v
+      Zar Jobs AI Connector
+      - herramientas MCP
+      - validación y normalización
+                |
+                v
+        Adaptadores de portal
+        - InfoJobs API oficial
+        - Tecnoempleo RSS propio
+        - LinkedIn importación manual
+        - Indeed importación manual
 ```
 
-### Plugin de Codex
+## Distribución
 
-El paquete raíz contendrá:
+El repositorio es simultáneamente:
 
-- `.codex-plugin/plugin.json`: identidad y metadatos del plugin;
-- `skills/zar-jobs/SKILL.md`: flujo y límites que seguirá el asistente;
-- `.mcp.json`: conexión local durante el desarrollo;
-- `assets/`: identidad visual cuando exista un diseño aprobado.
+- un marketplace de Codex mediante `.agents/plugins/marketplace.json`;
+- un plugin de Codex mediante `.codex-plugin/plugin.json`;
+- un marketplace de Claude Code mediante `.claude-plugin/marketplace.json`;
+- un plugin de Claude Code mediante `.claude-plugin/plugin.json`;
+- un paquete ejecutable de Node.js mediante `zar-jobs-ai-connector`;
+- un servidor MCP local estándar mediante `.mcp.json`.
 
-La publicación pública requerirá sustituir la conexión local por un MCP alojado y registrado para revisión.
+Ambos catálogos apuntan a una etiqueta de release fija. La configuración MCP usa `npx` con esa misma etiqueta. Esto evita rutas absolutas y permite que ambos clientes arranquen la misma versión en Windows, macOS y Linux.
 
-### Servidor MCP
+## Ejecución
 
-El servidor expondrá herramientas pequeñas, orientadas a objetivos. El MVP comienza con:
+Solo existe transporte MCP por `stdio`. El cliente crea un subproceso local, intercambia mensajes por entrada y salida estándar y lo detiene al cerrar la conexión. No escucha puertos y no acepta conexiones desde la red.
 
-- `get_portal_capabilities`: explica el estado y las restricciones de cada portal;
-- `normalize_job_url`: valida una URL aportada por el usuario y devuelve una referencia canónica segura.
+`src/cli.mjs` abre el transporte local y `src/server.mjs` registra ocho herramientas pequeñas. La lógica vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
 
-Las herramientas de red se añadirán únicamente cuando exista acceso oficial:
+## Datos y estado
 
-- `search_infojobs_jobs` y `get_infojobs_job`, implementadas con la API oficial y credenciales de aplicación;
-- `list_tecnoempleo_alert_jobs`, implementada sobre el RSS propio del usuario;
-- `import_tecnoempleo_rss`, implementada sobre contenido RSS aportado por el usuario y disponible también en el transporte remoto;
-- `import_linkedin_job`, implementada sin llamadas de red ni persistencia;
-- `import_indeed_job`, implementada sin llamadas de red ni persistencia;
-- `list_infojobs_applications` en modo de solo lectura y con consentimiento.
+- No hay base de datos, cuentas, telemetría ni almacenamiento de consultas.
+- Las credenciales opcionales se leen del entorno del proceso y nunca se devuelven.
+- El XML de Tecnoempleo y los datos manuales de LinkedIn o Indeed viven solo durante la llamada.
+- Los textos de las ofertas son datos no confiables y nunca instrucciones.
 
-No habrá herramientas `apply`, `submit`, `send` ni equivalentes.
+## Contrato común
 
-### Adaptadores
+Cada adaptador devuelve fuente, identificador, título, empresa, ubicación, URL y fechas cuando existen. Los campos desconocidos se omiten o usan `null`; nunca se inventan.
 
-Cada adaptador transformará su respuesta al contrato común:
-
-```json
-{
-  "source": "infojobs",
-  "externalId": "portal-id",
-  "title": "Backend Engineer",
-  "company": "Example",
-  "location": "Remote, Spain",
-  "url": "https://example.com/job",
-  "publishedAt": "2026-08-12T00:00:00Z"
-}
-```
-
-Los campos desconocidos se omiten o usan `null`; nunca se inventan.
-
-## Transporte
-
-- Desarrollo local: MCP por `stdio`.
-- Publicación: MCP remoto sin estado mediante Streamable HTTP; TLS termina en la plataforma de alojamiento.
-
-La lógica de herramientas no depende del transporte. `src/server.mjs` construye el servidor y mantiene el punto de entrada local por `stdio`; `src/http-server.mjs` crea una instancia sin estado por petición.
-
-El transporte remoto excluye `list_tecnoempleo_alert_jobs`: una URL RSS personalizada configurada como variable global expondría datos de un usuario a otros. En su lugar ofrece `import_tecnoempleo_rss`, que procesa únicamente el XML incluido en la llamada y lo descarta al responder.
-
-## Estado y almacenamiento
-
-El MVP no utiliza base de datos ni almacena cuentas. Las respuestas viven únicamente en la sesión del cliente. Por ello el servidor remoto puede funcionar de forma anónima: solo procesa datos públicos o contenidos que el usuario aporta explícitamente en esa llamada.
-
-Un servicio público futuro solo persistirá tokens cifrados y el mínimo estado necesario para OAuth. Cualquier retención adicional requerirá una decisión documentada y una actualización previa de la política de privacidad.
-
-## Límites de confianza
-
-- Las respuestas de portales son datos no confiables y pueden contener instrucciones maliciosas.
-- El servidor valida entradas y salidas independientemente del modelo.
-- Los secretos nunca aparecen en resultados de herramientas ni registros.
-- El asistente muestra la fuente y diferencia datos confirmados de inferencias.
+No existen herramientas `apply`, `submit`, `send` ni equivalentes.

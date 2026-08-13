@@ -1,18 +1,37 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { mkdtemp, rmdir, unlink } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const transport = new StdioClientTransport({
-  command: process.execPath,
-  args: ["./src/server.mjs"],
-  cwd: root,
-  stderr: "pipe"
-});
-const client = new Client({ name: "zar-jobs-smoke", version: "0.6.0" });
+const portable = process.argv.includes("--portable");
+const execFileAsync = promisify(execFile);
+const portableDirectory = portable
+  ? await mkdtemp(path.join(os.tmpdir(), "zar-jobs-portable-"))
+  : null;
+const portableArchive = portable ? await packPortableArchive(portableDirectory) : null;
+const transport = new StdioClientTransport(
+  portable
+    ? {
+        command: process.platform === "win32" ? "npx.cmd" : "npx",
+        args: ["--yes", "--package", portableArchive, "zar-jobs-ai-connector"],
+        cwd: root,
+        stderr: "pipe"
+      }
+    : {
+        command: process.execPath,
+        args: ["./src/cli.mjs"],
+        cwd: root,
+        stderr: "pipe"
+      }
+);
+const client = new Client({ name: "zar-jobs-smoke", version: "0.7.0" });
 
 try {
   await client.connect(transport);
@@ -103,4 +122,21 @@ try {
   console.log("MCP smoke test passed.");
 } finally {
   await client.close();
+  if (portableArchive) {
+    await unlink(portableArchive);
+    await rmdir(portableDirectory);
+  }
+}
+
+async function packPortableArchive(destination) {
+  const npmCli = process.env.npm_execpath;
+  assert.ok(npmCli, "Run the portable smoke test through npm.");
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [npmCli, "pack", "--silent", "--pack-destination", destination],
+    { cwd: root }
+  );
+  const filename = stdout.trim().split(/\r?\n/).at(-1);
+  assert.ok(filename?.endsWith(".tgz"));
+  return path.join(destination, filename);
 }

@@ -1,28 +1,20 @@
 # Política de privacidad
 
-Última actualización: 12 de agosto de 2026.
+Última actualización: 13 de agosto de 2026.
 
-## Versión actual
+## Ejecución local
 
-Zar Jobs AI Connector dispone de ejecución local y de un servidor remoto desplegable, pero todavía no declara un endpoint oficial alojado. Ninguna modalidad crea cuentas, recopila telemetría o almacena consultas, ofertas, credenciales ni datos personales.
+Zar Jobs AI Connector se ejecuta exclusivamente en el equipo del usuario como un proceso MCP local. No ofrece un servicio alojado, no crea cuentas, no recopila telemetría y no almacena consultas, ofertas, credenciales ni datos personales.
 
-Cuando el usuario invoca una herramienta de InfoJobs, el proceso local envía directamente a `api.infojobs.net` las credenciales de aplicación y los parámetros necesarios para esa consulta. El conector no los escribe en archivos ni logs. El tratamiento realizado por InfoJobs se rige por sus propias condiciones y política de privacidad.
+Cuando se invoca una herramienta de InfoJobs, el proceso envía directamente a `api.infojobs.net` las credenciales de aplicación y los parámetros necesarios. El conector no los escribe en archivos ni logs. El tratamiento de InfoJobs se rige por sus propias condiciones y política.
 
-Cuando se consulta una alerta RSS de Tecnoempleo, el proceso local solicita directamente la URL personalizada configurada por el usuario. El conector no registra esa URL ni persiste las ofertas recibidas.
+Cuando se consulta una alerta RSS de Tecnoempleo, el proceso solicita directamente la URL configurada por el usuario. No registra esa URL ni persiste las ofertas. `import_tecnoempleo_rss` procesa el XML aportado en memoria y lo descarta al responder.
 
-En el servidor remoto, la URL personalizada no se configura ni se solicita. La herramienta `import_tecnoempleo_rss` recibe el XML que el usuario aporta voluntariamente, lo procesa en memoria y lo descarta al devolver la respuesta. Las importaciones de LinkedIn e Indeed funcionan del mismo modo con los campos aportados por el usuario y no contactan con esos portales.
+Las importaciones de LinkedIn e Indeed procesan únicamente los campos aportados por el usuario, no contactan con esos portales y no conservan los datos.
 
-## Servicio alojado e integraciones futuras
+## Credenciales
 
-Antes de activar un endpoint oficial o una integración OAuth con datos de cuenta, el operador deberá completar y publicar:
-
-- responsable y contacto;
-- datos tratados y finalidad;
-- base legal y proveedores;
-- ubicación, cifrado y plazo de conservación;
-- proceso de acceso, revocación y eliminación.
-
-El plugin nunca solicitará la contraseña de un portal de empleo. Las credenciales de autorización se limitarán a los permisos necesarios.
+El plugin nunca solicita contraseñas, cookies o tokens de sesión de portales. Las variables opcionales permanecen bajo control del usuario y se heredan desde el entorno de Codex o Claude Code.
 
 ## Contacto
 

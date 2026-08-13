@@ -21,9 +21,9 @@ $env:TECNOEMPLEO_RSS_URL = $tecnoempleoCredential.GetNetworkCredential().Passwor
 
 El conector exige HTTPS, restringe el host a `tecnoempleo.com`, no sigue redirecciones y limita la respuesta a 2 MB.
 
-### Alternativa para el MCP remoto
+### Alternativa sin configurar la URL
 
-El servidor público no acepta ni conserva la URL personalizada. El usuario puede descargar o copiar el XML de su propio canal y pasarlo a `import_tecnoempleo_rss`. La herramienta procesa el contenido en memoria, rechaza enlaces externos, devuelve como máximo 50 ofertas y descarta la entrada al finalizar la llamada.
+El usuario puede descargar o copiar el XML de su propio canal y pasarlo a `import_tecnoempleo_rss`. La herramienta local procesa el contenido en memoria, rechaza enlaces externos, devuelve como máximo 50 ofertas y descarta la entrada al finalizar la llamada.
 
 ## 3. Verificación en vivo
 

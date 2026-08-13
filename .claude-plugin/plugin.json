@@ -1,0 +1,22 @@
+{
+  "name": "zar-jobs-ai-connector",
+  "version": "0.7.0",
+  "description": "Read-only job discovery workflows for AI assistants, backed by local MCP.",
+  "author": {
+    "name": "abelvalle",
+    "email": "26121474+abelvalle@users.noreply.github.com",
+    "url": "https://github.com/abelvalle"
+  },
+  "homepage": "https://github.com/abelvalle/zar-jobs-ai-connector",
+  "repository": "https://github.com/abelvalle/zar-jobs-ai-connector",
+  "license": "MIT",
+  "keywords": [
+    "jobs",
+    "employment",
+    "mcp",
+    "claude",
+    "ai"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}
