@@ -1,6 +1,6 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Read-only job discovery workflows for AI assistants, backed by MCP.",
   "author": {
     "name": "abelvalle",
@@ -29,6 +29,7 @@
       "InfoJobs search",
       "Tecnoempleo alerts",
       "LinkedIn manual import",
+      "Indeed manual import",
       "Read only",
       "MCP"
     ],
@@ -38,7 +39,7 @@
     "defaultPrompt": [
       "Find backend jobs on InfoJobs in Zaragoza.",
       "List jobs from my Tecnoempleo RSS alert.",
-      "Import this LinkedIn job without opening it."
+      "Import this Indeed job without opening it."
     ]
   },
   "mcpServers": "./.mcp.json"

@@ -12,7 +12,7 @@ const transport = new StdioClientTransport({
   cwd: root,
   stderr: "pipe"
 });
-const client = new Client({ name: "zar-jobs-smoke", version: "0.5.0" });
+const client = new Client({ name: "zar-jobs-smoke", version: "0.6.0" });
 
 try {
   await client.connect(transport);
@@ -23,6 +23,7 @@ try {
     [
       "get_infojobs_job",
       "get_portal_capabilities",
+      "import_indeed_job",
       "import_linkedin_job",
       "import_tecnoempleo_rss",
       "list_tecnoempleo_alert_jobs",
@@ -78,6 +79,26 @@ try {
   });
   assert.equal(imported.isError, undefined);
   assert.equal(imported.structuredContent.result.verificationStatus, "unverified");
+
+  const indeedCapabilities = await client.callTool({
+    name: "get_portal_capabilities",
+    arguments: { portal: "indeed" }
+  });
+  assert.equal(
+    indeedCapabilities.structuredContent.capabilities[0].status,
+    "implemented-manual-import"
+  );
+
+  const importedIndeed = await client.callTool({
+    name: "import_indeed_job",
+    arguments: {
+      url: "https://es.indeed.com/viewjob?jk=abc123def4567890&from=shareddesktop_copy",
+      title: "Backend Engineer",
+      company: "Example Tech"
+    }
+  });
+  assert.equal(importedIndeed.isError, undefined);
+  assert.equal(importedIndeed.structuredContent.result.externalId, "abc123def4567890");
 
   console.log("MCP smoke test passed.");
 } finally {

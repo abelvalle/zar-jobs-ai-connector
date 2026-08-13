@@ -31,6 +31,16 @@ test("preserves functional query parameters", () => {
   assert.equal(result.url, "https://www.infojobs.net/job/example?offerId=abc");
 });
 
+test("normalizes an Indeed viewjob URL and extracts its job key", () => {
+  const result = normalizeJobUrl(
+    "https://es.indeed.com/viewjob?jk=abc123def4567890&from=shareddesktop_copy&utm_source=email#job"
+  );
+
+  assert.equal(result.portal, "indeed");
+  assert.equal(result.externalId, "abc123def4567890");
+  assert.equal(result.url, "https://es.indeed.com/viewjob?jk=abc123def4567890");
+});
+
 test("marks unknown HTTPS domains as unsupported", () => {
   const result = normalizeJobUrl("https://jobs.example.com/role/42");
   assert.equal(result.portal, "unknown");

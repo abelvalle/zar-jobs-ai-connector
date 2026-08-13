@@ -1,4 +1,4 @@
-export const PORTALS = ["infojobs", "tecnoempleo", "linkedin"];
+export const PORTALS = ["infojobs", "tecnoempleo", "linkedin", "indeed"];
 
 const CAPABILITIES = Object.freeze([
   Object.freeze({
@@ -33,7 +33,7 @@ const CAPABILITIES = Object.freeze([
       "rss-content-import"
     ],
     unavailableNow: [
-      "general-api-search",
+      "automated-general-search",
       "application-status",
       "application-submission"
     ],
@@ -42,8 +42,7 @@ const CAPABILITIES = Object.freeze([
     safeNextAction:
       "Use import_tecnoempleo_rss remotely, or configure TECNOEMPLEO_RSS_URL locally, then review the source links.",
     sources: [
-      "https://www.tecnoempleo.com/buscar-trabajo/encuentra-ofertas-empleo.php",
-      "https://www.tecnoempleo.com/api-integraciones.php"
+      "https://www.tecnoempleo.com/buscar-trabajo/encuentra-ofertas-empleo.php"
     ]
   }),
   Object.freeze({
@@ -63,6 +62,17 @@ const CAPABILITIES = Object.freeze([
       "https://learn.microsoft.com/en-us/linkedin/talent/",
       "https://www.linkedin.com/legal/crawling-terms"
     ]
+  }),
+  Object.freeze({
+    portal: "indeed",
+    status: "implemented-manual-import",
+    accessMode: "user-provided-job",
+    availableNow: ["url-normalization", "capability-reporting", "manual-job-import"],
+    unavailableNow: ["automated-search", "automated-application", "scraping"],
+    dependency: "The user must provide an Indeed viewjob URL plus the visible job fields.",
+    safeNextAction:
+      "Import the user-provided Indeed job, then verify that the original posting is active.",
+    sources: ["https://docs.indeed.com/", "https://www.indeed.com/legal"]
   })
 ]);
 

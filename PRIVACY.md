@@ -10,7 +10,7 @@ Cuando el usuario invoca una herramienta de InfoJobs, el proceso local envía di
 
 Cuando se consulta una alerta RSS de Tecnoempleo, el proceso local solicita directamente la URL personalizada configurada por el usuario. El conector no registra esa URL ni persiste las ofertas recibidas.
 
-En el servidor remoto, la URL personalizada no se configura ni se solicita. La herramienta `import_tecnoempleo_rss` recibe el XML que el usuario aporta voluntariamente, lo procesa en memoria y lo descarta al devolver la respuesta. La importación de LinkedIn funciona del mismo modo con los campos aportados por el usuario y no contacta con LinkedIn.
+En el servidor remoto, la URL personalizada no se configura ni se solicita. La herramienta `import_tecnoempleo_rss` recibe el XML que el usuario aporta voluntariamente, lo procesa en memoria y lo descarta al devolver la respuesta. Las importaciones de LinkedIn e Indeed funcionan del mismo modo con los campos aportados por el usuario y no contactan con esos portales.
 
 ## Servicio alojado e integraciones futuras
 

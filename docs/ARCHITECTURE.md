@@ -22,8 +22,9 @@ Servidor MCP
         v
 Adaptadores de portal
   - InfoJobs API
-  - Tecnoempleo RSS propio / feed autorizado
+  - Tecnoempleo RSS propio
   - LinkedIn importación segura
+  - Indeed importación segura
 ```
 
 ### Plugin de Codex
@@ -49,8 +50,8 @@ Las herramientas de red se añadirán únicamente cuando exista acceso oficial:
 - `search_infojobs_jobs` y `get_infojobs_job`, implementadas con la API oficial y credenciales de aplicación;
 - `list_tecnoempleo_alert_jobs`, implementada sobre el RSS propio del usuario;
 - `import_tecnoempleo_rss`, implementada sobre contenido RSS aportado por el usuario y disponible también en el transporte remoto;
-- `search_tecnoempleo_jobs`, reservada para un futuro API general autorizado;
 - `import_linkedin_job`, implementada sin llamadas de red ni persistencia;
+- `import_indeed_job`, implementada sin llamadas de red ni persistencia;
 - `list_infojobs_applications` en modo de solo lectura y con consentimiento.
 
 No habrá herramientas `apply`, `submit`, `send` ni equivalentes.

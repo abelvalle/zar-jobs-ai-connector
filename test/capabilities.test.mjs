@@ -7,7 +7,7 @@ test("returns all documented portals", () => {
   const result = getPortalCapabilities();
   assert.deepEqual(
     result.map((item) => item.portal),
-    ["infojobs", "tecnoempleo", "linkedin"]
+    ["infojobs", "tecnoempleo", "linkedin", "indeed"]
   );
 });
 
@@ -31,7 +31,15 @@ test("reports the user-authorized Tecnoempleo RSS capability", () => {
   const [result] = getPortalCapabilities("tecnoempleo");
   assert.equal(result.status, "implemented-user-rss-required");
   assert.ok(result.availableNow.includes("alert-job-listing"));
-  assert.ok(result.unavailableNow.includes("general-api-search"));
+  assert.ok(result.unavailableNow.includes("automated-general-search"));
+});
+
+test("reports Indeed manual import without automated access", () => {
+  const [result] = getPortalCapabilities("indeed");
+  assert.equal(result.status, "implemented-manual-import");
+  assert.ok(result.availableNow.includes("manual-job-import"));
+  assert.ok(result.unavailableNow.includes("automated-search"));
+  assert.ok(result.unavailableNow.includes("scraping"));
 });
 
 test("rejects an unknown portal", () => {

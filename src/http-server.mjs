@@ -19,7 +19,7 @@ export function createZarJobsHttpServer({ allowedHosts = [] } = {}) {
       return sendJson(response, 200, {
         status: "ok",
         service: "zar-jobs-ai-connector",
-        version: "0.5.0",
+        version: "0.6.0",
       });
     }
 

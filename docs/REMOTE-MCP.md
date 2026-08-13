@@ -10,6 +10,7 @@ El endpoint `/mcp` ofrece únicamente herramientas que no requieren secretos de 
 - `normalize_job_url`;
 - `import_tecnoempleo_rss`;
 - `import_linkedin_job`.
+- `import_indeed_job`.
 
 Las herramientas InfoJobs y `list_tecnoempleo_alert_jobs` permanecen en el servidor local por `stdio`. Esto evita exponer una credencial de aplicación a abuso anónimo o compartir por error una URL RSS privada entre usuarios.
 
@@ -30,10 +31,10 @@ npx.cmd @modelcontextprotocol/inspector http://127.0.0.1:3000/mcp
 ## Contenedor
 
 ```powershell
-docker build -t zar-jobs-ai-connector:0.5.0 .
+docker build -t zar-jobs-ai-connector:0.6.0 .
 docker run --rm -p 3000:3000 `
   -e ALLOWED_HOSTS=localhost,127.0.0.1 `
-  zar-jobs-ai-connector:0.5.0
+  zar-jobs-ai-connector:0.6.0
 ```
 
 En producción:

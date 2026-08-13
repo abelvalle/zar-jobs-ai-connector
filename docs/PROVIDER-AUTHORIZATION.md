@@ -2,18 +2,6 @@
 
 Estas solicitudes son ampliaciones opcionales. La versión pública segura funciona mediante importación aportada por el usuario y no afirma una integración oficial directa.
 
-## Tecnoempleo
-
-Canal oficial: [API, integraciones y partners](https://www.tecnoempleo.com/api-integraciones.php).
-
-Plantilla:
-
-> Asunto: Solicitud de acceso API para Zar Jobs AI Connector
->
-> Somos los responsables del proyecto abierto Zar Jobs AI Connector: https://github.com/abelvalle/zar-jobs-ai-connector. El complemento es de solo lectura, no envía candidaturas, no almacena perfiles y conserva la atribución y el enlace original. Solicitamos confirmación escrita de si el feed XML/JSON general puede usarse en un MCP público para consultar ofertas, junto con esquema, autenticación, límites, condiciones de caché, atribución y entorno de pruebas. No activaremos el adaptador hasta recibir autorización expresa.
-
-Evidencia que debe guardarse sin secretos: fecha, interlocutor, alcance autorizado, documentación de esquema, hosts, límites, atribución y expiración/revocación.
-
 ## LinkedIn
 
 Fuentes oficiales: [Talent Solutions APIs](https://learn.microsoft.com/en-us/linkedin/talent/) y [crawling terms](https://www.linkedin.com/legal/crawling-terms).

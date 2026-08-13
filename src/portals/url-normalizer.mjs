@@ -16,16 +16,22 @@ function detectPortal(hostname) {
   if (matchesDomain(hostname, "infojobs.net")) return "infojobs";
   if (matchesDomain(hostname, "tecnoempleo.com")) return "tecnoempleo";
   if (matchesDomain(hostname, "linkedin.com")) return "linkedin";
+  if (matchesDomain(hostname, "indeed.com")) return "indeed";
   return "unknown";
 }
 
 function extractExternalId(portal, pathname, searchParams) {
-  if (portal !== "linkedin") return null;
-  return (
-    pathname.match(/\/jobs\/view\/(\d+)/i)?.[1] ??
-    searchParams.get("currentJobId")?.match(/^\d+$/)?.[0] ??
-    null
-  );
+  if (portal === "linkedin") {
+    return (
+      pathname.match(/\/jobs\/view\/(\d+)/i)?.[1] ??
+      searchParams.get("currentJobId")?.match(/^\d+$/)?.[0] ??
+      null
+    );
+  }
+  if (portal === "indeed" && /^\/viewjob\/?$/i.test(pathname)) {
+    return searchParams.get("jk")?.match(/^[A-Za-z0-9_-]{6,100}$/)?.[0] ?? null;
+  }
+  return null;
 }
 
 export function normalizeJobUrl(input) {
@@ -48,6 +54,11 @@ export function normalizeJobUrl(input) {
   }
 
   parsed.hash = "";
+  const portal = detectPortal(parsed.hostname.toLowerCase());
+  if (portal === "indeed") {
+    const jobKey = extractExternalId(portal, parsed.pathname, parsed.searchParams);
+    parsed.search = jobKey === null ? "" : `?jk=${encodeURIComponent(jobKey)}`;
+  }
   for (const key of [...parsed.searchParams.keys()]) {
     const normalizedKey = key.toLowerCase();
     if (normalizedKey.startsWith("utm_") || TRACKING_PARAMETERS.has(normalizedKey)) {
@@ -56,7 +67,6 @@ export function normalizeJobUrl(input) {
   }
   parsed.searchParams.sort();
 
-  const portal = detectPortal(parsed.hostname.toLowerCase());
   return {
     url: parsed.toString(),
     portal,

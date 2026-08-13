@@ -43,7 +43,6 @@ Las credenciales de aplicación se suministran mediante variables de entorno o m
 - `INFOJOBS_CLIENT_ID`
 - `INFOJOBS_CLIENT_SECRET`
 - `TECNOEMPLEO_RSS_URL`
-- credenciales que Tecnoempleo defina al autorizar su API general, todavía no implementadas
 
 `TECNOEMPLEO_RSS_URL` solo se usa en el transporte local. El servicio remoto no carga una URL de alerta global: recibe el contenido RSS como entrada efímera. Los usuarios nunca introducirán contraseñas de portales en el plugin.
 

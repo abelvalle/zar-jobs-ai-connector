@@ -7,7 +7,7 @@
 - [x] separación entre herramientas públicas y secretos locales;
 - [x] imagen Docker reproducible;
 - [x] pruebas unitarias, cliente MCP HTTP y smoke por `stdio`;
-- [x] cinco evaluaciones positivas y tres negativas;
+- [x] siete evaluaciones positivas y cuatro negativas;
 - [x] política de privacidad, términos, seguridad y soporte;
 - [x] anotaciones de solo lectura en todas las herramientas;
 - [x] sin scraping, candidaturas, mensajería ni persistencia.
@@ -18,7 +18,7 @@
 - [ ] configurar `ALLOWED_HOSTS`, límite de tasa, reinicio y monitorización;
 - [ ] verificar identidad de desarrollador y permiso `api.apps.write`;
 - [ ] completar la ficha, países, iconos definitivos y vídeo de demostración;
-- [ ] ejecutar las ocho evaluaciones contra producción;
+- [ ] ejecutar las once evaluaciones contra producción;
 - [ ] enviar la URL `/mcp` a revisión de OpenAI;
 - [ ] corregir observaciones, obtener aprobación y pulsar publicar.
 
@@ -28,9 +28,8 @@ La aprobación no se puede declarar desde el código. OpenAI exige una URL públ
 
 ## Ampliaciones de proveedor independientes
 
-- Tecnoempleo: solicitar autorización escrita para el feed XML/JSON general antes de añadir búsqueda directa.
 - LinkedIn: solicitar acceso al programa aplicable antes de añadir cualquier API Talent; sus APIs públicas documentadas no constituyen una búsqueda general de vacantes.
 
-Seguimiento público: [autorización de Tecnoempleo #3](https://github.com/abelvalle/zar-jobs-ai-connector/issues/3) y [elegibilidad de LinkedIn #4](https://github.com/abelvalle/zar-jobs-ai-connector/issues/4).
+Seguimiento público: [elegibilidad de LinkedIn #4](https://github.com/abelvalle/zar-jobs-ai-connector/issues/4).
 
 Las plantillas y la evidencia necesaria están en [PROVIDER-AUTHORIZATION.md](PROVIDER-AUTHORIZATION.md).

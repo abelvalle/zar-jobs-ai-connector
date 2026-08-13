@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { z } from "zod";
 
 import { getPortalCapabilities, PORTALS } from "./portals/capabilities.mjs";
+import { importIndeedJob } from "./portals/indeed-manual-import.mjs";
 import { createInfoJobsClientFromEnv } from "./portals/infojobs-client.mjs";
 import { importLinkedInJob } from "./portals/linkedin-manual-import.mjs";
 import {
@@ -95,6 +96,22 @@ const linkedinManualJobSchema = z.object({
   safeNextAction: z.string(),
 });
 
+const indeedManualJobSchema = z.object({
+  source: z.literal("indeed"),
+  externalId: z.string(),
+  title: z.string(),
+  company: z.string(),
+  location: nullableText,
+  url: z.string().url(),
+  publishedAt: nullableText,
+  workplaceType: nullableText,
+  employmentType: nullableText,
+  description: nullableText,
+  evidence: z.literal("user-provided"),
+  verificationStatus: z.literal("unverified"),
+  safeNextAction: z.string(),
+});
+
 export function createZarJobsServer({
   includeInfoJobsTools = true,
   includePrivateFeedTool = true,
@@ -102,7 +119,7 @@ export function createZarJobsServer({
   const server = new McpServer(
     {
       name: "zar-jobs-ai-connector",
-      version: "0.5.0",
+      version: "0.6.0",
     },
     {
       instructions:
@@ -139,6 +156,48 @@ export function createZarJobsServer({
     async (input) => {
       try {
         const result = importLinkedInJob(input);
+        return {
+          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+          structuredContent: { result },
+        };
+      } catch (error) {
+        return {
+          isError: true,
+          content: [{ type: "text", text: safeErrorMessage(error) }],
+        };
+      }
+    },
+  );
+
+  server.registerTool(
+    "import_indeed_job",
+    {
+      title: "Import an Indeed job manually",
+      description:
+        "Normalize an Indeed viewjob URL and user-provided job fields without contacting Indeed. The result remains unverified until a human checks the original posting.",
+      inputSchema: {
+        url: z.string().min(1).max(2048),
+        title: z.string().min(1).max(150),
+        company: z.string().min(1).max(150),
+        location: z.string().min(1).max(200).optional(),
+        description: z.string().min(1).max(10_000).optional(),
+        publishedAt: z.string().min(1).max(100).optional(),
+        workplaceType: z.string().min(1).max(100).optional(),
+        employmentType: z.string().min(1).max(100).optional(),
+      },
+      outputSchema: {
+        result: indeedManualJobSchema,
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async (input) => {
+      try {
+        const result = importIndeedJob(input);
         return {
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
           structuredContent: { result },
@@ -355,7 +414,7 @@ export function createZarJobsServer({
     {
       title: "Get job portal capabilities",
       description:
-        "Use this before promising access to InfoJobs, Tecnoempleo, or LinkedIn. It reports current read-only capabilities, dependencies, and safe next actions.",
+        "Use this before promising access to InfoJobs, Tecnoempleo, LinkedIn, or Indeed. It reports current read-only capabilities, dependencies, and safe next actions.",
       inputSchema: {
         portal: z.enum(PORTALS).optional(),
       },
@@ -386,7 +445,7 @@ export function createZarJobsServer({
     {
       title: "Normalize a job URL",
       description:
-        "Validate a user-provided HTTPS job URL, remove known tracking parameters, identify its portal, and extract a LinkedIn job ID when present. This tool does not open the URL.",
+        "Validate a user-provided HTTPS job URL, remove known tracking parameters, identify its portal, and extract a supported job ID when present. This tool does not open the URL.",
       inputSchema: {
         url: z.string().min(1).max(2048),
       },

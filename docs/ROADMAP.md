@@ -76,17 +76,6 @@ Criterios de aceptación:
 - enlaces externos o elementos inválidos omitidos y contabilizados;
 - sin credenciales personales, scraping, persistencia ni inscripción.
 
-## Hito 3B — API general autorizado de Tecnoempleo
-
-Dependencia externa: autorización escrita para el uso del feed XML/JSON en un plugin público.
-
-Criterios de aceptación:
-
-- acceso restringido al host y formato autorizados;
-- parser con fixtures anonimizadas;
-- prueba de cambios de esquema y fallos parciales;
-- atribución y enlaces conservados.
-
 ## Hito 4 — LinkedIn seguro ✅
 
 Objetivo: aportar valor sin automatizar ni extraer datos de LinkedIn sin permiso.
@@ -99,6 +88,18 @@ Criterios de aceptación:
 - rechazo explícito de búsquedas automatizadas o scraping;
 - cualquier API nueva requiere aprobación verificable de LinkedIn.
 
+## Hito 4B — Indeed seguro ✅
+
+Objetivo: incorporar Indeed sin automatizar el portal ni depender de credenciales o autorizaciones.
+
+Criterios de aceptación:
+
+- reconocimiento de URLs `viewjob` bajo `indeed.com` y extracción de la clave `jk`;
+- importación manual con título y empresa obligatorios;
+- resultado marcado como `user-provided` y `unverified`;
+- disponibilidad idéntica en MCP local y remoto;
+- cero llamadas de red, scraping, persistencia o candidaturas.
+
 ## Hito 5A — MCP remoto anónimo y sin estado ✅
 
 Objetivo: permitir conexión remota sin ejecutar un proceso local y sin custodiar datos privados de usuarios.
@@ -108,7 +109,7 @@ Criterios de aceptación:
 - Streamable HTTP sin estado en `/mcp` y health check mínimo en `/health`;
 - servidor ligado a loopback por defecto y `ALLOWED_HOSTS` obligatorio al publicar;
 - límite de petición de 3 MB, errores sanitizados y cero logs de contenidos;
-- `import_tecnoempleo_rss` e `import_linkedin_job` sin red ni persistencia;
+- `import_tecnoempleo_rss`, `import_linkedin_job` e `import_indeed_job` sin red ni persistencia;
 - la herramienta de URL RSS privada queda excluida del servidor remoto;
 - imagen Docker reproducible y pruebas de cliente MCP reales.
 

@@ -24,10 +24,10 @@ test("serves the public stateless MCP over Streamable HTTP", async () => {
   assert.deepEqual(await health.json(), {
     status: "ok",
     service: "zar-jobs-ai-connector",
-    version: "0.5.0",
+    version: "0.6.0",
   });
 
-  const client = new Client({ name: "zar-jobs-http-test", version: "0.5.0" });
+  const client = new Client({ name: "zar-jobs-http-test", version: "0.6.0" });
   const transport = new StreamableHTTPClientTransport(new URL(`${baseUrl}/mcp`));
 
   try {
@@ -36,6 +36,7 @@ test("serves the public stateless MCP over Streamable HTTP", async () => {
     const toolNames = listed.tools.map((tool) => tool.name);
     assert.ok(toolNames.includes("import_tecnoempleo_rss"));
     assert.ok(toolNames.includes("import_linkedin_job"));
+    assert.ok(toolNames.includes("import_indeed_job"));
     assert.ok(!toolNames.includes("search_infojobs_jobs"));
     assert.ok(!toolNames.includes("list_tecnoempleo_alert_jobs"));
 
@@ -51,6 +52,17 @@ test("serves the public stateless MCP over Streamable HTTP", async () => {
     });
     assert.equal(imported.isError, undefined);
     assert.equal(imported.structuredContent.result.jobs[0].externalId, "te-remote-1");
+
+    const importedIndeed = await client.callTool({
+      name: "import_indeed_job",
+      arguments: {
+        url: "https://es.indeed.com/viewjob?jk=abc123def4567890&from=share",
+        title: "Backend Engineer",
+        company: "Example Tech",
+      },
+    });
+    assert.equal(importedIndeed.isError, undefined);
+    assert.equal(importedIndeed.structuredContent.result.externalId, "abc123def4567890");
   } finally {
     await client.close();
     await new Promise((resolve, reject) =>

@@ -44,4 +44,4 @@ Remove-Variable tecnoempleoCredential
 
 Las herramientas `list_tecnoempleo_alert_jobs` e `import_tecnoempleo_rss` devuelven hasta 50 elementos y conservan el enlace original. Los elementos ajenos a Tecnoempleo o inválidos se omiten y se cuentan en `diagnostics.skippedItems`.
 
-El API general XML/JSON anunciado por Tecnoempleo es otra integración distinta. Continúa pendiente de autorización escrita, credenciales, esquema y condiciones específicas para distribuirlo mediante un plugin público.
+El proyecto limita deliberadamente Tecnoempleo al RSS personalizado del usuario. No solicitará ni implementará el API general XML/JSON.
