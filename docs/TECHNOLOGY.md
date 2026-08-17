@@ -9,6 +9,8 @@
 | MCP | `@modelcontextprotocol/sdk` | Implementación estándar de herramientas y `stdio` |
 | Validación | `zod` | Esquemas explícitos de entrada y salida |
 | XML | `fast-xml-parser` | Lectura acotada del RSS sin parser propio |
+| CV estructurado | `@jsonresume/schema` | Estándar abierto y validación portable del CV |
+| Validación ATS | `@jsonresume/ats-validator` | Controles HTML deterministas y offline |
 | Pruebas | `node:test` | Incluido en Node.js |
 | Distribución | Marketplaces Git + `npx` | Instalación desde GitHub sin servicio alojado |
 | Automatización | GitHub Actions | Validación en `develop` y `master` |
@@ -26,7 +28,9 @@ src/cli.mjs
 src/connector-status.mjs
 src/server.mjs
 src/portals/*.mjs
+src/resumes/*.mjs
 test/*.test.mjs
+templates/resume.example.json
 docs/
 ```
 
@@ -47,3 +51,5 @@ Las capacidades manuales funcionan sin credenciales. Las integraciones opcionale
 Los usuarios nunca introducirán contraseñas de portales en el plugin.
 
 `get_connector_status` comprueba solo si estas variables contienen un valor no vacío. Su respuesta puede incluir el nombre de una variable ausente, pero nunca su contenido.
+
+Las herramientas de currículum no necesitan variables, cuentas ni servicios externos. El render actual produce HTML y evita añadir Playwright, Chromium, Python o un servidor únicamente para generar PDF.

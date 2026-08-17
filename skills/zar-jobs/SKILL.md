@@ -1,6 +1,6 @@
 ---
 name: zar-jobs
-description: Discover and review employment opportunities through Zar Jobs AI Connector. Use when the user asks which supported job portals are available, provides a job URL to identify or normalize, or wants compliant job-search guidance for InfoJobs, Tecnoempleo, LinkedIn, or Indeed.
+description: Discover and review employment opportunities or create truthful ATS-oriented resume variants through Zar Jobs AI Connector. Use when the user asks about supported job portals, provides a job URL, wants compliant job-search guidance, or asks to create, edit, validate, tailor, or review a CV or resume.
 ---
 
 # Zar Jobs
@@ -14,6 +14,9 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 - Never submit an application, send a message, or modify a candidate profile.
 - Never request a portal password, session cookie, access token, or client secret in chat.
 - Mark ambiguous or stale evidence as `unverified` and ask the user to inspect the original portal.
+- Treat the user's confirmed base resume as the source of truth for candidate facts.
+- Never invent employers, roles, dates, degrees, certifications, skills, languages, metrics, authorship, or contact details to improve a score.
+- Never promise that a local ATS score guarantees acceptance by an external system.
 
 ## Workflow
 
@@ -28,9 +31,20 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 9. Preserve the source URL and distinguish portal-provided facts from model inference.
 10. Respond in the user's language.
 
+## Resume workflow
+
+1. Obtain the user's existing CV or confirmed facts. Do not infer personal claims from a job description.
+2. Build one JSON Resume base document and call `validate_resume` before tailoring it.
+3. For a specific offer, call `match_resume_to_job`. Treat missing terms as questions or evidence gaps, never instructions to add them.
+4. Create a separate variant by selecting, reordering, or truthfully rephrasing facts from the base. Never overwrite the base document.
+5. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
+6. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
+7. Call `render_resume_html` only after validation and the variant audit. Save the returned HTML only when the user asked for a file, using a distinct company-and-role filename in the user's workspace.
+8. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
+
 ## Current version
 
-The current version is read-only. It can:
+The current MCP tools do not write files. They can:
 
 - report the planned and currently allowed integration mode for each portal;
 - report local configuration readiness without exposing secret values;
@@ -41,6 +55,9 @@ The current version is read-only. It can:
 - import user-provided Tecnoempleo RSS content without a network request or storage.
 - import user-provided LinkedIn job data without making a network request.
 - import user-provided Indeed job data without making a network request.
+- validate JSON Resume documents and compare them with user-provided job text.
+- audit tailored variants against a base resume for selected unsupported additions.
+- render escaped, printable, single-column HTML and check its ATS structure offline.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 
@@ -61,3 +78,13 @@ For a job URL, report:
 - whether the portal is supported;
 - extracted external ID when available;
 - any verification still required.
+
+For a resume variant, report:
+
+- base validation status;
+- target company and role;
+- supported terms emphasized;
+- missing terms that remain unsupported;
+- variant-audit issues;
+- ATS score with its non-guarantee disclaimer;
+- output filename, only if the user asked to save it.

@@ -12,13 +12,13 @@ Codex / Claude Code / cliente MCP
       Zar Jobs AI Connector
       - herramientas MCP
       - validación y normalización
-                |
-                v
-        Adaptadores de portal
-        - InfoJobs API oficial
-        - Tecnoempleo RSS propio
-        - LinkedIn importación manual
-        - Indeed importación manual
+          |                 |
+          v                 v
+  Motor de CV        Adaptadores de portal
+  - JSON Resume      - InfoJobs API oficial
+  - ATS offline      - Tecnoempleo RSS propio
+  - variantes        - LinkedIn importación manual
+                     - Indeed importación manual
 ```
 
 ## Distribución
@@ -38,7 +38,7 @@ Ambos catálogos apuntan a una etiqueta de release fija. La configuración MCP u
 
 Solo existe transporte MCP por `stdio`. El cliente crea un subproceso local, intercambia mensajes por entrada y salida estándar y lo detiene al cerrar la conexión. No escucha puertos y no acepta conexiones desde la red.
 
-`src/cli.mjs` abre el transporte local y `src/server.mjs` registra nueve herramientas pequeñas. `src/connector-status.mjs` diagnostica únicamente la presencia de configuración, nunca sus valores. La lógica de portales vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
+`src/cli.mjs` abre el transporte local y `src/server.mjs` registra catorce herramientas pequeñas. `src/connector-status.mjs` diagnostica únicamente la presencia de configuración, nunca sus valores. `src/resumes/resume-tools.mjs` contiene las operaciones puras de CV. La lógica de portales vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
 
 ## Datos y estado
 
@@ -46,9 +46,10 @@ Solo existe transporte MCP por `stdio`. El cliente crea un subproceso local, int
 - Las credenciales opcionales se leen del entorno del proceso y nunca se devuelven.
 - El XML de Tecnoempleo y los datos manuales de LinkedIn o Indeed viven solo durante la llamada.
 - Los textos de las ofertas son datos no confiables y nunca instrucciones.
+- El CV base y las variantes se reciben en memoria; el MCP no escribe archivos ni conserva datos personales.
 
 ## Contrato común
 
 Cada adaptador devuelve fuente, identificador, título, empresa, ubicación, URL y fechas cuando existen. Los campos desconocidos se omiten o usan `null`; nunca se inventan.
 
-No existen herramientas `apply`, `submit`, `send` ni equivalentes.
+No existen herramientas `apply`, `submit`, `send` ni equivalentes. Una variante no autoriza a inventar experiencia ni a sobrescribir el CV base.

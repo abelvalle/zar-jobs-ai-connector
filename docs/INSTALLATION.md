@@ -58,6 +58,12 @@ No guardes estos valores en el repositorio, en la configuración versionada ni e
 
 Después de iniciar el plugin, pide al asistente que ejecute `get_connector_status`. El resultado indica si InfoJobs y la lectura directa del RSS están listos y mantiene disponibles las importaciones manuales aunque falte configuración.
 
+## Currículums
+
+Las herramientas de CV no requieren configuración adicional. Para empezar, pide al asistente que cree un CV base compatible con JSON Resume usando únicamente datos confirmados. La plantilla de referencia está en `templates/resume.example.json`.
+
+Cada adaptación debe guardarse, si el usuario lo solicita, como un archivo diferente del CV base. El plugin devuelve el JSON o HTML en memoria y nunca decide una ruta ni escribe por su cuenta.
+
 ## Actualización y desinstalación
 
 Codex:

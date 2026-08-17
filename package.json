@@ -1,7 +1,7 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "0.8.0",
-  "description": "Read-only job discovery connector for Codex and MCP-compatible AI assistants.",
+  "version": "0.9.0",
+  "description": "Local job discovery and truthful ATS-oriented resume tools for AI assistants.",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "check": "node --check src/cli.mjs && node --check src/server.mjs && node --check src/connector-status.mjs && node --check src/portals/capabilities.mjs && node --check src/portals/indeed-manual-import.mjs && node --check src/portals/infojobs-client.mjs && node --check src/portals/linkedin-manual-import.mjs && node --check src/portals/tecnoempleo-rss-client.mjs && node --check src/portals/url-normalizer.mjs && node --check scripts/infojobs-live-smoke.mjs && node --check scripts/tecnoempleo-live-smoke.mjs && node --check scripts/validate-plugin.mjs",
+    "check": "node --check src/cli.mjs && node --check src/server.mjs && node --check src/connector-status.mjs && node --check src/resumes/resume-tools.mjs && node --check src/portals/capabilities.mjs && node --check src/portals/indeed-manual-import.mjs && node --check src/portals/infojobs-client.mjs && node --check src/portals/linkedin-manual-import.mjs && node --check src/portals/tecnoempleo-rss-client.mjs && node --check src/portals/url-normalizer.mjs && node --check scripts/infojobs-live-smoke.mjs && node --check scripts/tecnoempleo-live-smoke.mjs && node --check scripts/validate-plugin.mjs",
     "test": "node --test",
     "validate:plugin": "node scripts/validate-plugin.mjs",
     "smoke": "node scripts/smoke.mjs",
@@ -21,6 +21,8 @@
     "smoke:tecnoempleo": "node scripts/tecnoempleo-live-smoke.mjs"
   },
   "dependencies": {
+    "@jsonresume/ats-validator": "^0.3.0",
+    "@jsonresume/schema": "^1.3.1",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "fast-xml-parser": "^5.10.1",
     "zod": "^4.4.3"

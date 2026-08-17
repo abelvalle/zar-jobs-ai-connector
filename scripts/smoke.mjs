@@ -33,6 +33,25 @@ const transport = new StdioClientTransport(
       }
 );
 const client = new Client({ name: "zar-jobs-smoke", version: CONNECTOR_VERSION });
+const smokeResume = {
+  basics: {
+    name: "Alex Example",
+    label: "Backend Engineer",
+    email: "alex@example.com",
+    phone: "+34 600 000 000",
+    summary: "Backend engineer focused on reliable services.",
+  },
+  work: [
+    {
+      name: "Example Tech",
+      position: "Backend Engineer",
+      startDate: "2021-01",
+      highlights: ["Built Java services", "Reduced deployment time by 30%"],
+    },
+  ],
+  education: [{ institution: "Example University", area: "Computer Science" }],
+  skills: [{ name: "Backend", keywords: ["Java", "PostgreSQL"] }],
+};
 
 try {
   await client.connect(transport);
@@ -41,6 +60,8 @@ try {
   assert.deepEqual(
     listed.tools.map((tool) => tool.name).sort(),
     [
+      "audit_resume_variant",
+      "check_resume_ats",
       "get_connector_status",
       "get_infojobs_job",
       "get_portal_capabilities",
@@ -48,8 +69,11 @@ try {
       "import_linkedin_job",
       "import_tecnoempleo_rss",
       "list_tecnoempleo_alert_jobs",
+      "match_resume_to_job",
       "normalize_job_url",
-      "search_infojobs_jobs"
+      "render_resume_html",
+      "search_infojobs_jobs",
+      "validate_resume"
     ]
   );
 
@@ -61,6 +85,42 @@ try {
   assert.equal(status.structuredContent.result.connector.version, CONNECTOR_VERSION);
   assert.equal(status.structuredContent.result.connector.transport, "stdio");
   assert.equal(status.structuredContent.result.portals.length, 4);
+
+  const validatedResume = await client.callTool({
+    name: "validate_resume",
+    arguments: { resume: smokeResume }
+  });
+  assert.equal(validatedResume.structuredContent.result.valid, true);
+
+  const renderedResume = await client.callTool({
+    name: "render_resume_html",
+    arguments: { resume: smokeResume }
+  });
+  assert.match(renderedResume.structuredContent.result.html, /<!doctype html>/);
+
+  const atsResume = await client.callTool({
+    name: "check_resume_ats",
+    arguments: { resume: smokeResume }
+  });
+  assert.ok(atsResume.structuredContent.result.score >= 80);
+
+  const matchedResume = await client.callTool({
+    name: "match_resume_to_job",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Backend Engineer with Java, PostgreSQL, and Kubernetes"
+    }
+  });
+  assert.ok(matchedResume.structuredContent.result.missingKeywords.includes("kubernetes"));
+
+  const auditedVariant = await client.callTool({
+    name: "audit_resume_variant",
+    arguments: { baseResume: smokeResume, variantResume: smokeResume }
+  });
+  assert.equal(
+    auditedVariant.structuredContent.result.status,
+    "no-structural-additions-detected"
+  );
 
   const capabilities = await client.callTool({
     name: "get_portal_capabilities",

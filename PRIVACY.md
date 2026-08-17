@@ -14,6 +14,8 @@ Las importaciones de LinkedIn e Indeed procesan únicamente los campos aportados
 
 La herramienta `get_connector_status` comprueba únicamente si las variables opcionales están presentes. Puede devolver el nombre de una variable ausente, pero nunca su valor.
 
+Las herramientas de currículum reciben el CV y, opcionalmente, el texto de una oferta durante la llamada MCP. No guardan estos datos, no los envían a un servicio externo y no escriben archivos. El cliente de IA solo debe guardar un CV base o una variante cuando el usuario lo solicite y en una ubicación bajo su control.
+
 ## Credenciales
 
 El plugin nunca solicita contraseñas, cookies o tokens de sesión de portales. Las variables opcionales permanecen bajo control del usuario y se heredan desde el entorno de Codex o Claude Code.

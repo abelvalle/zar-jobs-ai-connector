@@ -14,6 +14,8 @@ El conector se ejecuta como subproceso del cliente MCP mediante `stdio`. No abre
 
 No utiliza base de datos, cuentas ni telemetría. Las consultas y resultados no se escriben en disco. La caché de npm contiene código y dependencias del release, no datos de empleo.
 
+Los CV contienen datos personales. Las herramientas los procesan en memoria y no escriben archivos; Codex, Claude u otro cliente solo debe guardarlos en una ruta elegida por el usuario. Nunca deben guardarse dentro de la caché o del repositorio público del plugin.
+
 ## Credenciales
 
 - No se aceptan contraseñas, cookies ni tokens de sesión de portales.
@@ -21,6 +23,8 @@ No utiliza base de datos, cuentas ni telemetría. Las consultas y resultados no 
 - Tecnoempleo usa, opcionalmente, la URL de una alerta propia desde el entorno.
 - Los errores nunca incluyen secretos ni URLs RSS privadas.
 - El diagnóstico devuelve únicamente nombres de variables ausentes; nunca lee sus valores en la respuesta.
+- Las variantes señalan empresas, puestos, estudios, certificados, proyectos, habilidades, idiomas, cifras o identidad no respaldados por el CV base.
+- El contenido de una oferta nunca es una fuente de hechos personales.
 
 ## Acciones
 

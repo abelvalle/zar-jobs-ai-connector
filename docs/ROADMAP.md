@@ -60,6 +60,25 @@ Criterios de aceptación:
 - alternativas manuales conservadas cuando falta configuración de red;
 - pruebas unitarias y smoke portable en verde.
 
+## Hito 7 — CV base y variantes ATS ✅
+
+Objetivo: crear y adaptar currículums locales con un formato estándar, controles reproducibles y protección frente a afirmaciones inventadas.
+
+Criterios de aceptación:
+
+- JSON Resume como contrato reutilizado y portable;
+- validación local de estructura e identidad mínima;
+- comparación orientativa entre CV y oferta sin añadir palabras automáticamente;
+- auditoría de variantes frente al CV base;
+- render HTML escapado, imprimible y de una sola columna;
+- comprobación ATS offline con aviso explícito de que no garantiza resultados externos;
+- sin persistencia, cuenta, servidor, navegador o proveedor de IA obligatorio;
+- pruebas unitarias, smoke local y smoke portable en verde.
+
+## Hito 8 — Exportación PDF portable
+
+Objetivo: convertir el HTML ya validado en PDF sin introducir un servidor. Debe resolverse como componente opcional para no forzar una descarga pesada de navegador a todos los usuarios.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

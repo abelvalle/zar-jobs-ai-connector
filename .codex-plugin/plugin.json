@@ -1,7 +1,7 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "0.8.0",
-  "description": "Read-only job discovery workflows for AI assistants, backed by MCP.",
+  "version": "0.9.0",
+  "description": "Local job discovery and truthful ATS-oriented resume workflows, backed by MCP.",
   "author": {
     "name": "abelvalle",
     "email": "26121474+abelvalle@users.noreply.github.com",
@@ -13,6 +13,8 @@
   "keywords": [
     "jobs",
     "employment",
+    "resume",
+    "ats",
     "mcp",
     "codex",
     "ai"
@@ -20,8 +22,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Zar Jobs AI Connector",
-    "shortDescription": "Connect AI assistants to authorized job sources.",
-    "longDescription": "Discover and review job opportunities through official or explicitly authorized sources, with read-only tools and human verification.",
+    "shortDescription": "Find jobs and build truthful ATS-oriented resumes.",
+    "longDescription": "Discover and review job opportunities through authorized sources, then validate and tailor evidence-grounded JSON Resume variants locally.",
     "developerName": "abelvalle",
     "category": "Productivity",
     "capabilities": [
@@ -31,6 +33,9 @@
       "LinkedIn manual import",
       "Indeed manual import",
       "Setup diagnostics",
+      "Resume creation",
+      "Resume variants",
+      "Offline ATS checks",
       "Read only",
       "MCP"
     ],
@@ -40,7 +45,7 @@
     "defaultPrompt": [
       "Find backend jobs on InfoJobs in Zaragoza.",
       "List jobs from my Tecnoempleo RSS alert.",
-      "Import this Indeed job without opening it."
+      "Create a truthful CV variant for this job and check its ATS structure."
     ]
   },
   "mcpServers": "./.mcp.json"

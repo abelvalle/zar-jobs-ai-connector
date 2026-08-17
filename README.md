@@ -1,12 +1,12 @@
 # Zar Jobs AI Connector
 
-Conector local y de solo lectura para buscar o importar ofertas de empleo desde asistentes de IA.
+Conector local para buscar o importar ofertas de empleo y preparar currículums verificables desde asistentes de IA.
 
 > Installable GitHub plugin for Codex, ChatGPT desktop, Claude Code and compatible MCP clients.
 
 ## Estado
 
-La versión 0.8.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
+La versión 0.9.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
 
 No hay servicio web, endpoint público, Docker, dominio, HTTPS de alojamiento ni base de datos que mantener.
 
@@ -52,8 +52,19 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `import_tecnoempleo_rss`: procesa en memoria el XML que aporta el usuario.
 - `import_linkedin_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
 - `import_indeed_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
+- `validate_resume`: valida un documento JSON Resume sin guardarlo.
+- `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
+- `audit_resume_variant`: señala posibles afirmaciones nuevas frente al CV base.
+- `check_resume_ats`: evalúa la estructura HTML con reglas offline.
+- `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
+
+## Currículums
+
+El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS de una sola columna. Todo se procesa localmente y en memoria.
+
+Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 
 ## Desarrollo
 
@@ -79,6 +90,7 @@ npm.cmd run smoke:portable
 - [Configuración de Tecnoempleo](docs/TECNOEMPLEO-SETUP.md)
 - [Uso seguro con LinkedIn](docs/LINKEDIN-USAGE.md)
 - [Uso seguro con Indeed](docs/INDEED-USAGE.md)
+- [Motor de currículums](docs/RESUME-ENGINE.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Soporte](SUPPORT.md)
 - [Contribución y ramas](CONTRIBUTING.md)

@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "language": "es-ES"
+  },
+  "basics": {
+    "name": "Nombre Apellidos",
+    "label": "Puesto objetivo",
+    "email": "persona@example.com",
+    "phone": "+34 600 000 000",
+    "summary": "Resumen profesional respaldado por la experiencia incluida.",
+    "location": {
+      "city": "Ciudad",
+      "countryCode": "ES"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "usuario",
+        "url": "https://www.linkedin.com/in/usuario"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Empresa",
+      "position": "Puesto",
+      "startDate": "2022-01",
+      "endDate": "2025-01",
+      "summary": "Responsabilidad principal.",
+      "highlights": [
+        "Logro verificable sin métricas inventadas"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Centro educativo",
+      "area": "Área de estudio",
+      "studyType": "Titulación",
+      "endDate": "2021-06"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Categoría",
+      "keywords": [
+        "Competencia respaldada"
+      ]
+    }
+  ],
+  "projects": [],
+  "certificates": [],
+  "languages": []
+}
