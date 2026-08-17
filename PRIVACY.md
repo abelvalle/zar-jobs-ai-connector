@@ -12,6 +12,8 @@ Cuando se consulta una alerta RSS de Tecnoempleo, el proceso solicita directamen
 
 Las importaciones de LinkedIn e Indeed procesan únicamente los campos aportados por el usuario, no contactan con esos portales y no conservan los datos.
 
+La herramienta `get_connector_status` comprueba únicamente si las variables opcionales están presentes. Puede devolver el nombre de una variable ausente, pero nunca su valor.
+
 ## Credenciales
 
 El plugin nunca solicita contraseñas, cookies o tokens de sesión de portales. Las variables opcionales permanecen bajo control del usuario y se heredan desde el entorno de Codex o Claude Code.

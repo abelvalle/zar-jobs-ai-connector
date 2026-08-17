@@ -56,6 +56,8 @@ Para usar las capacidades de red autorizadas, define las variables antes de inic
 
 No guardes estos valores en el repositorio, en la configuración versionada ni en un chat.
 
+Después de iniciar el plugin, pide al asistente que ejecute `get_connector_status`. El resultado indica si InfoJobs y la lectura directa del RSS están listos y mantiene disponibles las importaciones manuales aunque falte configuración.
+
 ## Actualización y desinstalación
 
 Codex:

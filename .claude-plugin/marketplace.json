@@ -5,17 +5,17 @@
     "email": "26121474+abelvalle@users.noreply.github.com"
   },
   "description": "Local, read-only job connectors for AI assistants.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "plugins": [
     {
       "name": "zar-jobs-ai-connector",
       "source": {
         "source": "github",
         "repo": "abelvalle/zar-jobs-ai-connector",
-        "ref": "v0.7.0"
+        "ref": "v0.8.0"
       },
       "description": "Review jobs from authorized InfoJobs and Tecnoempleo sources plus manual LinkedIn and Indeed imports.",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "author": {
         "name": "abelvalle"
       },

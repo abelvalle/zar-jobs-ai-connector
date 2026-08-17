@@ -23,6 +23,7 @@
 .mcp.json
 skills/zar-jobs/SKILL.md
 src/cli.mjs
+src/connector-status.mjs
 src/server.mjs
 src/portals/*.mjs
 test/*.test.mjs
@@ -44,3 +45,5 @@ Las capacidades manuales funcionan sin credenciales. Las integraciones opcionale
 - `TECNOEMPLEO_RSS_URL`.
 
 Los usuarios nunca introducirán contraseñas de portales en el plugin.
+
+`get_connector_status` comprueba solo si estas variables contienen un valor no vacío. Su respuesta puede incluir el nombre de una variable ausente, pero nunca su contenido.

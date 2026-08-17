@@ -47,6 +47,19 @@ Criterios de aceptación:
 - sin HTTP, Docker, dominio, puertos ni base de datos;
 - pruebas, validadores, smoke y auditoría en verde.
 
+## Hito 6 — Diagnóstico local seguro ✅
+
+Objetivo: explicar qué capacidades están listas después de instalar el plugin sin revelar configuración sensible.
+
+Criterios de aceptación:
+
+- herramienta `get_connector_status` disponible por MCP;
+- estados diferenciados para InfoJobs, Tecnoempleo, LinkedIn e Indeed;
+- detección de configuración vacía, parcial y completa;
+- respuesta limitada a nombres de variables ausentes, nunca a sus valores;
+- alternativas manuales conservadas cuando falta configuración de red;
+- pruebas unitarias y smoke portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

@@ -8,6 +8,7 @@ import { promisify } from "node:util";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { CONNECTOR_VERSION } from "../src/connector-status.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const portable = process.argv.includes("--portable");
@@ -31,7 +32,7 @@ const transport = new StdioClientTransport(
         stderr: "pipe"
       }
 );
-const client = new Client({ name: "zar-jobs-smoke", version: "0.7.0" });
+const client = new Client({ name: "zar-jobs-smoke", version: CONNECTOR_VERSION });
 
 try {
   await client.connect(transport);
@@ -40,6 +41,7 @@ try {
   assert.deepEqual(
     listed.tools.map((tool) => tool.name).sort(),
     [
+      "get_connector_status",
       "get_infojobs_job",
       "get_portal_capabilities",
       "import_indeed_job",
@@ -50,6 +52,15 @@ try {
       "search_infojobs_jobs"
     ]
   );
+
+  const status = await client.callTool({
+    name: "get_connector_status",
+    arguments: {}
+  });
+  assert.equal(status.isError, undefined);
+  assert.equal(status.structuredContent.result.connector.version, CONNECTOR_VERSION);
+  assert.equal(status.structuredContent.result.connector.transport, "stdio");
+  assert.equal(status.structuredContent.result.portals.length, 4);
 
   const capabilities = await client.callTool({
     name: "get_portal_capabilities",

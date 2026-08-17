@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
+import { CONNECTOR_VERSION, getConnectorStatus } from "./connector-status.mjs";
 import { getPortalCapabilities, PORTALS } from "./portals/capabilities.mjs";
 import { importIndeedJob } from "./portals/indeed-manual-import.mjs";
 import { createInfoJobsClientFromEnv } from "./portals/infojobs-client.mjs";
@@ -20,6 +21,16 @@ const capabilitySchema = z.object({
   dependency: z.string(),
   safeNextAction: z.string(),
   sources: z.array(z.string().url()),
+});
+
+const portalStatusSchema = z.object({
+  portal: z.enum(PORTALS),
+  status: z.enum(["ready", "limited"]),
+  availableMode: z.string(),
+  missingVariables: z.array(
+    z.enum(["INFOJOBS_CLIENT_ID", "INFOJOBS_CLIENT_SECRET", "TECNOEMPLEO_RSS_URL"]),
+  ),
+  safeNextAction: z.string(),
 });
 
 const normalizedUrlSchema = z.object({
@@ -114,7 +125,7 @@ export function createZarJobsServer() {
   const server = new McpServer(
     {
       name: "zar-jobs-ai-connector",
-      version: "0.7.0",
+      version: CONNECTOR_VERSION,
     },
     {
       instructions:
@@ -399,6 +410,39 @@ export function createZarJobsServer() {
         }
       },
     );
+
+  server.registerTool(
+    "get_connector_status",
+    {
+      title: "Get local connector status",
+      description:
+        "Report which portal modes are ready in this local process and which environment variable names are missing. It never returns credential or RSS values.",
+      inputSchema: {},
+      outputSchema: {
+        result: z.object({
+          connector: z.object({
+            version: z.string(),
+            transport: z.literal("stdio"),
+            operational: z.literal(true),
+          }),
+          portals: z.array(portalStatusSchema),
+        }),
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async () => {
+      const result = getConnectorStatus();
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        structuredContent: { result },
+      };
+    },
+  );
 
   server.registerTool(
     "get_portal_capabilities",

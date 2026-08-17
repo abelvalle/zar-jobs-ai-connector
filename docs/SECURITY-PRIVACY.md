@@ -20,6 +20,7 @@ No utiliza base de datos, cuentas ni telemetría. Las consultas y resultados no 
 - InfoJobs usa credenciales de aplicación desde variables de entorno.
 - Tecnoempleo usa, opcionalmente, la URL de una alerta propia desde el entorno.
 - Los errores nunca incluyen secretos ni URLs RSS privadas.
+- El diagnóstico devuelve únicamente nombres de variables ausentes; nunca lee sus valores en la respuesta.
 
 ## Acciones
 

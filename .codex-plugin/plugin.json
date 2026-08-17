@@ -1,6 +1,6 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Read-only job discovery workflows for AI assistants, backed by MCP.",
   "author": {
     "name": "abelvalle",
@@ -30,6 +30,7 @@
       "Tecnoempleo alerts",
       "LinkedIn manual import",
       "Indeed manual import",
+      "Setup diagnostics",
       "Read only",
       "MCP"
     ],

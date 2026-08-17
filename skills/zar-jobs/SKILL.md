@@ -17,21 +17,23 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 
 ## Workflow
 
-1. Call `get_portal_capabilities` before promising access to a portal or account.
-2. For an InfoJobs search, use `search_infojobs_jobs`; use `get_infojobs_job` only when the user needs one offer's full public detail.
-3. For Tecnoempleo, use `list_tecnoempleo_alert_jobs` only when the local connector has the user's RSS URL configured. Alternatively, use `import_tecnoempleo_rss` only with RSS XML deliberately supplied by the user. Do not claim either path is a general portal search.
-4. For LinkedIn, use `import_linkedin_job` only when the user provides the job URL, title, and company. Keep its status `unverified` until the user checks the original posting.
-5. For Indeed, use `import_indeed_job` only when the user provides a `viewjob` URL, title, and company. Never search or open Indeed through this plugin.
-6. If the user provides another job link, call `normalize_job_url` before using or presenting it.
-7. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
-8. Preserve the source URL and distinguish portal-provided facts from model inference.
-9. Respond in the user's language.
+1. Call `get_connector_status` when the user asks whether the installed connector is ready or a configured portal tool fails. Never ask the user to paste a missing secret in chat.
+2. Call `get_portal_capabilities` before promising access to a portal or account.
+3. For an InfoJobs search, use `search_infojobs_jobs`; use `get_infojobs_job` only when the user needs one offer's full public detail.
+4. For Tecnoempleo, use `list_tecnoempleo_alert_jobs` only when the local connector has the user's RSS URL configured. Alternatively, use `import_tecnoempleo_rss` only with RSS XML deliberately supplied by the user. Do not claim either path is a general portal search.
+5. For LinkedIn, use `import_linkedin_job` only when the user provides the job URL, title, and company. Keep its status `unverified` until the user checks the original posting.
+6. For Indeed, use `import_indeed_job` only when the user provides a `viewjob` URL, title, and company. Never search or open Indeed through this plugin.
+7. If the user provides another job link, call `normalize_job_url` before using or presenting it.
+8. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
+9. Preserve the source URL and distinguish portal-provided facts from model inference.
+10. Respond in the user's language.
 
 ## Current version
 
 The current version is read-only. It can:
 
 - report the planned and currently allowed integration mode for each portal;
+- report local configuration readiness without exposing secret values;
 - validate and normalize job URLs without opening them;
 - identify supported portal domains.
 - search and retrieve public InfoJobs offers through its official API when application credentials are configured.

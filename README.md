@@ -6,7 +6,7 @@ Conector local y de solo lectura para buscar o importar ofertas de empleo desde 
 
 ## Estado
 
-La versión 0.7.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
+La versión 0.8.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
 
 No hay servicio web, endpoint público, Docker, dominio, HTTPS de alojamiento ni base de datos que mantener.
 
@@ -43,6 +43,7 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 
 ## Herramientas
 
+- `get_connector_status`: indica qué modos están listos y qué variables faltan, sin devolver valores.
 - `get_portal_capabilities`: explica el acceso disponible y sus límites.
 - `normalize_job_url`: valida una URL sin abrirla, elimina seguimiento conocido e identifica el portal.
 - `search_infojobs_jobs`: busca ofertas con la API oficial de InfoJobs.
