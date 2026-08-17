@@ -72,6 +72,7 @@ try {
       "match_resume_to_job",
       "normalize_job_url",
       "render_resume_html",
+      "render_resume_pdf",
       "search_infojobs_jobs",
       "validate_resume"
     ]
@@ -97,6 +98,16 @@ try {
     arguments: { resume: smokeResume }
   });
   assert.match(renderedResume.structuredContent.result.html, /<!doctype html>/);
+
+  const renderedPdf = await client.callTool({
+    name: "render_resume_pdf",
+    arguments: { resume: smokeResume, fileName: "example-tech-backend.pdf" }
+  });
+  const pdfResource = renderedPdf.content.find((item) => item.type === "resource");
+  assert.equal(renderedPdf.structuredContent.result.mimeType, "application/pdf");
+  assert.equal(renderedPdf.structuredContent.result.stored, false);
+  assert.equal(pdfResource.resource.mimeType, "application/pdf");
+  assert.match(Buffer.from(pdfResource.resource.blob, "base64").subarray(0, 5).toString("ascii"), /^%PDF-/);
 
   const atsResume = await client.callTool({
     name: "check_resume_ats",

@@ -62,7 +62,7 @@ Después de iniciar el plugin, pide al asistente que ejecute `get_connector_stat
 
 Las herramientas de CV no requieren configuración adicional. Para empezar, pide al asistente que cree un CV base compatible con JSON Resume usando únicamente datos confirmados. La plantilla de referencia está en `templates/resume.example.json`.
 
-Cada adaptación debe guardarse, si el usuario lo solicita, como un archivo diferente del CV base. El plugin devuelve el JSON o HTML en memoria y nunca decide una ruta ni escribe por su cuenta.
+Cada adaptación debe guardarse, si el usuario lo solicita, como un archivo diferente del CV base. El plugin devuelve el JSON, HTML o PDF en memoria y nunca decide una ruta ni escribe por su cuenta. Para el PDF, pide un nombre distinto por empresa y puesto; `render_resume_pdf` devuelve el recurso listo para que el cliente lo guarde con tu autorización.
 
 ## Actualización y desinstalación
 

@@ -39,8 +39,9 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 4. Create a separate variant by selecting, reordering, or truthfully rephrasing facts from the base. Never overwrite the base document.
 5. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
 6. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
-7. Call `render_resume_html` only after validation and the variant audit. Save the returned HTML only when the user asked for a file, using a distinct company-and-role filename in the user's workspace.
-8. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
+7. Call `render_resume_html` or `render_resume_pdf` only after validation and the variant audit. Use PDF when the user asks for a final document; use HTML when they want an editable or printable intermediate.
+8. Save returned HTML or PDF only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to `render_resume_pdf`; its optional `fileName` is only a safe suggested filename.
+9. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
 
 ## Current version
 
@@ -58,6 +59,7 @@ The current MCP tools do not write files. They can:
 - validate JSON Resume documents and compare them with user-provided job text.
 - audit tailored variants against a base resume for selected unsupported additions.
 - render escaped, printable, single-column HTML and check its ATS structure offline.
+- render a text-based PDF in memory without a browser, server, or automatic filesystem write.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 
@@ -88,3 +90,4 @@ For a resume variant, report:
 - variant-audit issues;
 - ATS score with its non-guarantee disclaimer;
 - output filename, only if the user asked to save it.
+- PDF page and byte count when PDF output was requested.

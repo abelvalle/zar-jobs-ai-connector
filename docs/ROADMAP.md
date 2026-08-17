@@ -75,9 +75,19 @@ Criterios de aceptación:
 - sin persistencia, cuenta, servidor, navegador o proveedor de IA obligatorio;
 - pruebas unitarias, smoke local y smoke portable en verde.
 
-## Hito 8 — Exportación PDF portable
+## Hito 8 — Exportación PDF portable ✅
 
-Objetivo: convertir el HTML ya validado en PDF sin introducir un servidor. Debe resolverse como componente opcional para no forzar una descarga pesada de navegador a todos los usuarios.
+Objetivo: generar desde el mismo JSON Resume validado un PDF equivalente al HTML ATS, sin introducir un servidor ni una descarga de navegador.
+
+Criterios de aceptación:
+
+- generación local en Node.js con PDFKit y sin Chromium, Python ni binarios nativos;
+- PDF A4 multipágina con texto seleccionable y extraíble;
+- resultado como recurso MCP en memoria, sin elegir rutas ni escribir archivos;
+- nombre sugerido opcional, limitado a un archivo `.pdf` sin ruta;
+- límites de 200 KB de entrada, 10 páginas y 2 MB de salida;
+- prueba real de extracción de nombre, empresa y habilidades mediante PDF.js;
+- smoke local y portable en verde.
 
 ## Releases
 

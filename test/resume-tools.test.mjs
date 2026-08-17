@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   analyzeResumeAts,
@@ -8,6 +9,7 @@ import {
   renderResumeHtml,
   validateResume,
 } from "../src/resumes/resume-tools.mjs";
+import { renderResumePdf } from "../src/resumes/resume-pdf.mjs";
 
 const baseResume = {
   meta: { language: "es-ES" },
@@ -125,4 +127,44 @@ test("flags new employers, skills, metrics, and identity changes in a variant", 
   assert.ok(result.issues.some((issue) => issue.field === "skill"));
   assert.ok(result.issues.some((issue) => issue.field === "numeric claim"));
   assert.ok(result.issues.some((issue) => issue.field === "basics.email"));
+});
+
+test("renders a portable PDF with extractable resume text", async () => {
+  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  const result = await renderResumePdf(baseResume, "example-tech-backend.pdf");
+  const loadingTask = getDocument({
+    data: new Uint8Array(result.buffer),
+    standardFontDataUrl: fileURLToPath(
+      new URL("../node_modules/pdfjs-dist/standard_fonts/", import.meta.url),
+    ).replaceAll("\\", "/"),
+  });
+  const document = await loadingTask.promise;
+  const pages = [];
+
+  for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
+    const page = await document.getPage(pageNumber);
+    const content = await page.getTextContent();
+    pages.push(content.items.map((item) => item.str).join(" "));
+  }
+  await document.destroy();
+
+  assert.equal(result.mimeType, "application/pdf");
+  assert.equal(result.fileName, "example-tech-backend.pdf");
+  assert.equal(result.stored, false);
+  assert.match(result.buffer.subarray(0, 5).toString("ascii"), /^%PDF-/);
+  assert.equal(result.pages, document.numPages);
+  assert.match(pages.join(" "), /Alex Example/);
+  assert.match(pages.join(" "), /Example Tech/);
+  assert.match(pages.join(" "), /Java/);
+});
+
+test("rejects paths and non-PDF names for portable output", async () => {
+  await assert.rejects(
+    renderResumePdf(baseResume, "../resume.pdf"),
+    /plain PDF filename/,
+  );
+  await assert.rejects(
+    renderResumePdf(baseResume, "resume.txt"),
+    /plain PDF filename/,
+  );
 });

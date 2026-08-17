@@ -6,7 +6,7 @@ Conector local para buscar o importar ofertas de empleo y preparar currículums 
 
 ## Estado
 
-La versión 0.9.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
+La versión 1.0.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
 
 No hay servicio web, endpoint público, Docker, dominio, HTTPS de alojamiento ni base de datos que mantener.
 
@@ -57,12 +57,13 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `audit_resume_variant`: señala posibles afirmaciones nuevas frente al CV base.
 - `check_resume_ats`: evalúa la estructura HTML con reglas offline.
 - `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.
+- `render_resume_pdf`: genera un PDF con texto extraíble y lo devuelve en memoria, sin navegador ni escritura automática.
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Currículums
 
-El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS de una sola columna. Todo se procesa localmente y en memoria.
+El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS o PDF con texto extraíble. Todo se procesa localmente y en memoria.
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 

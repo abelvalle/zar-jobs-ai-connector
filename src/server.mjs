@@ -18,6 +18,7 @@ import {
   renderResumeHtml,
   validateResume,
 } from "./resumes/resume-tools.mjs";
+import { renderResumePdf } from "./resumes/resume-pdf.mjs";
 
 const capabilitySchema = z.object({
   portal: z.enum(PORTALS),
@@ -495,6 +496,57 @@ export function createZarJobsServer() {
     async ({ resume }) => {
       try {
         return resumeToolResult({ format: "html", html: renderResumeHtml(resume), stored: false });
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "render_resume_pdf",
+    {
+      title: "Render a portable ATS-oriented resume PDF",
+      description:
+        "Render a validated JSON Resume as an in-memory, text-based PDF without a browser, server, or filesystem write.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        fileName: z.string().min(5).max(120).optional(),
+      },
+      outputSchema: {
+        result: z.object({
+          format: z.literal("pdf"),
+          mimeType: z.literal("application/pdf"),
+          encoding: z.literal("base64"),
+          fileName: z.string(),
+          bytes: z.number().int().positive(),
+          pages: z.number().int().positive(),
+          stored: z.literal(false),
+        }),
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, fileName }) => {
+      try {
+        const { buffer, ...result } = await renderResumePdf(resume, fileName);
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: `memory://zar-jobs/resumes/${encodeURIComponent(result.fileName)}`,
+                mimeType: result.mimeType,
+                blob: buffer.toString("base64"),
+              },
+            },
+            { type: "text", text: JSON.stringify(result, null, 2) },
+          ],
+          structuredContent: { result },
+        };
       } catch (error) {
         return resumeToolError(error);
       }

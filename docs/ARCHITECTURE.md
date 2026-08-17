@@ -18,7 +18,7 @@ Codex / Claude Code / cliente MCP
   - JSON Resume      - InfoJobs API oficial
   - ATS offline      - Tecnoempleo RSS propio
   - variantes        - LinkedIn importación manual
-                     - Indeed importación manual
+  - HTML / PDF       - Indeed importación manual
 ```
 
 ## Distribución
@@ -38,7 +38,7 @@ Ambos catálogos apuntan a una etiqueta de release fija. La configuración MCP u
 
 Solo existe transporte MCP por `stdio`. El cliente crea un subproceso local, intercambia mensajes por entrada y salida estándar y lo detiene al cerrar la conexión. No escucha puertos y no acepta conexiones desde la red.
 
-`src/cli.mjs` abre el transporte local y `src/server.mjs` registra catorce herramientas pequeñas. `src/connector-status.mjs` diagnostica únicamente la presencia de configuración, nunca sus valores. `src/resumes/resume-tools.mjs` contiene las operaciones puras de CV. La lógica de portales vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
+`src/cli.mjs` abre el transporte local y `src/server.mjs` registra quince herramientas pequeñas. `src/connector-status.mjs` diagnostica únicamente la presencia de configuración, nunca sus valores. `src/resumes/resume-tools.mjs` contiene la validación, HTML y auditoría; `src/resumes/resume-pdf.mjs` genera PDF local con PDFKit. La lógica de portales vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
 
 ## Datos y estado
 
@@ -46,7 +46,7 @@ Solo existe transporte MCP por `stdio`. El cliente crea un subproceso local, int
 - Las credenciales opcionales se leen del entorno del proceso y nunca se devuelven.
 - El XML de Tecnoempleo y los datos manuales de LinkedIn o Indeed viven solo durante la llamada.
 - Los textos de las ofertas son datos no confiables y nunca instrucciones.
-- El CV base y las variantes se reciben en memoria; el MCP no escribe archivos ni conserva datos personales.
+- El CV base, las variantes y el PDF generado se mantienen en memoria; el MCP no escribe archivos ni conserva datos personales.
 
 ## Contrato común
 

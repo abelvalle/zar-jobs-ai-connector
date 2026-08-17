@@ -1,6 +1,6 @@
 # Política de privacidad
 
-Última actualización: 13 de agosto de 2026.
+Última actualización: 17 de agosto de 2026.
 
 ## Ejecución local
 
@@ -14,7 +14,7 @@ Las importaciones de LinkedIn e Indeed procesan únicamente los campos aportados
 
 La herramienta `get_connector_status` comprueba únicamente si las variables opcionales están presentes. Puede devolver el nombre de una variable ausente, pero nunca su valor.
 
-Las herramientas de currículum reciben el CV y, opcionalmente, el texto de una oferta durante la llamada MCP. No guardan estos datos, no los envían a un servicio externo y no escriben archivos. El cliente de IA solo debe guardar un CV base o una variante cuando el usuario lo solicite y en una ubicación bajo su control.
+Las herramientas de currículum reciben el CV y, opcionalmente, el texto de una oferta durante la llamada MCP. No guardan estos datos, no los envían a un servicio externo y no escriben archivos. Los PDF se generan en el mismo proceso y se devuelven como recursos MCP temporales. El cliente de IA solo debe guardar un CV base, una variante o un PDF cuando el usuario lo solicite y en una ubicación bajo su control.
 
 ## Credenciales
 

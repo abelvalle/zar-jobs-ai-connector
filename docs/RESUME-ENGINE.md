@@ -7,6 +7,8 @@ Zar Jobs reutiliza dos paquetes MIT del repositorio público [JSON Resume](https
 - `@jsonresume/schema` como contrato portable del CV;
 - `@jsonresume/ats-validator` para comprobar de forma determinista la estructura HTML.
 
+La exportación usa [PDFKit](https://github.com/foliojs/pdfkit), también MIT, para producir texto PDF directamente en Node.js. No interpreta HTML arbitrario: renderiza el mismo JSON Resume ya validado con la misma estructura lineal, evitando incorporar un navegador.
+
 El conector conserva Node.js y `stdio`. No añade web, servidor, cuenta, base de datos ni proveedor de IA.
 
 ## Alternativas evaluadas
@@ -45,6 +47,7 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 - `audit_resume_variant`: señala hechos estructurados, habilidades y cifras que no aparecen en el CV base.
 - `check_resume_ats`: ejecuta controles offline sobre la representación HTML.
 - `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.
+- `render_resume_pdf`: genera un PDF A4 multipágina, limitado a 10 páginas y 2 MB, y lo devuelve como recurso MCP en memoria.
 
 ## Límites
 
@@ -52,4 +55,6 @@ Ninguna herramienta puede garantizar que un CV supere un ATS o una evaluación d
 
 Una palabra ausente nunca se añade automáticamente. Primero debe estar respaldada por el CV base o ser confirmada por el usuario. La auditoría de variantes tampoco comprende el significado completo de una reformulación, por lo que la revisión humana continúa siendo obligatoria.
 
-La salida actual es HTML imprimible. La exportación PDF automatizada queda separada para no obligar a instalar un navegador o un segundo runtime.
+Las salidas HTML y PDF se generan desde el mismo documento validado. El PDF contiene texto seleccionable y extraíble, no una captura de pantalla. La prueba automatizada vuelve a leerlo con PDF.js y comprueba nombre, empresa y habilidades. La fuente estándar actual está orientada a alfabetos latinos; otros sistemas de escritura requieren una fuente portable adicional antes de poder considerarse soportados.
+
+El conector no escribe el PDF. Devuelve el binario codificado dentro de un recurso MCP y un nombre sugerido; Codex, Claude u otro cliente solo debe guardarlo cuando el usuario lo pida y en una ruta bajo su control.

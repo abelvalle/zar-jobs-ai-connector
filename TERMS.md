@@ -1,6 +1,6 @@
 # Condiciones de uso
 
-Última actualización: 12 de agosto de 2026.
+Última actualización: 17 de agosto de 2026.
 
 Zar Jobs AI Connector es software en desarrollo para ayudar a consultar y organizar información laboral. No garantiza la disponibilidad, exactitud o vigencia de las ofertas.
 
