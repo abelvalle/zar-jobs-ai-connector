@@ -61,6 +61,7 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `review_offer_conditions`: verifica salario y condiciones contra citas literales aportadas por el usuario.
 - `compare_offer_conditions`: compara hasta 10 ofertas sin mezclar divisas ni bases brutas y netas.
 - `review_application_tracker`: calcula métricas y seguimientos desde registros aportados en memoria.
+- `analyze_application_funnel`: calcula un embudo descriptivo y segmentos con muestras y límites visibles, sin causalidad ni ranking.
 - `plan_application_update`: prepara una copia y un parche revisable sin escribir el tracker.
 - `export_followup_calendar`: genera un calendario ICS local sin conectarse a servicios externos.
 - `plan_interview`: prepara temas, preguntas y evidencia trazable sin generar respuestas.
@@ -119,6 +120,8 @@ La bandeja universal reúne alertas que el usuario ya recibe y compara snapshots
 
 El seguimiento de candidaturas también es portable: el cliente aporta los registros y puede guardar la copia actualizada o importar un calendario ICS. El MCP no mantiene base de datos ni sincroniza cuentas. Consulta [docs/APPLICATION-TRACKING.md](docs/APPLICATION-TRACKING.md).
 
+La analítica del embudo usa solo fechas y dimensiones aportadas por el usuario, marca datos ausentes y muestras pequeñas, y nunca atribuye un resultado al portal o al CV. Consulta [docs/APPLICATION-ANALYTICS.md](docs/APPLICATION-ANALYTICS.md).
+
 El workspace portable mueve CV, preferencias, ofertas y tracker entre clientes compatibles. Por defecto elimina contacto, notas libres y respuestas; el modo completo requiere consentimiento explícito en exportación e importación. Consulta [docs/PORTABLE-WORKSPACE.md](docs/PORTABLE-WORKSPACE.md).
 
 La preparación de entrevistas parte del CV confirmado: diferencia temas respaldados y lagunas, y audita borradores sin certificar su verdad o calidad. Consulta [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md).
@@ -154,6 +157,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
 - [Bandeja universal de alertas](docs/JOB-INBOX.md)
 - [Seguimiento local de candidaturas](docs/APPLICATION-TRACKING.md)
+- [Analítica descriptiva de candidaturas](docs/APPLICATION-ANALYTICS.md)
 - [Preparación de entrevistas](docs/INTERVIEW-PREP.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Soporte](SUPPORT.md)

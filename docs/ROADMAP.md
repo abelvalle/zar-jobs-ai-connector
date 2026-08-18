@@ -357,6 +357,23 @@ Criterios de aceptación:
 - ninguna escritura, publicación, carga o envío;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 27 — Analítica descriptiva de candidaturas ✅
+
+Objetivo: observar el embudo y sus segmentos desde evidencia aportada por el usuario sin confundir correlación, muestras pequeñas o datos incompletos con causalidad.
+
+Criterios de aceptación:
+
+- recuentos y tasas para candidatura, respuesta, entrevista, oferta, contratación y rechazo;
+- fases históricas conservadas aunque el estado actual sea rechazo;
+- segmentación opcional por portal, puesto, variante de CV y banda de ajuste;
+- mediana hasta respuesta solo desde fechas explícitas;
+- diagnóstico visible de fechas y dimensiones ausentes;
+- mínimo de cinco candidaturas por segmento antes de permitir comparación descriptiva;
+- sin inferencia causal, significación, predicción, ranking ni recomendaciones;
+- `causalAnalysisPerformed: false`, `rankingPerformed: false` y `stored: false` invariables;
+- ninguna escritura, candidatura, descarte, sincronización o red;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

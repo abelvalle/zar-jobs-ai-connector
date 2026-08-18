@@ -105,6 +105,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 5. Never add passwords, tokens, cookies, secrets, authorization headers, or private keys. Never claim the redacted mode guarantees anonymity.
 6. Import returns data for review; it does not authorize merging, replacing, or saving any local state.
 
+## Application analytics workflow
+
+1. Call `analyze_application_funnel` only with records the user deliberately provides and an explicit `asOf` date.
+2. Prefer explicit stage dates. Explain every missing-date or unknown-dimension count; never fill a gap by inference.
+3. Treat portal, role, resume-variant, and fit-band segments as descriptive observations only. Do not claim a segment caused an outcome.
+4. Do not compare a segment marked `insufficient-applied-sample`; five applications only enables a descriptive comparison, not a statistical conclusion.
+5. Never turn the result into automatic ranking, prediction, application, rejection, tracker changes, or external writes.
+
 ## Interview workflow
 
 1. Call `plan_interview` with the validated resume and user-provided job description. Present supported topics with their evidence paths before gaps.
@@ -145,6 +153,7 @@ The current MCP tools do not write files. They can:
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
 - verify and compare supplied salary and conditions from literal excerpts without currency, tax, legal, or decision automation.
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
+- calculate a descriptive application funnel and segment it by declared portal, role, resume variant, or fit band without causal claims, ranking, or persistence.
 - plan interview preparation from traceable CV evidence and audit a draft answer without certifying truth or hiring quality.
 - review, export, and import a versioned portable workspace with redaction, credential rejection, checksums, and explicit personal-data consent.
 

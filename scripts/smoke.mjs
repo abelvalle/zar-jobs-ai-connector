@@ -91,6 +91,7 @@ try {
   assert.deepEqual(
     listed.tools.map((tool) => tool.name).sort(),
     [
+      "analyze_application_funnel",
       "apply_resume_changes",
       "audit_application_text",
       "audit_interview_answer",
@@ -686,6 +687,45 @@ try {
   });
   assert.equal(trackerReview.structuredContent.result.metrics.active, 1);
   assert.equal(trackerReview.structuredContent.result.followUps.upcoming[0].id, "app-001");
+
+  const funnelAnalysis = await client.callTool({
+    name: "analyze_application_funnel",
+    arguments: {
+      records: [
+        {
+          id: "app-001",
+          company: "Example Tech",
+          role: "Backend Engineer",
+          status: "interview",
+          createdAt: "2026-08-01",
+          appliedAt: "2026-08-02",
+          respondedAt: "2026-08-05",
+          interviewAt: "2026-08-10",
+          sourcePortal: "infojobs",
+          resumeVariant: "backend-v1",
+          fitScore: 82
+        },
+        {
+          id: "app-002",
+          company: "Second Tech",
+          role: "Backend Engineer",
+          status: "applied",
+          createdAt: "2026-08-03",
+          appliedAt: "2026-08-04",
+          sourcePortal: "linkedin",
+          resumeVariant: "backend-v2",
+          fitScore: 74
+        }
+      ],
+      asOf: "2026-08-18"
+    }
+  });
+  assert.equal(funnelAnalysis.structuredContent.result.overall.rates.responsePerApplied, 0.5);
+  assert.equal(funnelAnalysis.structuredContent.result.causalAnalysisPerformed, false);
+  assert.equal(
+    funnelAnalysis.structuredContent.result.segments.portal[0].sampleStatus,
+    "insufficient-applied-sample"
+  );
 
   const trackerUpdate = await client.callTool({
     name: "plan_application_update",

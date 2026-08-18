@@ -70,3 +70,5 @@ Las etiquetas multilingües son datos locales del repositorio y no llaman a un s
 La comparación de condiciones usa coincidencia literal y aritmética JavaScript determinista. No añade una fuente de tipos de cambio, motor fiscal, base legal ni modelo de extracción.
 
 La anonimización es una transformación local por rutas. El correo reservado `candidate@example.invalid` mantiene válido el JSON Resume y se excluye de HTML, PDF y DOCX. PDFKit, docx y JSZip reutilizan el mismo pipeline de documentos; no se añade dependencia.
+
+La analítica del tracker usa contadores, cocientes y una mediana deterministas sobre fechas ISO explícitas. No añade motor estadístico, aprendizaje automático, telemetría ni almacén de eventos: los segmentos pequeños se marcan y ninguna asociación se presenta como causa, predicción o recomendación.

@@ -31,6 +31,10 @@ import {
   reviewApplicationTracker,
 } from "./tracking/application-tracker.mjs";
 import {
+  ANALYTICS_GROUPS,
+  analyzeApplicationFunnel,
+} from "./tracking/application-analytics.mjs";
+import {
   auditInterviewAnswer,
   INTERVIEW_STAGES,
   planInterview,
@@ -282,6 +286,22 @@ const applicationRecordSchema = z.object({
   nextActionAt: isoDateSchema.optional(),
   sourceUrl: z.string().min(1).max(2048).optional(),
   notes: z.string().min(1).max(5_000).optional(),
+});
+const applicationAnalyticsRecordSchema = z.object({
+  id: z.string().min(1).max(200),
+  company: z.string().min(1).max(200),
+  role: z.string().min(1).max(200),
+  status: z.enum(APPLICATION_STATUSES),
+  createdAt: isoDateSchema,
+  appliedAt: isoDateSchema.optional(),
+  respondedAt: isoDateSchema.optional(),
+  interviewAt: isoDateSchema.optional(),
+  offerAt: isoDateSchema.optional(),
+  hiredAt: isoDateSchema.optional(),
+  rejectedAt: isoDateSchema.optional(),
+  sourcePortal: z.string().min(1).max(100).optional(),
+  resumeVariant: z.string().min(1).max(200).optional(),
+  fitScore: z.number().min(0).max(100).optional(),
 });
 
 export function createZarJobsServer() {
@@ -1142,6 +1162,34 @@ export function createZarJobsServer() {
     async ({ resume, mode }) => {
       try {
         return resumeToolResult(planResumeAnonymization(resume, mode ?? "contact-safe"));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "analyze_application_funnel",
+    {
+      title: "Analyze an observed application funnel",
+      description:
+        "Calculate descriptive funnel rates and optional portal, role, resume-variant, or fit-band segments from user-provided records. It marks small samples and never performs causal analysis, ranking, or storage.",
+      inputSchema: {
+        records: z.array(applicationAnalyticsRecordSchema).max(500),
+        asOf: isoDateSchema,
+        groups: z.array(z.enum(ANALYTICS_GROUPS)).min(1).max(ANALYTICS_GROUPS.length).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ records, asOf, groups }) => {
+      try {
+        return resumeToolResult(analyzeApplicationFunnel(records, asOf, groups));
       } catch (error) {
         return resumeToolError(error);
       }
