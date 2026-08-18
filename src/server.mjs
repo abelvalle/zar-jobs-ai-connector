@@ -14,6 +14,12 @@ import { normalizeJobUrl } from "./portals/url-normalizer.mjs";
 import { fingerprintJobs, reviewJobImport } from "./jobs/job-import.mjs";
 import { compareJobFit, scoreJobFit } from "./jobs/job-ranking.mjs";
 import {
+  compareOfferConditions,
+  COMPENSATION_PERIODS,
+  GROSS_NET_VALUES,
+  reviewOfferConditions,
+} from "./jobs/offer-conditions.mjs";
+import {
   compareJobSnapshots,
   importJobAlert,
   JOB_ALERT_FORMATS,
@@ -201,6 +207,46 @@ const jobRankingJobSchema = z.object({
   salaryMinimum: z.number().nonnegative().optional(),
   description: z.string().min(1).max(100_000).optional(),
   url: z.string().min(1).max(2048).optional(),
+});
+const compensationSchema = z.object({
+  minimum: z.number().nonnegative().max(100_000_000),
+  maximum: z.number().nonnegative().max(100_000_000).optional(),
+  currency: z.string().regex(/^[A-Z]{3}$/),
+  period: z.enum(COMPENSATION_PERIODS),
+  grossNet: z.enum(GROSS_NET_VALUES).optional(),
+  paymentsPerYear: z.number().min(1).max(24).optional(),
+  hoursPerWeek: z.number().min(1).max(100).optional(),
+  weeksPerYear: z.number().min(1).max(53).optional(),
+});
+const offerConditionValuesSchema = z.object({
+  compensation: compensationSchema.optional(),
+  variablePercent: z.number().min(0).max(100).optional(),
+  remoteDaysPerWeek: z.number().min(0).max(7).optional(),
+  weeklyHours: z.number().min(1).max(100).optional(),
+  vacationDays: z.number().min(0).max(366).optional(),
+  contractType: z.string().min(1).max(300).optional(),
+  location: z.string().min(1).max(300).optional(),
+  commuteMinutes: z.number().min(0).max(1_440).optional(),
+  benefits: z.array(z.string().min(1).max(300)).max(50).optional(),
+});
+const offerConditionEvidenceSchema = z.object({
+  compensation: z.string().min(1).max(1_000).optional(),
+  variablePercent: z.string().min(1).max(1_000).optional(),
+  remoteDaysPerWeek: z.string().min(1).max(1_000).optional(),
+  weeklyHours: z.string().min(1).max(1_000).optional(),
+  vacationDays: z.string().min(1).max(1_000).optional(),
+  contractType: z.string().min(1).max(1_000).optional(),
+  location: z.string().min(1).max(1_000).optional(),
+  commuteMinutes: z.string().min(1).max(1_000).optional(),
+  benefits: z.string().min(1).max(1_000).optional(),
+});
+const offerConditionsSchema = z.object({
+  id: z.string().min(1).max(200).optional(),
+  title: z.string().min(1).max(200),
+  company: z.string().min(1).max(200),
+  sourceText: z.string().min(1).max(100_000),
+  conditions: offerConditionValuesSchema,
+  evidence: offerConditionEvidenceSchema,
 });
 const nullableOptionalString = (maximum) => z.string().min(1).max(maximum).nullable().optional();
 const snapshotJobSchema = z.object({
@@ -1118,6 +1164,54 @@ export function createZarJobsServer() {
           ],
           structuredContent: { result },
         };
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "review_offer_conditions",
+    {
+      title: "Review salary and job conditions",
+      description:
+        "Verify supplied salary and condition values against literal excerpts from user-provided job text. It performs only explicit arithmetic and no currency, tax, or legal interpretation.",
+      inputSchema: { offer: offerConditionsSchema },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ offer }) => {
+      try {
+        return resumeToolResult(reviewOfferConditions(offer));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "compare_offer_conditions",
+    {
+      title: "Compare verified job conditions",
+      description:
+        "Compare 2 to 10 jobs using only conditions backed by literal excerpts. Salary is grouped by currency and gross/net basis, missing evidence stays unknown, and no decision is made.",
+      inputSchema: { offers: z.array(offerConditionsSchema).min(2).max(10) },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ offers }) => {
+      try {
+        return resumeToolResult(compareOfferConditions(offers));
       } catch (error) {
         return resumeToolError(error);
       }

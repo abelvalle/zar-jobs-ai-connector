@@ -323,6 +323,22 @@ Criterios de aceptación:
 - ninguna escritura, fusión, sincronización, cuenta o red;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 25 — Comparación verificable de salario y condiciones ✅
+
+Objetivo: comparar ofertas desde evidencia visible sin inventar condiciones, mezclar magnitudes incompatibles ni convertir una tabla en una decisión automática.
+
+Criterios de aceptación:
+
+- revisión individual y matriz de entre 2 y 10 ofertas;
+- citas obligatoriamente contenidas en el texto aportado;
+- números respaldados para salario, variable, remoto, jornada, vacaciones y desplazamiento;
+- anualización mensual u horaria solo con multiplicadores explícitos y visibles;
+- grupos separados por divisa y base bruta, neta o desconocida;
+- contrato, ubicación y beneficios mostrados sin valoración monetaria;
+- datos sin evidencia conservados como desconocidos;
+- sin extracción automática, tipos de cambio, impuestos, consejo legal, ranking general ni decisión;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

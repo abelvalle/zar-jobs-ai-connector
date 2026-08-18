@@ -58,6 +58,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `compare_job_snapshots`: muestra altas, bajas, cambios y republicaciones exactas entre dos snapshots.
 - `score_job_fit`: puntúa una oferta con reglas fijas y muestra factores, lagunas y bloqueadores.
 - `compare_job_fit`: ordena hasta 20 ofertas con las mismas reglas, sin decidir ni solicitar puestos.
+- `review_offer_conditions`: verifica salario y condiciones contra citas literales aportadas por el usuario.
+- `compare_offer_conditions`: compara hasta 10 ofertas sin mezclar divisas ni bases brutas y netas.
 - `review_application_tracker`: calcula métricas y seguimientos desde registros aportados en memoria.
 - `plan_application_update`: prepara una copia y un parche revisable sin escribir el tracker.
 - `export_followup_calendar`: genera un calendario ICS local sin conectarse a servicios externos.
@@ -105,6 +107,8 @@ Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan sup
 Las cartas y respuestas se planifican y auditan contra el CV base. El kit final puede ser un manifiesto o un ZIP local con PDF, DOCX, borradores opcionales y checksums; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
 
 La priorización de ofertas es determinista y explicable: cada resultado conserva pesos, coincidencias, datos desconocidos y preferencias bloqueantes. No sustituye la revisión del usuario. Consulta [docs/JOB-RANKING.md](docs/JOB-RANKING.md).
+
+El comparador de condiciones conserva citas literales, normaliza periodos solo con multiplicadores explícitos y separa divisas y bases brutas/netas. No estima impuestos ni decide por el usuario. Consulta [docs/JOB-CONDITIONS.md](docs/JOB-CONDITIONS.md).
 
 La bandeja universal reúne alertas que el usuario ya recibe y compara snapshots sin abrir enlaces ni depender de un portal nuevo. Consulta [docs/JOB-INBOX.md](docs/JOB-INBOX.md).
 

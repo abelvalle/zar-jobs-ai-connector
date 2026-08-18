@@ -100,6 +100,7 @@ try {
       "check_resume_ats",
       "compare_job_fit",
       "compare_job_snapshots",
+      "compare_offer_conditions",
       "compare_resume_versions",
       "export_followup_calendar",
       "fingerprint_jobs",
@@ -130,6 +131,7 @@ try {
       "render_resume_pdf",
       "review_application_tracker",
       "review_job_import",
+      "review_offer_conditions",
       "review_portable_workspace",
       "review_resume_import",
       "score_job_fit",
@@ -593,6 +595,55 @@ try {
   });
   assert.equal(comparedJobs.structuredContent.result.ranking[0].id, "backend");
   assert.equal(comparedJobs.structuredContent.result.humanReviewRequired, true);
+
+  const offerConditions = [{
+    id: "alpha",
+    title: "Backend Engineer",
+    company: "Alpha",
+    sourceText: "Salary 3000 EUR gross monthly. Remote 3 days. 25 vacation days.",
+    conditions: {
+      compensation: {
+        minimum: 3000,
+        currency: "EUR",
+        period: "monthly",
+        grossNet: "gross",
+        paymentsPerYear: 14,
+      },
+      remoteDaysPerWeek: 3,
+      vacationDays: 25,
+    },
+    evidence: {
+      compensation: "Salary 3000 EUR gross monthly.",
+      remoteDaysPerWeek: "Remote 3 days.",
+      vacationDays: "25 vacation days.",
+    },
+  }, {
+    id: "beta",
+    title: "Platform Engineer",
+    company: "Beta",
+    sourceText: "Annual gross salary 45000 EUR. Remote 2 days. 40 weekly hours.",
+    conditions: {
+      compensation: { minimum: 45000, currency: "EUR", period: "annual", grossNet: "gross" },
+      remoteDaysPerWeek: 2,
+      weeklyHours: 40,
+    },
+    evidence: {
+      compensation: "Annual gross salary 45000 EUR.",
+      remoteDaysPerWeek: "Remote 2 days.",
+      weeklyHours: "40 weekly hours.",
+    },
+  }];
+  const reviewedConditions = await client.callTool({
+    name: "review_offer_conditions",
+    arguments: { offer: offerConditions[0] },
+  });
+  assert.equal(reviewedConditions.structuredContent.result.normalizedCompensation.annualMinimum, 42000);
+  const comparedConditions = await client.callTool({
+    name: "compare_offer_conditions",
+    arguments: { offers: offerConditions },
+  });
+  assert.deepEqual(comparedConditions.structuredContent.result.compensationGroups[0].leaders, ["beta"]);
+  assert.equal(comparedConditions.structuredContent.result.ranked, false);
 
   const trackerRecords = [{
     id: "app-001",

@@ -43,6 +43,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 4. Confirm that salary values use the same currency and period before interpreting that factor.
 5. Never apply, discard, contact, or update an external tracker from a ranking result.
 
+## Offer conditions workflow
+
+1. Ask the user to provide each condition plus the exact excerpt that supports it. Never infer a number from unrelated text.
+2. Call `review_offer_conditions` before comparing. Present every `unverified` and `unknown` field.
+3. Call `compare_offer_conditions` only for 2 to 10 reviewed offers. Compare annual compensation only inside the same currency and gross/net group.
+4. Treat monthly payments, weekly hours, and working weeks as explicit arithmetic assumptions, not facts supplied by the employer unless the evidence says so.
+5. Never convert currencies, estimate taxes, assign money to benefits, provide legal conclusions, or turn the matrix into an automatic employment decision.
+
 ## Resume workflow
 
 1. Obtain the user's existing CV or confirmed facts. Do not infer personal claims from a job description.
@@ -124,6 +132,7 @@ The current MCP tools do not write files. They can:
 - prepare a local application-kit manifest that always requires final human approval and never submits.
 - audit selected resume privacy risks without echoing values and render a checksummed application ZIP in memory.
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
+- verify and compare supplied salary and conditions from literal excerpts without currency, tax, legal, or decision automation.
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
 - plan interview preparation from traceable CV evidence and audit a draft answer without certifying truth or hiring quality.
 - review, export, and import a versioned portable workspace with redaction, credential rejection, checksums, and explicit personal-data consent.
