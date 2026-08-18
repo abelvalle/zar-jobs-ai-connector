@@ -87,6 +87,10 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
+## Prompts y recursos MCP
+
+Los clientes compatibles descubren cuatro flujos nativos: `review-job`, `tailor-resume`, `prepare-application` y `prepare-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
+
 ## Currículums
 
 El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, aplica cambios explícitos con linaje y hashes, compara cada variante con sus hechos de origen y genera HTML ATS, PDF o DOCX editable con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.

@@ -292,6 +292,21 @@ Criterios de aceptación:
 - sin login, cuenta, traducción automática, publicación, red ni almacenamiento;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 23 — Experiencia MCP nativa ✅
+
+Objetivo: hacer visibles los flujos seguros del conector en cualquier cliente MCP compatible sin depender de comandos privados de Codex o Claude.
+
+Criterios de aceptación:
+
+- cuatro prompts para revisar ofertas, adaptar CV, preparar candidaturas y entrevistas;
+- oferta delimitada como contenido no confiable en cada prompt;
+- tres recursos locales para capacidades, privacidad y contrato del CV;
+- protocolos estándar de listado, lectura y obtención, sin extensiones del proveedor;
+- recursos estáticos sin datos del usuario, red ni almacenamiento;
+- clientes sin soporte visual pueden conservar las herramientas y la skill;
+- ninguna candidatura, mensaje, carga o cambio externo;
+- smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

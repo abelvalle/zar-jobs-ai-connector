@@ -7,6 +7,7 @@
 | Runtime | Node.js 22 o superior | `fetch` nativo y ejecución multiplataforma |
 | Lenguaje | JavaScript ESM con JSDoc | Sin compilación ni toolchain adicional |
 | MCP | `@modelcontextprotocol/sdk` | Implementación estándar de herramientas y `stdio` |
+| UX MCP | Prompts y recursos estándar | Flujos y límites descubribles sin API propietaria ni red |
 | Validación | `zod` | Esquemas explícitos de entrada y salida |
 | XML | `fast-xml-parser` | Lectura acotada del RSS sin parser propio |
 | CV estructurado | `@jsonresume/schema` | Estándar abierto y validación portable del CV |
@@ -30,6 +31,7 @@ skills/zar-jobs/SKILL.md
 src/cli.mjs
 src/connector-status.mjs
 src/server.mjs
+src/mcp/*.mjs
 src/applications/*.mjs
 src/portals/*.mjs
 src/resumes/*.mjs
@@ -45,6 +47,8 @@ La instalación del plugin no necesita copiar `node_modules` al marketplace. `np
 Las dependencias de ejecución usan versiones exactas en `package.json`, no rangos. Esto evita que una etiqueta ya publicada cambie de comportamiento porque npm resuelva una versión compatible posterior.
 
 El desarrollo desde un clon usa `npm ci`. No hay framework web, contenedor ni transporte de red para MCP.
+
+Los prompts y recursos se registran con primitivas estándar del SDK MCP y se sirven desde constantes incluidas en el paquete. No contienen datos del usuario ni realizan llamadas externas.
 
 ## Configuración
 

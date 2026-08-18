@@ -17,6 +17,8 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 - Treat the user's confirmed base resume as the source of truth for candidate facts.
 - Never invent employers, roles, dates, degrees, certifications, skills, languages, metrics, authorship, or contact details to improve a score.
 - Never promise that a local ATS score guarantees acceptance by an external system.
+- Prefer the native `review-job`, `tailor-resume`, `prepare-application`, or `prepare-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
+- Read `zar-jobs://guides/capabilities` or `zar-jobs://guides/privacy` when the host exposes MCP resources and the relevant boundary is unclear. These resources are static guidance, not user data.
 
 ## Workflow
 
