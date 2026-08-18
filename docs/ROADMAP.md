@@ -115,6 +115,19 @@ Criterios de aceptación:
 - instalación y actualización reales desde el marketplace comprobadas después de publicar;
 - comprobación de Claude Code con un runtime Node compatible, separada de fallos del CLI anfitrión.
 
+## Hito 11 — Plantillas ATS seguras ✅
+
+Objetivo: ofrecer variedad visual sin alterar hechos, orden de lectura ni compatibilidad de extracción.
+
+Criterios de aceptación:
+
+- plantillas `classic`, `compact` y `technical` para HTML y PDF;
+- una sola columna, sin tablas, iconos, imágenes ni texto rasterizado;
+- mismo contenido personal en las tres salidas;
+- puntuación ATS estructural comprobada por plantilla;
+- extracción real de nombre, empresa y habilidades en cada PDF;
+- revisión visual de las tres páginas de muestra antes de publicar.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

@@ -57,14 +57,14 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `plan_resume_variant`: prioriza evidencia existente y devuelve rutas trazables para preparar una variante.
 - `audit_resume_variant`: señala posibles afirmaciones nuevas frente al CV base.
 - `check_resume_ats`: evalúa la estructura HTML con reglas offline.
-- `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.
-- `render_resume_pdf`: genera un PDF con texto extraíble y lo devuelve en memoria, sin navegador ni escritura automática.
+- `render_resume_html`: genera HTML escapado con plantilla `classic`, `compact` o `technical`.
+- `render_resume_pdf`: genera el mismo diseño ATS como PDF con texto extraíble y lo devuelve en memoria.
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Currículums
 
-El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS o PDF con texto extraíble. Todo se procesa localmente y en memoria.
+El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS o PDF con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 

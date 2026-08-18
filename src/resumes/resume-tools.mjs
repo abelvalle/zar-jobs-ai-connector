@@ -7,6 +7,8 @@ const STOP_WORDS = new Set([
   "your", "you", "our", "sus", "como", "esta", "este", "job", "role",
 ]);
 
+export const RESUME_TEMPLATES = ["classic", "compact", "technical"];
+
 export function validateResume(resume) {
   if (!isPlainObject(resume)) {
     return invalidResume("instance", "must be a JSON object");
@@ -52,12 +54,14 @@ export function validateResume(resume) {
   };
 }
 
-export function renderResumeHtml(resume) {
+export function renderResumeHtml(resume, template = "classic") {
   const validation = validateResume(resume);
   if (!validation.valid) {
     throw new Error(`Invalid resume: ${validation.errors[0].path} ${validation.errors[0].message}`);
   }
 
+  const selectedTemplate = selectResumeTemplate(template);
+  const style = htmlTemplateStyle(selectedTemplate);
   const basics = resume.basics;
   const language = safeLanguage(resume.meta?.language);
   const labels = sectionLabels(language);
@@ -78,20 +82,20 @@ export function renderResumeHtml(resume) {
 <title>${escapeHtml(basics.name)} - ${labels.resume}</title>
 <style>
   @page { size: A4; margin: 16mm; }
-  body { color: #111; background: #fff; font: 11pt/1.4 Arial, Helvetica, sans-serif; margin: 0 auto; max-width: 760px; }
-  header { border-bottom: 1px solid #555; padding-bottom: 8px; }
-  h1 { font-size: 22pt; margin: 0 0 2px; }
-  h2 { border-bottom: 1px solid #999; font-size: 14pt; margin: 18px 0 8px; padding-bottom: 2px; }
-  h3 { font-size: 11.5pt; margin: 10px 0 2px; }
-  p { margin: 4px 0; }
-  ul { margin: 4px 0 8px 20px; padding: 0; }
-  li { margin: 2px 0; }
+  body { color: #111; background: #fff; font: ${style.bodySize}pt/${style.lineHeight} Arial, Helvetica, sans-serif; margin: 0 auto; max-width: 760px; }
+  header { border-bottom: ${style.headerBorder}; padding-bottom: ${style.headerPadding}px; }
+  h1 { color: ${style.accent}; font-size: ${style.nameSize}pt; margin: 0 0 2px; }
+  h2 { border-bottom: ${style.sectionBorder}; color: ${style.accent}; font-size: ${style.sectionSize}pt; margin: ${style.sectionMargin}px 0 ${style.sectionGap}px; padding-bottom: 2px; }
+  h3 { font-size: ${style.entrySize}pt; margin: ${style.entryMargin}px 0 2px; }
+  p { margin: ${style.paragraphMargin}px 0; }
+  ul { margin: ${style.paragraphMargin}px 0 ${style.listGap}px 20px; padding: 0; }
+  li { margin: ${style.itemMargin}px 0; }
   .meta { color: #333; }
   a { color: #111; }
   @media print { a { text-decoration: none; } }
 </style>
 </head>
-<body>
+<body data-template="${selectedTemplate}">
 <header>
   <h1>${escapeHtml(basics.name)}</h1>
   ${paragraph(basics.label)}
@@ -105,11 +109,13 @@ ${sections}
 </html>`;
 }
 
-export function analyzeResumeAts(resume) {
-  const html = renderResumeHtml(resume);
+export function analyzeResumeAts(resume, template = "classic") {
+  const selectedTemplate = selectResumeTemplate(template);
+  const html = renderResumeHtml(resume, selectedTemplate);
   const result = validateATS(html);
   return {
     ...result,
+    template: selectedTemplate,
     recommendations: getRecommendations(result),
     disclaimer: "Heuristic structural check; no external ATS result is guaranteed.",
   };
@@ -145,6 +151,7 @@ export function planResumeVariant(resume, jobDescription) {
   if (!validation.valid) {
     throw new Error(`Invalid resume: ${validation.errors[0].path} ${validation.errors[0].message}`);
   }
+
   if (!hasText(jobDescription)) {
     throw new TypeError("jobDescription is required");
   }
@@ -233,6 +240,38 @@ export function auditResumeVariant(baseResume, variantResume) {
 
 function invalidResume(path, message) {
   return { valid: false, standard: "JSON Resume 1.x", errors: [{ path, message }], warnings: [] };
+}
+
+function selectResumeTemplate(value) {
+  if (!RESUME_TEMPLATES.includes(value)) {
+    throw new Error(`Unknown resume template: ${value}`);
+  }
+  return value;
+}
+
+function htmlTemplateStyle(template) {
+  if (template === "compact") {
+    return {
+      accent: "#111111", bodySize: 10, lineHeight: 1.25, nameSize: 20,
+      sectionSize: 12.5, entrySize: 10.5, headerBorder: "1px solid #444444",
+      sectionBorder: "1px solid #aaaaaa", headerPadding: 6, sectionMargin: 12,
+      sectionGap: 5, entryMargin: 7, paragraphMargin: 2, listGap: 4, itemMargin: 1,
+    };
+  }
+  if (template === "technical") {
+    return {
+      accent: "#17324d", bodySize: 10.5, lineHeight: 1.35, nameSize: 21,
+      sectionSize: 13, entrySize: 11, headerBorder: "2px solid #17324d",
+      sectionBorder: "1px solid #587087", headerPadding: 8, sectionMargin: 16,
+      sectionGap: 7, entryMargin: 9, paragraphMargin: 3, listGap: 6, itemMargin: 2,
+    };
+  }
+  return {
+    accent: "#111111", bodySize: 11, lineHeight: 1.4, nameSize: 22,
+    sectionSize: 14, entrySize: 11.5, headerBorder: "1px solid #555555",
+    sectionBorder: "1px solid #999999", headerPadding: 8, sectionMargin: 18,
+    sectionGap: 8, entryMargin: 10, paragraphMargin: 4, listGap: 8, itemMargin: 2,
+  };
 }
 
 function resumeEvidence(resume) {

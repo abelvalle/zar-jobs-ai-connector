@@ -16,6 +16,7 @@ import {
   analyzeResumeJobMatch,
   auditResumeVariant,
   planResumeVariant,
+  RESUME_TEMPLATES,
   renderResumeHtml,
   validateResume,
 } from "./resumes/resume-tools.mjs";
@@ -479,10 +480,14 @@ export function createZarJobsServer() {
       title: "Render an ATS-oriented resume",
       description:
         "Render an in-memory JSON Resume document as escaped, printable, single-column HTML. The caller decides whether and where to save it.",
-      inputSchema: { resume: resumeDocumentSchema },
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        template: z.enum(RESUME_TEMPLATES).optional(),
+      },
       outputSchema: {
         result: z.object({
           format: z.literal("html"),
+          template: z.enum(RESUME_TEMPLATES),
           html: z.string(),
           stored: z.literal(false),
         }),
@@ -494,9 +499,15 @@ export function createZarJobsServer() {
         openWorldHint: false,
       },
     },
-    async ({ resume }) => {
+    async ({ resume, template }) => {
       try {
-        return resumeToolResult({ format: "html", html: renderResumeHtml(resume), stored: false });
+        const selectedTemplate = template ?? "classic";
+        return resumeToolResult({
+          format: "html",
+          template: selectedTemplate,
+          html: renderResumeHtml(resume, selectedTemplate),
+          stored: false,
+        });
       } catch (error) {
         return resumeToolError(error);
       }
@@ -512,12 +523,14 @@ export function createZarJobsServer() {
       inputSchema: {
         resume: resumeDocumentSchema,
         fileName: z.string().min(5).max(120).optional(),
+        template: z.enum(RESUME_TEMPLATES).optional(),
       },
       outputSchema: {
         result: z.object({
           format: z.literal("pdf"),
           mimeType: z.literal("application/pdf"),
           encoding: z.literal("base64"),
+          template: z.enum(RESUME_TEMPLATES),
           fileName: z.string(),
           bytes: z.number().int().positive(),
           pages: z.number().int().positive(),
@@ -531,9 +544,13 @@ export function createZarJobsServer() {
         openWorldHint: false,
       },
     },
-    async ({ resume, fileName }) => {
+    async ({ resume, fileName, template }) => {
       try {
-        const { buffer, ...result } = await renderResumePdf(resume, fileName);
+        const { buffer, ...result } = await renderResumePdf(
+          resume,
+          fileName,
+          template ?? "classic",
+        );
         return {
           content: [
             {
@@ -560,7 +577,10 @@ export function createZarJobsServer() {
       title: "Check resume ATS structure",
       description:
         "Run deterministic offline checks on the plugin's single-column HTML representation. This is guidance, not a guarantee that any external ATS will accept the resume.",
-      inputSchema: { resume: resumeDocumentSchema },
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        template: z.enum(RESUME_TEMPLATES).optional(),
+      },
       outputSchema: { result: z.unknown() },
       annotations: {
         readOnlyHint: true,
@@ -569,9 +589,9 @@ export function createZarJobsServer() {
         openWorldHint: false,
       },
     },
-    async ({ resume }) => {
+    async ({ resume, template }) => {
       try {
-        return resumeToolResult(analyzeResumeAts(resume));
+        return resumeToolResult(analyzeResumeAts(resume, template ?? "classic"));
       } catch (error) {
         return resumeToolError(error);
       }

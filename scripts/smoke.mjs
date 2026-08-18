@@ -96,25 +96,32 @@ try {
 
   const renderedResume = await client.callTool({
     name: "render_resume_html",
-    arguments: { resume: smokeResume }
+    arguments: { resume: smokeResume, template: "compact" }
   });
   assert.match(renderedResume.structuredContent.result.html, /<!doctype html>/);
+  assert.equal(renderedResume.structuredContent.result.template, "compact");
 
   const renderedPdf = await client.callTool({
     name: "render_resume_pdf",
-    arguments: { resume: smokeResume, fileName: "example-tech-backend.pdf" }
+    arguments: {
+      resume: smokeResume,
+      fileName: "example-tech-backend.pdf",
+      template: "technical"
+    }
   });
   const pdfResource = renderedPdf.content.find((item) => item.type === "resource");
   assert.equal(renderedPdf.structuredContent.result.mimeType, "application/pdf");
+  assert.equal(renderedPdf.structuredContent.result.template, "technical");
   assert.equal(renderedPdf.structuredContent.result.stored, false);
   assert.equal(pdfResource.resource.mimeType, "application/pdf");
   assert.match(Buffer.from(pdfResource.resource.blob, "base64").subarray(0, 5).toString("ascii"), /^%PDF-/);
 
   const atsResume = await client.callTool({
     name: "check_resume_ats",
-    arguments: { resume: smokeResume }
+    arguments: { resume: smokeResume, template: "technical" }
   });
   assert.ok(atsResume.structuredContent.result.score >= 80);
+  assert.equal(atsResume.structuredContent.result.template, "technical");
 
   const matchedResume = await client.callTool({
     name: "match_resume_to_job",

@@ -7,6 +7,7 @@ import {
   analyzeResumeJobMatch,
   auditResumeVariant,
   planResumeVariant,
+  RESUME_TEMPLATES,
   renderResumeHtml,
   validateResume,
 } from "../src/resumes/resume-tools.mjs";
@@ -190,5 +191,42 @@ test("rejects paths and non-PDF names for portable output", async () => {
   await assert.rejects(
     renderResumePdf(baseResume, "resume.txt"),
     /plain PDF filename/,
+  );
+});
+
+test("keeps all ATS templates single-column and text-extractable", async () => {
+  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  for (const template of RESUME_TEMPLATES) {
+    const html = renderResumeHtml(baseResume, template);
+    const ats = analyzeResumeAts(baseResume, template);
+    const pdf = await renderResumePdf(baseResume, `${template}-resume.pdf`, template);
+    const loadingTask = getDocument({
+      data: new Uint8Array(pdf.buffer),
+      standardFontDataUrl: fileURLToPath(
+        new URL("../node_modules/pdfjs-dist/standard_fonts/", import.meta.url),
+      ).replaceAll("\\", "/"),
+    });
+    const document = await loadingTask.promise;
+    const page = await document.getPage(1);
+    const content = await page.getTextContent();
+    const text = content.items.map((item) => item.str).join(" ");
+    await document.destroy();
+
+    assert.match(html, new RegExp(`data-template="${template}"`));
+    assert.doesNotMatch(html, /<table|grid-template-columns|column-count/);
+    assert.ok(ats.score >= 80, `${template} ATS score was ${ats.score}`);
+    assert.equal(ats.template, template);
+    assert.equal(pdf.template, template);
+    assert.match(text, /Alex Example/);
+    assert.match(text, /Example Tech/);
+    assert.match(text, /Java/);
+  }
+});
+
+test("rejects unknown resume templates", async () => {
+  assert.throws(() => renderResumeHtml(baseResume, "decorative"), /Unknown resume template/);
+  await assert.rejects(
+    renderResumePdf(baseResume, "resume.pdf", "decorative"),
+    /Unknown resume template/,
   );
 });
