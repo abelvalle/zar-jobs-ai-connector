@@ -78,6 +78,15 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 4. Use `export_followup_calendar` only when the user wants a portable ICS. Save or import it only to a destination the user chooses; never imply account synchronization.
 5. A tracker status is user-maintained operational state. It is not proof that the plugin applied, contacted anyone, or received a portal update.
 
+## Portable workspace workflow
+
+1. Call `review_portable_workspace` before export. Keep `redacted` as the default and show the redaction paths and anonymity disclaimer.
+2. Use `full` only when the user explicitly wants personal data preserved; pass `includePersonalData: true` only after that confirmation.
+3. Call `render_portable_workspace` to receive the ZIP in memory. Save it only to a destination the user chooses.
+4. On import, call `import_portable_workspace`. Pass `acceptPersonalData: true` only after the user confirms a full workspace may be revealed in the current client.
+5. Never add passwords, tokens, cookies, secrets, authorization headers, or private keys. Never claim the redacted mode guarantees anonymity.
+6. Import returns data for review; it does not authorize merging, replacing, or saving any local state.
+
 ## Interview workflow
 
 1. Call `plan_interview` with the validated resume and user-provided job description. Present supported topics with their evidence paths before gaps.
@@ -117,6 +126,7 @@ The current MCP tools do not write files. They can:
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
 - plan interview preparation from traceable CV evidence and audit a draft answer without certifying truth or hiring quality.
+- review, export, and import a versioned portable workspace with redaction, credential rejection, checksums, and explicit personal-data consent.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 

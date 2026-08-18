@@ -109,6 +109,7 @@ try {
       "import_indeed_job",
       "import_job_alert",
       "import_linkedin_job",
+      "import_portable_workspace",
       "import_tecnoempleo_rss",
       "list_tecnoempleo_alert_jobs",
       "match_resume_evidence",
@@ -123,11 +124,13 @@ try {
       "prepare_europass_mapping",
       "prepare_resume_locale",
       "render_application_bundle",
+      "render_portable_workspace",
       "render_resume_docx",
       "render_resume_html",
       "render_resume_pdf",
       "review_application_tracker",
       "review_job_import",
+      "review_portable_workspace",
       "review_resume_import",
       "score_job_fit",
       "search_infojobs_jobs",
@@ -184,6 +187,36 @@ try {
   });
   assert.ok(matchedEvidence.structuredContent.result.supportedTopics.includes("java"));
   assert.ok(matchedEvidence.structuredContent.result.unsupportedTopics.includes("kubernetes"));
+
+  const portableWorkspace = {
+    schemaVersion: 1,
+    preferences: { remote: "hybrid" },
+    baseResume: smokeResume,
+    jobs: [{ id: "job-1", title: "Backend Engineer", company: "Example Tech" }],
+    applications: [{ id: "app-1", company: "Example Tech", notes: "Private note" }],
+  };
+  const reviewedWorkspace = await client.callTool({
+    name: "review_portable_workspace",
+    arguments: { workspace: portableWorkspace },
+  });
+  assert.equal(reviewedWorkspace.structuredContent.result.privacyMode, "redacted");
+  assert.equal(reviewedWorkspace.structuredContent.result.credentialsIncluded, false);
+
+  const renderedWorkspace = await client.callTool({
+    name: "render_portable_workspace",
+    arguments: { workspace: portableWorkspace },
+  });
+  const workspaceResource = renderedWorkspace.content.find((item) => item.type === "resource");
+  assert.equal(workspaceResource.resource.mimeType, "application/zip");
+  assert.equal(renderedWorkspace.structuredContent.result.stored, false);
+
+  const importedWorkspace = await client.callTool({
+    name: "import_portable_workspace",
+    arguments: { archiveBase64: workspaceResource.resource.blob },
+  });
+  assert.equal(importedWorkspace.structuredContent.result.checksumVerified, true);
+  assert.equal(importedWorkspace.structuredContent.result.workspace.baseResume.basics.name, "Candidate");
+  assert.equal(importedWorkspace.structuredContent.result.workspace.baseResume.basics.email, undefined);
 
   const renderedResume = await client.callTool({
     name: "render_resume_html",

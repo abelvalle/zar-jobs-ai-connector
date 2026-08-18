@@ -65,6 +65,12 @@ import {
   prepareResumeLocale,
 } from "./resumes/resume-interoperability.mjs";
 import { registerZarJobsGuidance } from "./mcp/guidance.mjs";
+import {
+  importPortableWorkspace,
+  renderPortableWorkspace,
+  reviewPortableWorkspace,
+  WORKSPACE_PRIVACY_MODES,
+} from "./workspace/portable-workspace.mjs";
 
 const capabilitySchema = z.object({
   portal: z.enum(PORTALS),
@@ -176,6 +182,7 @@ const indeedManualJobSchema = z.object({
 });
 
 const resumeDocumentSchema = z.record(z.string(), z.unknown());
+const portableWorkspaceSchema = z.record(z.string(), z.unknown());
 const jobRankingPreferencesSchema = z.object({
   titleKeywords: z.array(z.string().min(1).max(100)).max(50).optional(),
   skillKeywords: z.array(z.string().min(1).max(100)).max(50).optional(),
@@ -1111,6 +1118,114 @@ export function createZarJobsServer() {
           ],
           structuredContent: { result },
         };
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "review_portable_workspace",
+    {
+      title: "Review a portable Zar Jobs workspace",
+      description:
+        "Validate an in-memory workspace, reject credential fields, and report privacy redactions without returning personal values. The default mode is redacted.",
+      inputSchema: {
+        workspace: portableWorkspaceSchema,
+        privacyMode: z.enum(WORKSPACE_PRIVACY_MODES).optional(),
+        includePersonalData: z.boolean().optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ workspace, privacyMode, includePersonalData }) => {
+      try {
+        return resumeToolResult(reviewPortableWorkspace(
+          workspace,
+          privacyMode ?? "redacted",
+          includePersonalData ?? false,
+        ));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "render_portable_workspace",
+    {
+      title: "Render a portable Zar Jobs workspace",
+      description:
+        "Create an in-memory ZIP with a versioned workspace, manifest, privacy summary, and SHA-256 checksum. It never writes a file or includes credentials.",
+      inputSchema: {
+        workspace: portableWorkspaceSchema,
+        privacyMode: z.enum(WORKSPACE_PRIVACY_MODES).optional(),
+        includePersonalData: z.boolean().optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ workspace, privacyMode, includePersonalData }) => {
+      try {
+        const { buffer, ...result } = await renderPortableWorkspace({
+          workspace,
+          privacyMode: privacyMode ?? "redacted",
+          includePersonalData: includePersonalData ?? false,
+        });
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: `memory://zar-jobs/workspaces/${encodeURIComponent(result.fileName)}`,
+                mimeType: result.mimeType,
+                blob: buffer.toString("base64"),
+              },
+            },
+            { type: "text", text: JSON.stringify(result, null, 2) },
+          ],
+          structuredContent: { result },
+        };
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "import_portable_workspace",
+    {
+      title: "Import a portable Zar Jobs workspace",
+      description:
+        "Verify and return an in-memory Zar Jobs workspace ZIP. Full workspaces require explicit personal-data consent and nothing is saved automatically.",
+      inputSchema: {
+        archiveBase64: z.string().min(4).max(8_000_016),
+        acceptPersonalData: z.boolean().optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ archiveBase64, acceptPersonalData }) => {
+      try {
+        return resumeToolResult(await importPortableWorkspace(
+          archiveBase64,
+          acceptPersonalData ?? false,
+        ));
       } catch (error) {
         return resumeToolError(error);
       }

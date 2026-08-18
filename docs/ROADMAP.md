@@ -307,6 +307,22 @@ Criterios de aceptación:
 - ninguna candidatura, mensaje, carga o cambio externo;
 - smoke local y portable en verde.
 
+## Hito 24 — Workspace portable ✅
+
+Objetivo: mover el estado confirmado del candidato entre clientes MCP sin cuenta, servidor, credenciales ni persistencia automática.
+
+Criterios de aceptación:
+
+- contrato versionado para perfil, preferencias, CV, variantes, ofertas, snapshots, tracker y respuestas;
+- revisión que devuelve rutas y recuentos, no valores personales;
+- modo `redacted` predeterminado y modo `full` con doble consentimiento explícito;
+- rechazo recursivo de contraseñas, tokens, cookies, secretos, autorización y claves privadas;
+- ZIP determinista en memoria con solo `workspace.json` y `manifest.json`;
+- límites de 5 MB para datos y 6 MB para archivo;
+- CRC, estructura, versión, tamaño y SHA-256 verificados al importar;
+- ninguna escritura, fusión, sincronización, cuenta o red;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

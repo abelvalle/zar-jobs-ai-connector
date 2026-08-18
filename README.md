@@ -84,6 +84,9 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `prepare_application_kit`: coordina auditorías, nombres de archivo y revisión final, sin enviar nada.
 - `audit_resume_privacy`: señala rutas con datos sensibles seleccionados sin devolver sus valores.
 - `render_application_bundle`: empaqueta PDF, DOCX y borradores en un ZIP con checksums y aprobación final obligatoria.
+- `review_portable_workspace`: valida un workspace y muestra redacciones y riesgos sin devolver valores personales.
+- `render_portable_workspace`: exporta un workspace versionado como ZIP en memoria, sin secretos ni escritura automática.
+- `import_portable_workspace`: verifica e importa ese ZIP en memoria, con consentimiento adicional para el modo completo.
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
@@ -106,6 +109,8 @@ La priorización de ofertas es determinista y explicable: cada resultado conserv
 La bandeja universal reúne alertas que el usuario ya recibe y compara snapshots sin abrir enlaces ni depender de un portal nuevo. Consulta [docs/JOB-INBOX.md](docs/JOB-INBOX.md).
 
 El seguimiento de candidaturas también es portable: el cliente aporta los registros y puede guardar la copia actualizada o importar un calendario ICS. El MCP no mantiene base de datos ni sincroniza cuentas. Consulta [docs/APPLICATION-TRACKING.md](docs/APPLICATION-TRACKING.md).
+
+El workspace portable mueve CV, preferencias, ofertas y tracker entre clientes compatibles. Por defecto elimina contacto, notas libres y respuestas; el modo completo requiere consentimiento explícito en exportación e importación. Consulta [docs/PORTABLE-WORKSPACE.md](docs/PORTABLE-WORKSPACE.md).
 
 La preparación de entrevistas parte del CV confirmado: diferencia temas respaldados y lagunas, y audita borradores sin certificar su verdad o calidad. Consulta [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md).
 
