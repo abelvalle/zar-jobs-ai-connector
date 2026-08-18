@@ -5,17 +5,17 @@
     "email": "26121474+abelvalle@users.noreply.github.com"
   },
   "description": "Local job connectors and truthful ATS-oriented resume tools for AI assistants.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "plugins": [
     {
       "name": "zar-jobs-ai-connector",
       "source": {
         "source": "github",
         "repo": "abelvalle/zar-jobs-ai-connector",
-        "ref": "v1.0.0"
+        "ref": "v1.1.0"
       },
-      "description": "Review authorized job sources and create evidence-grounded JSON Resume variants with offline ATS checks and portable PDF export.",
-      "version": "1.0.0",
+      "description": "Review authorized job sources, confirm imported resume drafts, and create evidence-grounded variants with ATS-safe templates and portable PDF export.",
+      "version": "1.1.0",
       "author": {
         "name": "abelvalle"
       },
