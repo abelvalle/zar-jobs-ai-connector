@@ -31,6 +31,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 9. Preserve the source URL and distinguish portal-provided facts from model inference.
 10. Respond in the user's language.
 
+## Job ranking workflow
+
+1. Ask the user for explicit ranking preferences; never infer exclusions, salary limits, or location constraints from unrelated context.
+2. Call `score_job_fit` for one user-provided job or `compare_job_fit` for up to 20 jobs.
+3. Report the factor breakdown, confidence, missing evidence, and blockers. Treat the ordering as a review aid, never a decision.
+4. Confirm that salary values use the same currency and period before interpreting that factor.
+5. Never apply, discard, contact, or update an external tracker from a ranking result.
+
 ## Resume workflow
 
 1. Obtain the user's existing CV or confirmed facts. Do not infer personal claims from a job description.
@@ -77,6 +85,7 @@ The current MCP tools do not write files. They can:
 - choose among three single-column ATS-oriented visual templates without changing candidate facts.
 - plan and audit cover letters and screening answers against traceable resume evidence.
 - prepare a local application-kit manifest that always requires final human approval and never submits.
+- score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 

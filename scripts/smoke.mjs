@@ -64,6 +64,7 @@ try {
       "audit_application_text",
       "audit_resume_variant",
       "check_resume_ats",
+      "compare_job_fit",
       "compare_resume_versions",
       "fingerprint_jobs",
       "get_connector_status",
@@ -84,6 +85,7 @@ try {
       "render_resume_pdf",
       "review_job_import",
       "review_resume_import",
+      "score_job_fit",
       "search_infojobs_jobs",
       "validate_resume"
     ]
@@ -367,6 +369,38 @@ try {
   });
   assert.equal(fingerprintedJobs.structuredContent.result.duplicateCount, 1);
   assert.equal(fingerprintedJobs.structuredContent.result.fuzzyMatching, false);
+
+  const scoredJob = await client.callTool({
+    name: "score_job_fit",
+    arguments: {
+      preferences: {
+        titleKeywords: ["backend"],
+        skillKeywords: ["java", "postgresql"],
+        remotePreference: "remote"
+      },
+      job: {
+        title: "Backend Engineer",
+        company: "Example Tech",
+        workplaceType: "Remote",
+        description: "Java and PostgreSQL"
+      }
+    }
+  });
+  assert.equal(scoredJob.structuredContent.result.score, 100);
+  assert.equal(scoredJob.structuredContent.result.decisionMade, false);
+
+  const comparedJobs = await client.callTool({
+    name: "compare_job_fit",
+    arguments: {
+      preferences: { titleKeywords: ["backend"], skillKeywords: ["java"] },
+      jobs: [
+        { id: "frontend", title: "Frontend Engineer", company: "Example", description: "CSS" },
+        { id: "backend", title: "Backend Engineer", company: "Example", description: "Java" }
+      ]
+    }
+  });
+  assert.equal(comparedJobs.structuredContent.result.ranking[0].id, "backend");
+  assert.equal(comparedJobs.structuredContent.result.humanReviewRequired, true);
 
   console.log("MCP smoke test passed.");
 } finally {

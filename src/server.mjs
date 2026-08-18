@@ -12,6 +12,7 @@ import {
 } from "./portals/tecnoempleo-rss-client.mjs";
 import { normalizeJobUrl } from "./portals/url-normalizer.mjs";
 import { fingerprintJobs, reviewJobImport } from "./jobs/job-import.mjs";
+import { compareJobFit, scoreJobFit } from "./jobs/job-ranking.mjs";
 import {
   auditApplicationText,
   planCoverLetter,
@@ -148,6 +149,25 @@ const indeedManualJobSchema = z.object({
 });
 
 const resumeDocumentSchema = z.record(z.string(), z.unknown());
+const jobRankingPreferencesSchema = z.object({
+  titleKeywords: z.array(z.string().min(1).max(100)).max(50).optional(),
+  skillKeywords: z.array(z.string().min(1).max(100)).max(50).optional(),
+  preferredLocations: z.array(z.string().min(1).max(100)).max(50).optional(),
+  remotePreference: z.enum(["any", "remote", "hybrid", "onsite"]).optional(),
+  salaryMinimum: z.number().nonnegative().optional(),
+  requiredTerms: z.array(z.string().min(1).max(100)).max(50).optional(),
+  excludedTerms: z.array(z.string().min(1).max(100)).max(50).optional(),
+});
+const jobRankingJobSchema = z.object({
+  id: z.string().min(1).max(200).optional(),
+  title: z.string().min(1).max(200),
+  company: z.string().min(1).max(200),
+  location: z.string().min(1).max(300).optional(),
+  workplaceType: z.string().min(1).max(100).optional(),
+  salaryMinimum: z.number().nonnegative().optional(),
+  description: z.string().min(1).max(100_000).optional(),
+  url: z.string().min(1).max(2048).optional(),
+});
 
 export function createZarJobsServer() {
   const server = new McpServer(
@@ -539,6 +559,60 @@ export function createZarJobsServer() {
     async ({ jobs }) => {
       try {
         return resumeToolResult(fingerprintJobs(jobs));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "score_job_fit",
+    {
+      title: "Score one job against explicit preferences",
+      description:
+        "Apply fixed deterministic rules to one user-provided job. Returns factor weights, matches, missing evidence, confidence, and blockers; it never decides or applies.",
+      inputSchema: {
+        preferences: jobRankingPreferencesSchema,
+        job: jobRankingJobSchema,
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ preferences, job }) => {
+      try {
+        return resumeToolResult(scoreJobFit(preferences, job));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "compare_job_fit",
+    {
+      title: "Compare jobs against explicit preferences",
+      description:
+        "Rank up to 20 user-provided jobs with the same fixed explainable rules. Results remain recommendations for human review, never application decisions.",
+      inputSchema: {
+        preferences: jobRankingPreferencesSchema,
+        jobs: z.array(jobRankingJobSchema).min(1).max(20),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ preferences, jobs }) => {
+      try {
+        return resumeToolResult(compareJobFit(preferences, jobs));
       } catch (error) {
         return resumeToolError(error);
       }

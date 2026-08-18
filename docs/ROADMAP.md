@@ -198,6 +198,21 @@ Criterios de aceptación:
 - sin escritura, navegación, formulario, cuenta, mensaje o candidatura automática;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 17 — Ranking explicable y comparación ✅
+
+Objetivo: priorizar ofertas con preferencias explícitas sin delegar la decisión a una caja negra ni automatizar candidaturas.
+
+Criterios de aceptación:
+
+- puntuación determinista de 0 a 100 con pesos fijos documentados;
+- desglose por título, habilidades, ubicación, modalidad, salario y términos obligatorios;
+- bloqueadores visibles para términos excluidos, sin descarte automático;
+- confianza reducida cuando la oferta no aporta evidencia suficiente;
+- comparación estable de hasta 20 ofertas sin mutar las entradas;
+- `decisionMade: false` y `humanReviewRequired: true` invariables;
+- sin modelo, red, navegación, almacenamiento ni candidatura;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

@@ -54,6 +54,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `import_indeed_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
 - `review_job_import`: revisa una oferta pegada desde cualquier portal sin abrir su URL y deja todos los campos sin confirmar.
 - `fingerprint_jobs`: agrupa solo duplicados exactos mediante huellas deterministas locales.
+- `score_job_fit`: puntúa una oferta con reglas fijas y muestra factores, lagunas y bloqueadores.
+- `compare_job_fit`: ordena hasta 20 ofertas con las mismas reglas, sin decidir ni solicitar puestos.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
@@ -79,6 +81,8 @@ El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 
 Las cartas y respuestas se planifican y auditan contra el CV base. El kit final solo es un manifiesto local para generar PDF/DOCX y revisar los borradores; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
+
+La priorización de ofertas es determinista y explicable: cada resultado conserva pesos, coincidencias, datos desconocidos y preferencias bloqueantes. No sustituye la revisión del usuario. Consulta [docs/JOB-RANKING.md](docs/JOB-RANKING.md).
 
 ## Desarrollo
 
@@ -107,6 +111,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Uso seguro con LinkedIn](docs/LINKEDIN-USAGE.md)
 - [Uso seguro con Indeed](docs/INDEED-USAGE.md)
 - [Motor de currículums](docs/RESUME-ENGINE.md)
+- [Ranking explicable de ofertas](docs/JOB-RANKING.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Soporte](SUPPORT.md)
 - [Contribución y ramas](CONTRIBUTING.md)
