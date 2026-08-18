@@ -213,6 +213,21 @@ Criterios de aceptación:
 - sin modelo, red, navegación, almacenamiento ni candidatura;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 18 — Tracker, métricas y calendario portable ✅
+
+Objetivo: ayudar a mantener el seguimiento sin convertir el plugin en un servicio ni escribir datos personales de forma implícita.
+
+Criterios de aceptación:
+
+- contrato documentado con identificadores, estados y fechas ISO;
+- métricas deterministas con fecha de referencia explícita;
+- seguimientos vencidos, de hoy, futuros y sin fecha diferenciados;
+- actualización sobre una copia, con parche antes/después y transiciones atípicas visibles;
+- exportación ICS en memoria con plegado UTF-8 y sin notas privadas;
+- máximo de 500 registros y rechazo de identificadores duplicados;
+- ninguna escritura, sincronización, contacto o candidatura externa;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

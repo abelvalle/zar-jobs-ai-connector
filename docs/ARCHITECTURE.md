@@ -38,7 +38,7 @@ Ambos catálogos apuntan a una etiqueta de release fija. La configuración MCP u
 
 Solo existe transporte MCP por `stdio`. El cliente crea un subproceso local, intercambia mensajes por entrada y salida estándar y lo detiene al cerrar la conexión. No escucha puertos y no acepta conexiones desde la red.
 
-`src/cli.mjs` abre el transporte local y `src/server.mjs` registra herramientas pequeñas. `src/connector-status.mjs` diagnostica únicamente la presencia de configuración, nunca sus valores. `src/jobs/job-ranking.mjs` puntúa ofertas mediante reglas deterministas; `src/resumes/resume-tools.mjs` contiene la validación, HTML y auditoría; `src/resumes/resume-pdf.mjs` genera PDF local con PDFKit. La lógica de portales vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
+`src/cli.mjs` abre el transporte local y `src/server.mjs` registra herramientas pequeñas. `src/connector-status.mjs` diagnostica únicamente la presencia de configuración, nunca sus valores. `src/jobs/job-ranking.mjs` puntúa ofertas mediante reglas deterministas y `src/tracking/application-tracker.mjs` revisa copias en memoria y genera ICS; `src/resumes/resume-tools.mjs` contiene la validación, HTML y auditoría; `src/resumes/resume-pdf.mjs` genera PDF local con PDFKit. La lógica de portales vive en adaptadores independientes, por lo que un fallo de un portal no altera los demás.
 
 ## Datos y estado
 

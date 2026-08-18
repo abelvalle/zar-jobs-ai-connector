@@ -14,6 +14,12 @@ import { normalizeJobUrl } from "./portals/url-normalizer.mjs";
 import { fingerprintJobs, reviewJobImport } from "./jobs/job-import.mjs";
 import { compareJobFit, scoreJobFit } from "./jobs/job-ranking.mjs";
 import {
+  APPLICATION_STATUSES,
+  exportFollowupCalendar,
+  planApplicationUpdate,
+  reviewApplicationTracker,
+} from "./tracking/application-tracker.mjs";
+import {
   auditApplicationText,
   planCoverLetter,
   planScreeningAnswers,
@@ -167,6 +173,20 @@ const jobRankingJobSchema = z.object({
   salaryMinimum: z.number().nonnegative().optional(),
   description: z.string().min(1).max(100_000).optional(),
   url: z.string().min(1).max(2048).optional(),
+});
+const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const applicationRecordSchema = z.object({
+  id: z.string().min(1).max(200),
+  company: z.string().min(1).max(200),
+  role: z.string().min(1).max(200),
+  status: z.enum(APPLICATION_STATUSES),
+  createdAt: isoDateSchema,
+  updatedAt: isoDateSchema.optional(),
+  appliedAt: isoDateSchema.optional(),
+  lastContactAt: isoDateSchema.optional(),
+  nextActionAt: isoDateSchema.optional(),
+  sourceUrl: z.string().min(1).max(2048).optional(),
+  notes: z.string().min(1).max(5_000).optional(),
 });
 
 export function createZarJobsServer() {
@@ -644,6 +664,114 @@ export function createZarJobsServer() {
     async ({ resume, jobDescription, target }) => {
       try {
         return resumeToolResult(planCoverLetter(resume, jobDescription, target));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "review_application_tracker",
+    {
+      title: "Review an in-memory application tracker",
+      description:
+        "Calculate deterministic status metrics and due, overdue, upcoming, or missing follow-ups from user-provided records and an explicit date. It stores nothing.",
+      inputSchema: {
+        records: z.array(applicationRecordSchema).max(500),
+        asOf: isoDateSchema,
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ records, asOf }) => {
+      try {
+        return resumeToolResult(reviewApplicationTracker(records, asOf));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_application_update",
+    {
+      title: "Plan a reviewed tracker update",
+      description:
+        "Return an updated in-memory copy and field-level patch for one explicit application record. It flags unusual transitions and never writes or contacts anyone.",
+      inputSchema: {
+        records: z.array(applicationRecordSchema).max(500),
+        update: z.object({
+          id: z.string().min(1).max(200),
+          changes: z.object({
+            status: z.enum(APPLICATION_STATUSES).optional(),
+            appliedAt: isoDateSchema.nullable().optional(),
+            lastContactAt: isoDateSchema.nullable().optional(),
+            nextActionAt: isoDateSchema.nullable().optional(),
+            notes: z.string().min(1).max(5_000).nullable().optional(),
+          }),
+        }),
+        asOf: isoDateSchema,
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ records, update, asOf }) => {
+      try {
+        return resumeToolResult(planApplicationUpdate(records, update, asOf));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "export_followup_calendar",
+    {
+      title: "Export follow-ups as a portable calendar",
+      description:
+        "Create an in-memory ICS calendar for active records with next-action dates. Notes are excluded and no calendar service is contacted.",
+      inputSchema: {
+        records: z.array(applicationRecordSchema).max(500),
+        asOf: isoDateSchema,
+        calendarName: z.string().min(1).max(100).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ records, asOf, calendarName }) => {
+      try {
+        const result = exportFollowupCalendar(records, asOf, calendarName);
+        const metadata = { ...result };
+        delete metadata.calendarText;
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: `memory://zar-jobs/calendars/${result.fileName}`,
+                mimeType: result.mimeType,
+                text: result.calendarText,
+              },
+            },
+            { type: "text", text: JSON.stringify(metadata, null, 2) },
+          ],
+          structuredContent: { result },
+        };
       } catch (error) {
         return resumeToolError(error);
       }

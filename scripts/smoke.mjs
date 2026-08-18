@@ -66,6 +66,7 @@ try {
       "check_resume_ats",
       "compare_job_fit",
       "compare_resume_versions",
+      "export_followup_calendar",
       "fingerprint_jobs",
       "get_connector_status",
       "get_infojobs_job",
@@ -76,6 +77,7 @@ try {
       "list_tecnoempleo_alert_jobs",
       "match_resume_to_job",
       "normalize_job_url",
+      "plan_application_update",
       "plan_cover_letter",
       "plan_resume_variant",
       "plan_screening_answers",
@@ -83,6 +85,7 @@ try {
       "render_resume_docx",
       "render_resume_html",
       "render_resume_pdf",
+      "review_application_tracker",
       "review_job_import",
       "review_resume_import",
       "score_job_fit",
@@ -401,6 +404,45 @@ try {
   });
   assert.equal(comparedJobs.structuredContent.result.ranking[0].id, "backend");
   assert.equal(comparedJobs.structuredContent.result.humanReviewRequired, true);
+
+  const trackerRecords = [{
+    id: "app-001",
+    company: "Example Tech",
+    role: "Backend Engineer",
+    status: "applied",
+    createdAt: "2026-08-01",
+    appliedAt: "2026-08-02",
+    nextActionAt: "2026-08-20"
+  }];
+  const trackerReview = await client.callTool({
+    name: "review_application_tracker",
+    arguments: { records: trackerRecords, asOf: "2026-08-18" }
+  });
+  assert.equal(trackerReview.structuredContent.result.metrics.active, 1);
+  assert.equal(trackerReview.structuredContent.result.followUps.upcoming[0].id, "app-001");
+
+  const trackerUpdate = await client.callTool({
+    name: "plan_application_update",
+    arguments: {
+      records: trackerRecords,
+      asOf: "2026-08-18",
+      update: {
+        id: "app-001",
+        changes: { status: "interview", nextActionAt: "2026-08-25" }
+      }
+    }
+  });
+  assert.equal(trackerUpdate.structuredContent.result.updatedRecord.status, "interview");
+  assert.equal(trackerUpdate.structuredContent.result.writePerformed, false);
+
+  const followupCalendar = await client.callTool({
+    name: "export_followup_calendar",
+    arguments: { records: trackerRecords, asOf: "2026-08-18" }
+  });
+  const calendarResource = followupCalendar.content.find((item) => item.type === "resource");
+  assert.equal(followupCalendar.structuredContent.result.events, 1);
+  assert.equal(calendarResource.resource.mimeType, "text/calendar");
+  assert.match(calendarResource.resource.text, /BEGIN:VCALENDAR/);
 
   console.log("MCP smoke test passed.");
 } finally {

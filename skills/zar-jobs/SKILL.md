@@ -60,6 +60,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 3. Call `prepare_application_kit` to coordinate filenames and the final checklist. Render the requested resume formats only after review.
 4. Stop before any submission, message, profile change, or external write. The user must open the destination and approve the final application manually.
 
+## Application tracking workflow
+
+1. Use `review_application_tracker` only with records the user deliberately provides and an explicit `asOf` date.
+2. Use `plan_application_update` to produce a reviewed copy and patch. Do not claim the tracker was saved; the tool performs no write.
+3. Treat unusual transition warnings and missing dates as questions for the user, not errors to repair by inventing dates.
+4. Use `export_followup_calendar` only when the user wants a portable ICS. Save or import it only to a destination the user chooses; never imply account synchronization.
+5. A tracker status is user-maintained operational state. It is not proof that the plugin applied, contacted anyone, or received a portal update.
+
 ## Current version
 
 The current MCP tools do not write files. They can:
@@ -86,6 +94,7 @@ The current MCP tools do not write files. They can:
 - plan and audit cover letters and screening answers against traceable resume evidence.
 - prepare a local application-kit manifest that always requires final human approval and never submits.
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
+- review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 

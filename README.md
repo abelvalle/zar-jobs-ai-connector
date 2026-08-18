@@ -56,6 +56,9 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `fingerprint_jobs`: agrupa solo duplicados exactos mediante huellas deterministas locales.
 - `score_job_fit`: puntúa una oferta con reglas fijas y muestra factores, lagunas y bloqueadores.
 - `compare_job_fit`: ordena hasta 20 ofertas con las mismas reglas, sin decidir ni solicitar puestos.
+- `review_application_tracker`: calcula métricas y seguimientos desde registros aportados en memoria.
+- `plan_application_update`: prepara una copia y un parche revisable sin escribir el tracker.
+- `export_followup_calendar`: genera un calendario ICS local sin conectarse a servicios externos.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
@@ -83,6 +86,8 @@ Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan sup
 Las cartas y respuestas se planifican y auditan contra el CV base. El kit final solo es un manifiesto local para generar PDF/DOCX y revisar los borradores; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
 
 La priorización de ofertas es determinista y explicable: cada resultado conserva pesos, coincidencias, datos desconocidos y preferencias bloqueantes. No sustituye la revisión del usuario. Consulta [docs/JOB-RANKING.md](docs/JOB-RANKING.md).
+
+El seguimiento de candidaturas también es portable: el cliente aporta los registros y puede guardar la copia actualizada o importar un calendario ICS. El MCP no mantiene base de datos ni sincroniza cuentas. Consulta [docs/APPLICATION-TRACKING.md](docs/APPLICATION-TRACKING.md).
 
 ## Desarrollo
 
@@ -112,6 +117,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Uso seguro con Indeed](docs/INDEED-USAGE.md)
 - [Motor de currículums](docs/RESUME-ENGINE.md)
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
+- [Seguimiento local de candidaturas](docs/APPLICATION-TRACKING.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Soporte](SUPPORT.md)
 - [Contribución y ramas](CONTRIBUTING.md)
