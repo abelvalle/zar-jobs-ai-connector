@@ -374,6 +374,23 @@ Criterios de aceptación:
 - ninguna escritura, candidatura, descarte, sincronización o red;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 28 — Revisión recruiter del CV ✅
+
+Objetivo: ofrecer una primera criba profesional y accionable del CV sin simular intervención humana, usar atributos protegidos ni convertir una heurística en una predicción de contratación.
+
+Criterios de aceptación:
+
+- herramienta `review_resume_as_recruiter` y prompt MCP `review-resume-as-recruiter`;
+- modos general y dirigido por una oferta aportada por el usuario;
+- rúbrica reproducible de claridad, relevancia, impacto, credibilidad, escaneabilidad y evidencia;
+- fortalezas, prioridades y preguntas enlazadas a rutas del CV confirmado;
+- términos de la oferta sin respaldo conservados como lagunas;
+- oferta delimitada como datos no confiables dentro del prompt;
+- sin probabilidad de contratación, decisión de selección ni afirmación de recruiter humano;
+- atributos protegidos excluidos explícitamente del análisis;
+- ninguna invención, escritura, candidatura, descarte, mensaje o cambio de perfil;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

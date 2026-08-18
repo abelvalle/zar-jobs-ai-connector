@@ -53,6 +53,7 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 - `build_evidence_bank`: extrae evidencia con rutas, cifras, palabras clave y hash del banco.
 - `match_resume_evidence`: relaciona el banco reconstruido con una oferta y conserva los temas no respaldados.
 - `match_resume_to_job`: calcula coincidencia orientativa con el texto de una oferta.
+- `review_resume_as_recruiter`: puntúa seis dimensiones de primera criba, devuelve rutas, prioridades y preguntas, y mantiene desactivadas la predicción y la decisión de contratación.
 - `plan_resume_variant`: ordena evidencia existente por relevancia, conserva su ruta JSON y separa términos sin respaldo.
 - `apply_resume_changes`: aplica como máximo 50 operaciones explícitas sobre una copia, conserva valores anterior y posterior, procedencia declarada y hashes SHA-256, y ejecuta validación y auditoría.
 - `compare_resume_versions`: calcula diferencias de campo y hashes deterministas entre el CV base y una variante.
@@ -88,6 +89,8 @@ La herramienta rechaza claves de prototipo, rutas inexistentes, inserciones ambi
 ## Límites
 
 Ninguna herramienta puede garantizar que un CV supere un ATS o una evaluación de IA externos. Los productos usan parsers, modelos y reglas privadas que cambian. La puntuación local detecta problemas reproducibles de estructura; la coincidencia por palabras clave es solo una señal.
+
+La rúbrica recruiter tampoco representa la opinión de una persona ni una probabilidad de entrevista. Evalúa señales visibles y reproducibles del documento. No considera atributos protegidos y no debe utilizarse para decidir si una persona merece ser contratada.
 
 Una palabra ausente nunca se añade automáticamente. Primero debe estar respaldada por el CV base o ser confirmada por el usuario. La auditoría de variantes tampoco comprende el significado completo de una reformulación, por lo que la revisión humana continúa siendo obligatoria.
 

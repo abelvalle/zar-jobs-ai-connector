@@ -80,6 +80,7 @@ import {
   planResumeAnonymization,
   renderAnonymousResumeBundle,
 } from "./resumes/resume-anonymizer.mjs";
+import { reviewResumeAsRecruiter } from "./resumes/resume-recruiter-review.mjs";
 import { registerZarJobsGuidance } from "./mcp/guidance.mjs";
 import {
   importPortableWorkspace,
@@ -1549,6 +1550,34 @@ export function createZarJobsServer() {
     async ({ resume, locale }) => {
       try {
         return resumeToolResult(prepareResumeLocale(resume, locale));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "review_resume_as_recruiter",
+    {
+      title: "Review a resume with a recruiter-style rubric",
+      description:
+        "Score six deterministic first-pass dimensions and return evidence paths, priorities, and questions. It is not a human recruiter review, hiring prediction, or hiring decision.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000).optional(),
+        targetRole: z.string().min(1).max(200).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription, targetRole }) => {
+      try {
+        return resumeToolResult(reviewResumeAsRecruiter(resume, { jobDescription, targetRole }));
       } catch (error) {
         return resumeToolError(error);
       }

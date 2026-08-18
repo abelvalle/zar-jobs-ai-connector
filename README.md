@@ -68,6 +68,7 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `audit_interview_answer`: revisa afirmaciones, estructura STAR y relevancia literal de un borrador.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
+- `review_resume_as_recruiter`: revisa seis dimensiones de primera criba y prioriza mejoras sin fingir un recruiter humano ni predecir contratación.
 - `prepare_resume_locale`: localiza etiquetas en seis idiomas sin traducir ni alterar los hechos.
 - `prepare_europass_mapping`: crea un borrador trazable para transferencia manual, no un import oficial.
 - `build_evidence_bank`: extrae evidencia reutilizable con rutas, cifras y un hash determinista.
@@ -98,7 +99,7 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Prompts y recursos MCP
 
-Los clientes compatibles descubren cuatro flujos nativos: `review-job`, `tailor-resume`, `prepare-application` y `prepare-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
+Los clientes compatibles descubren cinco flujos nativos: `review-job`, `review-resume-as-recruiter`, `tailor-resume`, `prepare-application` y `prepare-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
 
 ## Currículums
 
@@ -107,6 +108,8 @@ El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes
 Las etiquetas de los tres formatos pueden localizarse en seis idiomas sin traducir automáticamente el contenido. También existe un mapeo de revisión para transferencia manual a Europass y un banco de evidencias con rutas y hashes. Consulta [docs/RESUME-INTEROPERABILITY.md](docs/RESUME-INTEROPERABILITY.md).
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
+
+La revisión recruiter añade una lectura general o dirigida a una oferta con seis dimensiones, fortalezas por rutas y preguntas para descubrir evidencia real. No usa atributos protegidos ni calcula probabilidades de contratación. Consulta [docs/RECRUITER-REVIEW.md](docs/RECRUITER-REVIEW.md).
 
 Las cartas y respuestas se planifican y auditan contra el CV base. El kit final puede ser un manifiesto o un ZIP local con PDF, DOCX, borradores opcionales y checksums; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
 
@@ -154,6 +157,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Uso seguro con LinkedIn](docs/LINKEDIN-USAGE.md)
 - [Uso seguro con Indeed](docs/INDEED-USAGE.md)
 - [Motor de currículums](docs/RESUME-ENGINE.md)
+- [Revisión recruiter del CV](docs/RECRUITER-REVIEW.md)
 - [Interoperabilidad y CV multilingüe](docs/RESUME-INTEROPERABILITY.md)
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
 - [Bandeja universal de alertas](docs/JOB-INBOX.md)

@@ -72,3 +72,5 @@ La comparación de condiciones usa coincidencia literal y aritmética JavaScript
 La anonimización es una transformación local por rutas. El correo reservado `candidate@example.invalid` mantiene válido el JSON Resume y se excluye de HTML, PDF y DOCX. PDFKit, docx y JSZip reutilizan el mismo pipeline de documentos; no se añade dependencia.
 
 La analítica del tracker usa contadores, cocientes y una mediana deterministas sobre fechas ISO explícitas. No añade motor estadístico, aprendizaje automático, telemetría ni almacén de eventos: los segmentos pequeños se marcan y ninguna asociación se presenta como causa, predicción o recomendación.
+
+La revisión recruiter reutiliza la validación, el banco de evidencias y la coincidencia literal existentes. La puntuación se calcula con aritmética JavaScript sobre presencia, longitudes, rutas, fechas y métricas visibles; no añade un modelo, servicio de IA, dataset de selección ni atributos demográficos. El prompt del cliente aporta la explicación cualitativa y debe conservar la misma frontera no predictiva.
