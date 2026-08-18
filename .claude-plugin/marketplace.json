@@ -5,17 +5,17 @@
     "email": "26121474+abelvalle@users.noreply.github.com"
   },
   "description": "Local job connectors and truthful ATS-oriented resume tools for AI assistants.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "plugins": [
     {
       "name": "zar-jobs-ai-connector",
       "source": {
         "source": "url",
         "url": "https://github.com/abelvalle/zar-jobs-ai-connector.git",
-        "ref": "v1.3.0"
+        "ref": "v1.4.0"
       },
       "description": "Rank and track jobs, prepare interviews, create traceable resume variants, and export private application bundles without submitting.",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "author": {
         "name": "abelvalle"
       },
