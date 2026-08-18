@@ -65,6 +65,7 @@ try {
       "audit_interview_answer",
       "audit_resume_privacy",
       "audit_resume_variant",
+      "build_evidence_bank",
       "check_resume_ats",
       "compare_job_fit",
       "compare_job_snapshots",
@@ -79,6 +80,7 @@ try {
       "import_linkedin_job",
       "import_tecnoempleo_rss",
       "list_tecnoempleo_alert_jobs",
+      "match_resume_evidence",
       "match_resume_to_job",
       "normalize_job_url",
       "plan_application_update",
@@ -87,6 +89,8 @@ try {
       "plan_resume_variant",
       "plan_screening_answers",
       "prepare_application_kit",
+      "prepare_europass_mapping",
+      "prepare_resume_locale",
       "render_application_bundle",
       "render_resume_docx",
       "render_resume_html",
@@ -114,6 +118,41 @@ try {
     arguments: { resume: smokeResume }
   });
   assert.equal(validatedResume.structuredContent.result.valid, true);
+
+  const localizedResume = await client.callTool({
+    name: "prepare_resume_locale",
+    arguments: { resume: smokeResume, locale: "fr-FR" }
+  });
+  assert.equal(localizedResume.structuredContent.result.contentTranslated, false);
+  assert.equal(localizedResume.structuredContent.result.labels.work, "Expérience professionnelle");
+
+  const europassMapping = await client.callTool({
+    name: "prepare_europass_mapping",
+    arguments: { resume: smokeResume, locale: "es-ES" }
+  });
+  const europassResource = europassMapping.content.find((item) => item.type === "resource");
+  assert.equal(
+    europassMapping.structuredContent.result.compatibility.officialEuropassImport,
+    false
+  );
+  assert.equal(europassResource.resource.mimeType, "application/json");
+
+  const evidenceBank = await client.callTool({
+    name: "build_evidence_bank",
+    arguments: { resume: smokeResume }
+  });
+  assert.match(evidenceBank.structuredContent.result.bankHash, /^[a-f0-9]{64}$/);
+  assert.equal(evidenceBank.structuredContent.result.factsAdded, false);
+
+  const matchedEvidence = await client.callTool({
+    name: "match_resume_evidence",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Backend Engineer with Java, PostgreSQL, and Kubernetes"
+    }
+  });
+  assert.ok(matchedEvidence.structuredContent.result.supportedTopics.includes("java"));
+  assert.ok(matchedEvidence.structuredContent.result.unsupportedTopics.includes("kubernetes"));
 
   const renderedResume = await client.callTool({
     name: "render_resume_html",

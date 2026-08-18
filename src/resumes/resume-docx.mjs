@@ -10,6 +10,7 @@ import {
 } from "docx";
 
 import { RESUME_TEMPLATES, validateResume } from "./resume-tools.mjs";
+import { resumeSectionLabels } from "./resume-labels.mjs";
 
 const MAX_DOCX_BYTES = 2_000_000;
 const MAX_RESUME_CHARACTERS = 200_000;
@@ -27,7 +28,7 @@ export async function renderResumeDocx(resume, requestedFileName, template = "cl
   }
 
   const style = docxTemplateStyle(template);
-  const labels = sectionLabels(resume.meta?.language);
+  const labels = resumeSectionLabels(resume.meta?.language);
   const fileName = safeDocxFileName(requestedFileName, resume.basics.name);
   const children = [
     ...renderHeader(resume.basics),
@@ -357,31 +358,6 @@ function safeDocxFileName(requestedFileName, name) {
 function renderDateRange(startDate, endDate, present) {
   if (!hasText(startDate) && !hasText(endDate)) return "";
   return [startDate, endDate || present].filter(hasText).join(" - ");
-}
-
-function sectionLabels(language) {
-  const isSpanish = String(language ?? "").toLowerCase().startsWith("es");
-  return isSpanish
-    ? {
-        resume: "Currículum",
-        work: "Experiencia profesional",
-        projects: "Proyectos",
-        education: "Formación",
-        skills: "Competencias",
-        certificates: "Certificaciones",
-        languages: "Idiomas",
-        present: "Actualidad",
-      }
-    : {
-        resume: "Resume",
-        work: "Work experience",
-        projects: "Projects",
-        education: "Education",
-        skills: "Skills",
-        certificates: "Certificates",
-        languages: "Languages",
-        present: "Present",
-      };
 }
 
 function hasText(value) {

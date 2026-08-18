@@ -54,6 +54,9 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 9. Call `render_resume_html`, `render_resume_pdf`, or `render_resume_docx` only after validation and the variant audit. Use PDF for a fixed final document, DOCX for an editable final document, and HTML for a printable intermediate. Offer `classic`, `compact`, or `technical`; do not imply that visual style changes ATS guarantees.
 10. Save returned HTML, PDF, or DOCX only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to a render tool; `fileName` is only a safe suggested filename.
 11. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
+12. For another supported document language, call `prepare_resume_locale`. Translate only returned review paths, preserve names and metrics, and audit the translated variant. The tool itself changes labels only.
+13. Use `prepare_europass_mapping` only as a manual transfer draft. Never call it an official Europass import file, ELM profile, credential, or account integration.
+14. Use `build_evidence_bank` to inspect reusable resume evidence and `match_resume_evidence` to rank it for a job. Unsupported topics remain gaps.
 
 ## Application kit workflow
 
@@ -97,6 +100,7 @@ The current MCP tools do not write files. They can:
 - review an in-memory resume draft against user-provided text extracted from TXT, PDF, or DOCX, with every field awaiting confirmation.
 - import user-provided RSS, Atom, JSON, CSV, or labelled-text alerts and compare exact snapshot changes without opening links.
 - validate JSON Resume documents and compare them with user-provided job text.
+- localize document labels in six languages, prepare an explicitly non-official Europass mapping draft, and build a deterministic evidence bank.
 - plan a variant from traceable base-resume evidence without generating candidate facts.
 - apply bounded edits to a copy with declared provenance, before/after lineage, and deterministic hashes.
 - compare resume versions at field level without storing them.

@@ -276,6 +276,22 @@ Criterios de aceptación:
 - sin red, correo, navegación, similitud difusa ni persistencia;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 22 — Interoperabilidad del CV y banco de evidencias ✅
+
+Objetivo: reutilizar el mismo CV en más mercados y flujos sin traducciones opacas ni afirmar una compatibilidad oficial inexistente.
+
+Criterios de aceptación:
+
+- etiquetas compartidas para HTML, PDF y DOCX en seis idiomas latinos;
+- copia localizada con contenido profesional sin traducir y rutas de revisión explícitas;
+- mapeo Europass trazable con fuentes oficiales y transferencia manual;
+- compatibilidad de importación, ELM y credencial digital marcadas expresamente como falsas;
+- banco determinista desde el CV validado, sin datos de contacto como evidencia;
+- identificadores de evidencia, rutas, cifras, palabras clave y hash SHA-256;
+- comparación local con una oferta que conserva todos los temas no respaldados;
+- sin login, cuenta, traducción automática, publicación, red ni almacenamiento;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

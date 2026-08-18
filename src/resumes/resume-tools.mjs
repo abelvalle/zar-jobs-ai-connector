@@ -1,6 +1,8 @@
 import jsonResumeSchema from "@jsonresume/schema";
 import { getRecommendations, validateATS } from "@jsonresume/ats-validator";
 
+import { resumeSectionLabels } from "./resume-labels.mjs";
+
 const STOP_WORDS = new Set([
   "and", "are", "con", "del", "desde", "for", "las", "los", "para", "por",
   "que", "the", "una", "uno", "with", "years", "anos", "años", "will",
@@ -64,7 +66,7 @@ export function renderResumeHtml(resume, template = "classic") {
   const style = htmlTemplateStyle(selectedTemplate);
   const basics = resume.basics;
   const language = safeLanguage(resume.meta?.language);
-  const labels = sectionLabels(language);
+  const labels = resumeSectionLabels(language);
   const sections = [
     renderWork(resume.work, labels.work, labels.present),
     renderProjects(resume.projects, labels.projects),
@@ -487,30 +489,6 @@ function safeHttpUrl(value) {
 
 function safeLanguage(value) {
   return /^[a-z]{2,3}(?:-[a-z]{2})?$/i.test(value ?? "") ? value : "en";
-}
-
-function sectionLabels(language) {
-  return language.toLowerCase().startsWith("es")
-    ? {
-        resume: "Currículum",
-        work: "Experiencia profesional",
-        projects: "Proyectos",
-        education: "Formación",
-        skills: "Competencias",
-        certificates: "Certificaciones",
-        languages: "Idiomas",
-        present: "Actualidad",
-      }
-    : {
-        resume: "Resume",
-        work: "Work Experience",
-        projects: "Projects",
-        education: "Education",
-        skills: "Skills",
-        certificates: "Certifications",
-        languages: "Languages",
-        present: "Present",
-      };
 }
 
 function unique(values) {

@@ -59,3 +59,5 @@ Los usuarios nunca introducirán contraseñas de portales en el plugin.
 `get_connector_status` comprueba solo si estas variables contienen un valor no vacío. Su respuesta puede incluir el nombre de una variable ausente, pero nunca su contenido.
 
 Las herramientas de currículum no necesitan variables, cuentas ni servicios externos. `render_resume_pdf`, `render_resume_docx` y `render_application_bundle` usan PDFKit, docx y JSZip en el mismo proceso y devuelven recursos MCP en memoria. PDF.js y Mammoth se usan únicamente como dependencias de desarrollo para demostrar en las pruebas que el texto puede extraerse; los usuarios no los instalan con el paquete publicado. No se añade Playwright, Chromium, Python ni servidor.
+
+Las etiquetas multilingües son datos locales del repositorio y no llaman a un servicio de traducción. El mapeo Europass sigue siendo un contrato propio de revisión; enlaza la documentación oficial vigente, pero no implementa login, API de cuenta, ELM ni credenciales digitales.

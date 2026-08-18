@@ -58,6 +58,12 @@ import {
   RESUME_IMPORT_FORMATS,
   reviewResumeImport,
 } from "./resumes/resume-import.mjs";
+import {
+  buildEvidenceBank,
+  matchResumeEvidence,
+  prepareEuropassMapping,
+  prepareResumeLocale,
+} from "./resumes/resume-interoperability.mjs";
 
 const capabilitySchema = z.object({
   portal: z.enum(PORTALS),
@@ -1154,6 +1160,125 @@ export function createZarJobsServer() {
       },
     },
     async ({ resume }) => resumeToolResult(validateResume(resume)),
+  );
+
+  server.registerTool(
+    "prepare_resume_locale",
+    {
+      title: "Prepare multilingual resume labels",
+      description:
+        "Create an in-memory copy with English, Spanish, French, German, Italian, or Portuguese document labels. Candidate content is not translated or changed.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        locale: z.string().regex(/^[a-z]{2}(?:-[a-z]{2})?$/i),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, locale }) => {
+      try {
+        return resumeToolResult(prepareResumeLocale(resume, locale));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "prepare_europass_mapping",
+    {
+      title: "Prepare a traceable Europass mapping draft",
+      description:
+        "Map a validated resume into a reviewable Zar Jobs draft for manual Europass transfer. It is explicitly not an official import file, ELM profile, or credential.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        locale: z.string().regex(/^[a-z]{2}(?:-[a-z]{2})?$/i).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, locale }) => {
+      try {
+        const result = prepareEuropassMapping(resume, locale ?? "en");
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: "memory://zar-jobs/europass/mapping-draft.json",
+                mimeType: "application/json",
+                text: `${JSON.stringify(result, null, 2)}\n`,
+              },
+            },
+            { type: "text", text: JSON.stringify(result.compatibility, null, 2) },
+          ],
+          structuredContent: { result },
+        };
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "build_evidence_bank",
+    {
+      title: "Build a traceable resume evidence bank",
+      description:
+        "Extract reusable evidence items, paths, metrics, keywords, and a deterministic bank hash from a validated resume without adding facts or storing data.",
+      inputSchema: { resume: resumeDocumentSchema },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume }) => {
+      try {
+        return resumeToolResult(buildEvidenceBank(resume));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "match_resume_evidence",
+    {
+      title: "Match traceable resume evidence to a job",
+      description:
+        "Rank evidence-bank items against user-provided job text with deterministic literal overlap. Unsupported topics remain gaps and no facts are added.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription }) => {
+      try {
+        return resumeToolResult(matchResumeEvidence(resume, jobDescription));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
   );
 
   server.registerTool(

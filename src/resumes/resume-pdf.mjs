@@ -1,6 +1,7 @@
 import PDFDocument from "pdfkit";
 
 import { RESUME_TEMPLATES, validateResume } from "./resume-tools.mjs";
+import { resumeSectionLabels } from "./resume-labels.mjs";
 
 const MAX_PAGES = 10;
 const MAX_PDF_BYTES = 2_000_000;
@@ -20,7 +21,7 @@ export async function renderResumePdf(resume, requestedFileName, template = "cla
   }
 
   const style = pdfTemplateStyle(template);
-  const labels = sectionLabels(resume.meta?.language);
+  const labels = resumeSectionLabels(resume.meta?.language);
   const fileName = safePdfFileName(requestedFileName, resume.basics.name);
   const doc = new PDFDocument({
     size: "A4",
@@ -248,30 +249,6 @@ function safeHttpUrl(value) {
   } catch {
     return "";
   }
-}
-
-function sectionLabels(language) {
-  return String(language ?? "").toLowerCase().startsWith("es")
-    ? {
-        resume: "Currículum",
-        work: "Experiencia profesional",
-        projects: "Proyectos",
-        education: "Formación",
-        skills: "Competencias",
-        certificates: "Certificaciones",
-        languages: "Idiomas",
-        present: "Actualidad",
-      }
-    : {
-        resume: "Resume",
-        work: "Work Experience",
-        projects: "Projects",
-        education: "Education",
-        skills: "Skills",
-        certificates: "Certifications",
-        languages: "Languages",
-        present: "Present",
-      };
 }
 
 function joinPresent(values, separator) {

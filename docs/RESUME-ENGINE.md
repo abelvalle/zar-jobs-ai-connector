@@ -48,6 +48,10 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 
 - `review_resume_import`: contrasta un borrador JSON Resume con texto extraído de TXT, PDF o DOCX y marca cada campo como coincidencia exacta, parcial o no encontrada; ninguno queda confirmado automáticamente.
 - `validate_resume`: valida JSON Resume y requisitos mínimos.
+- `prepare_resume_locale`: localiza las etiquetas de los tres formatos sin traducir el contenido profesional.
+- `prepare_europass_mapping`: prepara un mapeo trazable para revisión y transferencia manual, no un archivo oficial de importación.
+- `build_evidence_bank`: extrae evidencia con rutas, cifras, palabras clave y hash del banco.
+- `match_resume_evidence`: relaciona el banco reconstruido con una oferta y conserva los temas no respaldados.
 - `match_resume_to_job`: calcula coincidencia orientativa con el texto de una oferta.
 - `plan_resume_variant`: ordena evidencia existente por relevancia, conserva su ruta JSON y separa términos sin respaldo.
 - `apply_resume_changes`: aplica como máximo 50 operaciones explícitas sobre una copia, conserva valores anterior y posterior, procedencia declarada y hashes SHA-256, y ejecuta validación y auditoría.
@@ -58,7 +62,7 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 - `render_resume_pdf`: genera un PDF A4 multipágina, limitado a 10 páginas y 2 MB, y lo devuelve como recurso MCP en memoria.
 - `render_resume_docx`: genera un DOCX A4 editable, limitado a 2 MB, y lo devuelve como recurso MCP en memoria.
 
-Las salidas aceptan `classic`, `compact` o `technical`. Las tres conservan el mismo contenido, orden lineal y fuentes estándar; solo cambian tamaños, espaciado, líneas y un acento oscuro en `technical`. El DOCX usa el preset interno `resume_a4`, con cabecera `resume_identity_header`, márgenes compactos y listas numeradas reales; no usa tablas, columnas, imágenes ni cuadros de texto.
+Las salidas aceptan `classic`, `compact` o `technical`. Las tres conservan el mismo contenido, orden lineal y fuentes estándar; solo cambian tamaños, espaciado, líneas y un acento oscuro en `technical`. Las etiquetas de sección compartidas están disponibles en inglés, español, francés, alemán, italiano y portugués; el texto del candidato no se traduce automáticamente. El DOCX usa el preset interno `resume_a4`, con cabecera `resume_identity_header`, márgenes compactos y listas numeradas reales; no usa tablas, columnas, imágenes ni cuadros de texto.
 
 ## Importación guiada
 

@@ -65,6 +65,10 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `audit_interview_answer`: revisa afirmaciones, estructura STAR y relevancia literal de un borrador.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
+- `prepare_resume_locale`: localiza etiquetas en seis idiomas sin traducir ni alterar los hechos.
+- `prepare_europass_mapping`: crea un borrador trazable para transferencia manual, no un import oficial.
+- `build_evidence_bank`: extrae evidencia reutilizable con rutas, cifras y un hash determinista.
+- `match_resume_evidence`: relaciona esa evidencia con una oferta y conserva las lagunas.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
 - `plan_resume_variant`: prioriza evidencia existente y devuelve rutas trazables para preparar una variante.
 - `apply_resume_changes`: crea una variante sin alterar el CV base y conserva origen, antes/después y hashes.
@@ -86,6 +90,8 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 ## Currículums
 
 El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, aplica cambios explícitos con linaje y hashes, compara cada variante con sus hechos de origen y genera HTML ATS, PDF o DOCX editable con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
+
+Las etiquetas de los tres formatos pueden localizarse en seis idiomas sin traducir automáticamente el contenido. También existe un mapeo de revisión para transferencia manual a Europass y un banco de evidencias con rutas y hashes. Consulta [docs/RESUME-INTEROPERABILITY.md](docs/RESUME-INTEROPERABILITY.md).
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 
@@ -126,6 +132,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Uso seguro con LinkedIn](docs/LINKEDIN-USAGE.md)
 - [Uso seguro con Indeed](docs/INDEED-USAGE.md)
 - [Motor de currículums](docs/RESUME-ENGINE.md)
+- [Interoperabilidad y CV multilingüe](docs/RESUME-INTEROPERABILITY.md)
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
 - [Bandeja universal de alertas](docs/JOB-INBOX.md)
 - [Seguimiento local de candidaturas](docs/APPLICATION-TRACKING.md)
