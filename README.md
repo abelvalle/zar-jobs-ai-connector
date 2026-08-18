@@ -85,6 +85,9 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `audit_application_text`: señala afirmaciones seleccionadas sin respaldo en borradores.
 - `prepare_application_kit`: coordina auditorías, nombres de archivo y revisión final, sin enviar nada.
 - `audit_resume_privacy`: señala rutas con datos sensibles seleccionados sin devolver sus valores.
+- `plan_resume_anonymization`: prepara eliminaciones y seudónimos sin devolver los valores originales.
+- `create_anonymous_resume`: crea una copia `contact-safe` o `blind-review` sin modificar el CV base.
+- `render_anonymous_resume_bundle`: empaqueta JSON, PDF y DOCX anónimos con checksums y revisión obligatoria.
 - `render_application_bundle`: empaqueta PDF, DOCX y borradores en un ZIP con checksums y aprobación final obligatoria.
 - `review_portable_workspace`: valida un workspace y muestra redacciones y riesgos sin devolver valores personales.
 - `render_portable_workspace`: exporta un workspace versionado como ZIP en memoria, sin secretos ni escritura automática.
@@ -105,6 +108,8 @@ Las etiquetas de los tres formatos pueden localizarse en seis idiomas sin traduc
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 
 Las cartas y respuestas se planifican y auditan contra el CV base. El kit final puede ser un manifiesto o un ZIP local con PDF, DOCX, borradores opcionales y checksums; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
+
+Para revisiones ciegas o compartir con menos datos, el conector puede crear una copia sin contacto y, opcionalmente, seudonimizar organizaciones. Bloquea el bundle si encuentra identificadores directos repetidos en texto libre, pero no promete anonimato. Consulta [docs/ANONYMOUS-RESUME.md](docs/ANONYMOUS-RESUME.md).
 
 La priorización de ofertas es determinista y explicable: cada resultado conserva pesos, coincidencias, datos desconocidos y preferencias bloqueantes. No sustituye la revisión del usuario. Consulta [docs/JOB-RANKING.md](docs/JOB-RANKING.md).
 

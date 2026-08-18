@@ -339,6 +339,24 @@ Criterios de aceptación:
 - sin extracción automática, tipos de cambio, impuestos, consejo legal, ranking general ni decisión;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 26 — CV anónimo y paquete seguro para compartir ✅
+
+Objetivo: reducir identificadores directos en una copia del CV y producir formatos revisables sin degradar el documento base ni prometer anonimato.
+
+Criterios de aceptación:
+
+- plan por rutas sin valores originales y copia inmutable;
+- modos `contact-safe` y `blind-review`;
+- nombre, contacto, ubicación, perfiles, imágenes, enlaces e identificadores seleccionados retirados;
+- organizaciones seudonimizadas de forma estable en revisión ciega;
+- correo `.invalid` interno omitido de HTML, PDF y DOCX;
+- detección por rutas de nombre, correo o teléfono repetidos en texto libre;
+- bloqueo del ZIP mientras queden esos identificadores directos;
+- bundle en memoria con JSON, PDF, DOCX, manifiesto y SHA-256, sin CV original;
+- advertencia explícita de riesgo residual de reidentificación;
+- ninguna escritura, publicación, carga o envío;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

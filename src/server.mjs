@@ -70,6 +70,12 @@ import {
   prepareEuropassMapping,
   prepareResumeLocale,
 } from "./resumes/resume-interoperability.mjs";
+import {
+  ANONYMIZATION_MODES,
+  createAnonymousResume,
+  planResumeAnonymization,
+  renderAnonymousResumeBundle,
+} from "./resumes/resume-anonymizer.mjs";
 import { registerZarJobsGuidance } from "./mcp/guidance.mjs";
 import {
   importPortableWorkspace,
@@ -1109,6 +1115,106 @@ export function createZarJobsServer() {
     async ({ resume }) => {
       try {
         return resumeToolResult(auditResumePrivacy(resume));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_resume_anonymization",
+    {
+      title: "Plan resume anonymization",
+      description:
+        "Return path-only removal and replacement operations for a contact-safe or blind-review resume copy. It reports direct identifiers found in free text and never changes the base resume.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        mode: z.enum(ANONYMIZATION_MODES).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, mode }) => {
+      try {
+        return resumeToolResult(planResumeAnonymization(resume, mode ?? "contact-safe"));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "create_anonymous_resume",
+    {
+      title: "Create an anonymous resume copy",
+      description:
+        "Create an in-memory resume copy with selected identifiers removed. Blind-review mode also pseudonymizes organizations. The result cannot guarantee anonymity and requires review.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        mode: z.enum(ANONYMIZATION_MODES).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, mode }) => {
+      try {
+        return resumeToolResult(createAnonymousResume(resume, mode ?? "contact-safe"));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "render_anonymous_resume_bundle",
+    {
+      title: "Render an anonymous resume bundle",
+      description:
+        "Create an in-memory ZIP with anonymous JSON, PDF, DOCX, checksums, and review gates. Rendering is blocked when the original direct identifiers remain in free text.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        mode: z.enum(ANONYMIZATION_MODES).optional(),
+        template: z.enum(RESUME_TEMPLATES).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, mode, template }) => {
+      try {
+        const { buffer, ...result } = await renderAnonymousResumeBundle({
+          resume,
+          mode: mode ?? "contact-safe",
+          template: template ?? "classic",
+        });
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: `memory://zar-jobs/resumes/${encodeURIComponent(result.fileName)}`,
+                mimeType: result.mimeType,
+                blob: buffer.toString("base64"),
+              },
+            },
+            { type: "text", text: JSON.stringify(result, null, 2) },
+          ],
+          structuredContent: { result },
+        };
       } catch (error) {
         return resumeToolError(error);
       }

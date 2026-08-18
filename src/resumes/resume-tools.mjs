@@ -388,10 +388,16 @@ function renderContact(basics) {
     basics.location?.region,
     basics.location?.countryCode,
   ], ", ");
-  return [basics.email, basics.phone, location, safeHttpUrl(basics.url)]
+  return [renderableEmail(basics.email), basics.phone, location, safeHttpUrl(basics.url)]
     .filter(hasText)
     .map(escapeHtml)
     .join(" | ");
+}
+
+function renderableEmail(value) {
+  return typeof value === "string" && !value.toLowerCase().endsWith("@example.invalid")
+    ? value
+    : "";
 }
 
 function metaLine(startDate, endDate, location, present) {

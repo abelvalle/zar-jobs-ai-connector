@@ -212,9 +212,15 @@ function renderContact(basics) {
     basics.location?.region,
     basics.location?.countryCode,
   ], ", ");
-  return [basics.email, basics.phone, location, safeHttpUrl(basics.url)]
+  return [renderableEmail(basics.email), basics.phone, location, safeHttpUrl(basics.url)]
     .filter(hasText)
     .join(" | ");
+}
+
+function renderableEmail(value) {
+  return typeof value === "string" && !value.toLowerCase().endsWith("@example.invalid")
+    ? value
+    : "";
 }
 
 function dateRange(startDate, endDate, present) {

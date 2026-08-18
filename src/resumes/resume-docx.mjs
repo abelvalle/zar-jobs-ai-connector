@@ -77,7 +77,7 @@ export async function renderResumeDocx(resume, requestedFileName, template = "cl
 
 function renderHeader(basics) {
   const contact = [
-    basics.email,
+    renderableEmail(basics.email),
     basics.phone,
     [basics.location?.city, basics.location?.region, basics.location?.countryCode]
       .filter(hasText)
@@ -90,6 +90,12 @@ function renderHeader(basics) {
     paragraph(contact, "ResumeMeta"),
     paragraph(basics.summary, "ResumeSummary"),
   ].filter(Boolean);
+}
+
+function renderableEmail(value) {
+  return typeof value === "string" && !value.toLowerCase().endsWith("@example.invalid")
+    ? value
+    : "";
 }
 
 function renderWork(items, title, present) {

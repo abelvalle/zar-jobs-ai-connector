@@ -102,6 +102,7 @@ try {
       "compare_job_snapshots",
       "compare_offer_conditions",
       "compare_resume_versions",
+      "create_anonymous_resume",
       "export_followup_calendar",
       "fingerprint_jobs",
       "get_connector_status",
@@ -119,11 +120,13 @@ try {
       "plan_application_update",
       "plan_cover_letter",
       "plan_interview",
+      "plan_resume_anonymization",
       "plan_resume_variant",
       "plan_screening_answers",
       "prepare_application_kit",
       "prepare_europass_mapping",
       "prepare_resume_locale",
+      "render_anonymous_resume_bundle",
       "render_application_bundle",
       "render_portable_workspace",
       "render_resume_docx",
@@ -154,6 +157,29 @@ try {
     arguments: { resume: smokeResume }
   });
   assert.equal(validatedResume.structuredContent.result.valid, true);
+
+  const anonymizationPlan = await client.callTool({
+    name: "plan_resume_anonymization",
+    arguments: { resume: smokeResume, mode: "blind-review" },
+  });
+  assert.equal(anonymizationPlan.structuredContent.result.sourceValuesReturned, false);
+  assert.equal(anonymizationPlan.structuredContent.result.anonymityGuaranteed, false);
+
+  const anonymousResume = await client.callTool({
+    name: "create_anonymous_resume",
+    arguments: { resume: smokeResume, mode: "blind-review" },
+  });
+  assert.equal(anonymousResume.structuredContent.result.anonymousResume.basics.name, "Candidate");
+  assert.equal(anonymousResume.structuredContent.result.anonymousResume.work[0].name, "Employer 1");
+
+  const anonymousBundle = await client.callTool({
+    name: "render_anonymous_resume_bundle",
+    arguments: { resume: smokeResume, mode: "contact-safe", template: "compact" },
+  });
+  const anonymousResource = anonymousBundle.content.find((item) => item.type === "resource");
+  assert.equal(anonymousResource.resource.mimeType, "application/zip");
+  assert.equal(anonymousBundle.structuredContent.result.manifest.placeholderEmailRendered, false);
+  assert.equal(anonymousBundle.structuredContent.result.stored, false);
 
   const localizedResume = await client.callTool({
     name: "prepare_resume_locale",

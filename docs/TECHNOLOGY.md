@@ -68,3 +68,5 @@ Las herramientas de currículum no necesitan variables, cuentas ni servicios ext
 Las etiquetas multilingües son datos locales del repositorio y no llaman a un servicio de traducción. El mapeo Europass sigue siendo un contrato propio de revisión; enlaza la documentación oficial vigente, pero no implementa login, API de cuenta, ELM ni credenciales digitales.
 
 La comparación de condiciones usa coincidencia literal y aritmética JavaScript determinista. No añade una fuente de tipos de cambio, motor fiscal, base legal ni modelo de extracción.
+
+La anonimización es una transformación local por rutas. El correo reservado `candidate@example.invalid` mantiene válido el JSON Resume y se excluye de HTML, PDF y DOCX. PDFKit, docx y JSZip reutilizan el mismo pipeline de documentos; no se añade dependencia.

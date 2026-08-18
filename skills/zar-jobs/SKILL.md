@@ -68,6 +68,16 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 13. Use `prepare_europass_mapping` only as a manual transfer draft. Never call it an official Europass import file, ELM profile, credential, or account integration.
 14. Use `build_evidence_bank` to inspect reusable resume evidence and `match_resume_evidence` to rank it for a job. Unsupported topics remain gaps.
 
+## Anonymous resume workflow
+
+1. Call `plan_resume_anonymization` and show every operation and residual identifier path without repeating the sensitive value.
+2. Use `contact-safe` when organization names may remain; use `blind-review` only when the user also wants employers, institutions, projects, and selected issuers pseudonymized.
+3. Call `create_anonymous_resume` to obtain a separate copy. Never overwrite or relabel the confirmed base resume.
+4. Explain that `candidate@example.invalid` exists only to satisfy the structured schema and is omitted from rendered documents.
+5. Do not render while `residualIdentifierReferences` is non-empty. Ask the user to rewrite those fields truthfully, then repeat the plan.
+6. Use `render_anonymous_resume_bundle` only after review. Open the PDF, DOCX, JSON, and manifest before sharing.
+7. Never claim anonymity is guaranteed; unique facts, dates, employers, or achievements may still re-identify the candidate.
+
 ## Application kit workflow
 
 1. Call `plan_cover_letter` and `plan_screening_answers` before drafting application text. Use only returned resume evidence or facts the user confirms in the current conversation.
@@ -131,6 +141,7 @@ The current MCP tools do not write files. They can:
 - plan and audit cover letters and screening answers against traceable resume evidence.
 - prepare a local application-kit manifest that always requires final human approval and never submits.
 - audit selected resume privacy risks without echoing values and render a checksummed application ZIP in memory.
+- plan and create contact-safe or blind-review resume copies and render a checksummed anonymous bundle without claiming guaranteed anonymity.
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
 - verify and compare supplied salary and conditions from literal excerpts without currency, tax, legal, or decision automation.
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
