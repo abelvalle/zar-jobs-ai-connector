@@ -67,6 +67,7 @@ try {
       "audit_resume_variant",
       "check_resume_ats",
       "compare_job_fit",
+      "compare_job_snapshots",
       "compare_resume_versions",
       "export_followup_calendar",
       "fingerprint_jobs",
@@ -74,6 +75,7 @@ try {
       "get_infojobs_job",
       "get_portal_capabilities",
       "import_indeed_job",
+      "import_job_alert",
       "import_linkedin_job",
       "import_tecnoempleo_rss",
       "list_tecnoempleo_alert_jobs",
@@ -423,6 +425,39 @@ try {
   });
   assert.equal(fingerprintedJobs.structuredContent.result.duplicateCount, 1);
   assert.equal(fingerprintedJobs.structuredContent.result.fuzzyMatching, false);
+
+  const importedAlert = await client.callTool({
+    name: "import_job_alert",
+    arguments: {
+      format: "csv",
+      sourceLabel: "personal-alert",
+      content: "external_id,title,company,url\nalert-1,Backend Engineer,Example Tech,https://jobs.example.org/backend"
+    }
+  });
+  assert.equal(importedAlert.structuredContent.result.jobs[0].source, "personal-alert");
+  assert.equal(importedAlert.structuredContent.result.networkAccess, false);
+
+  const comparedSnapshots = await client.callTool({
+    name: "compare_job_snapshots",
+    arguments: {
+      previousJobs: [{
+        source: "personal-alert",
+        externalId: "alert-1",
+        title: "Backend Engineer",
+        company: "Example Tech",
+        description: "Java"
+      }],
+      currentJobs: [{
+        source: "personal-alert",
+        externalId: "alert-1",
+        title: "Backend Engineer",
+        company: "Example Tech",
+        description: "Java and PostgreSQL"
+      }]
+    }
+  });
+  assert.deepEqual(comparedSnapshots.structuredContent.result.changed[0].changedFields, ["description"]);
+  assert.equal(comparedSnapshots.structuredContent.result.fuzzyMatching, false);
 
   const scoredJob = await client.callTool({
     name: "score_job_fit",

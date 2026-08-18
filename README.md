@@ -54,6 +54,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `import_indeed_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
 - `review_job_import`: revisa una oferta pegada desde cualquier portal sin abrir su URL y deja todos los campos sin confirmar.
 - `fingerprint_jobs`: agrupa solo duplicados exactos mediante huellas deterministas locales.
+- `import_job_alert`: normaliza alertas RSS, Atom, JSON, CSV o texto que aporta el usuario.
+- `compare_job_snapshots`: muestra altas, bajas, cambios y republicaciones exactas entre dos snapshots.
 - `score_job_fit`: puntúa una oferta con reglas fijas y muestra factores, lagunas y bloqueadores.
 - `compare_job_fit`: ordena hasta 20 ofertas con las mismas reglas, sin decidir ni solicitar puestos.
 - `review_application_tracker`: calcula métricas y seguimientos desde registros aportados en memoria.
@@ -91,6 +93,8 @@ Las cartas y respuestas se planifican y auditan contra el CV base. El kit final 
 
 La priorización de ofertas es determinista y explicable: cada resultado conserva pesos, coincidencias, datos desconocidos y preferencias bloqueantes. No sustituye la revisión del usuario. Consulta [docs/JOB-RANKING.md](docs/JOB-RANKING.md).
 
+La bandeja universal reúne alertas que el usuario ya recibe y compara snapshots sin abrir enlaces ni depender de un portal nuevo. Consulta [docs/JOB-INBOX.md](docs/JOB-INBOX.md).
+
 El seguimiento de candidaturas también es portable: el cliente aporta los registros y puede guardar la copia actualizada o importar un calendario ICS. El MCP no mantiene base de datos ni sincroniza cuentas. Consulta [docs/APPLICATION-TRACKING.md](docs/APPLICATION-TRACKING.md).
 
 La preparación de entrevistas parte del CV confirmado: diferencia temas respaldados y lagunas, y audita borradores sin certificar su verdad o calidad. Consulta [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md).
@@ -123,6 +127,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Uso seguro con Indeed](docs/INDEED-USAGE.md)
 - [Motor de currículums](docs/RESUME-ENGINE.md)
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
+- [Bandeja universal de alertas](docs/JOB-INBOX.md)
 - [Seguimiento local de candidaturas](docs/APPLICATION-TRACKING.md)
 - [Preparación de entrevistas](docs/INTERVIEW-PREP.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)

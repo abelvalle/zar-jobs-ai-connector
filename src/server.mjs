@@ -14,6 +14,11 @@ import { normalizeJobUrl } from "./portals/url-normalizer.mjs";
 import { fingerprintJobs, reviewJobImport } from "./jobs/job-import.mjs";
 import { compareJobFit, scoreJobFit } from "./jobs/job-ranking.mjs";
 import {
+  compareJobSnapshots,
+  importJobAlert,
+  JOB_ALERT_FORMATS,
+} from "./jobs/job-inbox.mjs";
+import {
   APPLICATION_STATUSES,
   exportFollowupCalendar,
   planApplicationUpdate,
@@ -182,6 +187,21 @@ const jobRankingJobSchema = z.object({
   salaryMinimum: z.number().nonnegative().optional(),
   description: z.string().min(1).max(100_000).optional(),
   url: z.string().min(1).max(2048).optional(),
+});
+const nullableOptionalString = (maximum) => z.string().min(1).max(maximum).nullable().optional();
+const snapshotJobSchema = z.object({
+  id: nullableOptionalString(200),
+  source: nullableOptionalString(100),
+  externalId: nullableOptionalString(200),
+  title: nullableOptionalString(200),
+  company: nullableOptionalString(200),
+  location: nullableOptionalString(300),
+  url: nullableOptionalString(2048),
+  publishedAt: nullableOptionalString(100),
+  workplaceType: nullableOptionalString(100),
+  employmentType: nullableOptionalString(100),
+  salary: z.union([z.string().min(1).max(300), z.number().nonnegative()]).nullable().optional(),
+  description: nullableOptionalString(100_000),
 });
 const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 const applicationRecordSchema = z.object({
@@ -588,6 +608,62 @@ export function createZarJobsServer() {
     async ({ jobs }) => {
       try {
         return resumeToolResult(fingerprintJobs(jobs));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "import_job_alert",
+    {
+      title: "Import a user-provided job alert",
+      description:
+        "Normalize RSS, Atom, JSON, CSV, or labelled text supplied by the user. It opens no links, contacts no portal, and keeps every job unverified.",
+      inputSchema: {
+        content: z.string().min(1).max(2_000_000),
+        format: z.enum(JOB_ALERT_FORMATS),
+        sourceLabel: z.string().min(1).max(100).optional(),
+        limit: z.number().int().min(1).max(200).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ content, format, sourceLabel, limit }) => {
+      try {
+        return resumeToolResult(importJobAlert(content, { format, sourceLabel, limit }));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "compare_job_snapshots",
+    {
+      title: "Compare two local job snapshots",
+      description:
+        "Report exact additions, removals, selected field changes, duplicates, and exact repost candidates across two user-provided snapshots. No fuzzy model or network is used.",
+      inputSchema: {
+        previousJobs: z.array(snapshotJobSchema).max(200),
+        currentJobs: z.array(snapshotJobSchema).max(200),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ previousJobs, currentJobs }) => {
+      try {
+        return resumeToolResult(compareJobSnapshots(previousJobs, currentJobs));
       } catch (error) {
         return resumeToolError(error);
       }

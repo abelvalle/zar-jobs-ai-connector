@@ -260,6 +260,22 @@ Criterios de aceptación:
 - ninguna escritura, carga, sincronización o candidatura externa;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 21 — Bandeja universal y snapshots ✅
+
+Objetivo: incorporar alertas que el usuario ya posee y detectar cambios entre ejecuciones sin añadir scraping, correo conectado ni un servidor.
+
+Criterios de aceptación:
+
+- importación local de RSS, Atom, JSON, CSV y texto etiquetado;
+- límite de 2 MB, 200 ofertas y diagnóstico de filas omitidas;
+- contrato común con título y empresa obligatorios;
+- cada oferta marcada como aportada por el usuario y no verificada;
+- comparación exacta de altas, bajas, cambios y duplicados;
+- republicaciones solo por título, empresa y ubicación exactamente normalizados;
+- snapshots vacíos admitidos para la primera ejecución;
+- sin red, correo, navegación, similitud difusa ni persistencia;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

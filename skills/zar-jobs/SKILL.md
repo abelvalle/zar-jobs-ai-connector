@@ -27,9 +27,11 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 5. For LinkedIn, use `import_linkedin_job` only when the user provides the job URL, title, and company. Keep its status `unverified` until the user checks the original posting.
 6. For Indeed, use `import_indeed_job` only when the user provides a `viewjob` URL, title, and company. Never search or open Indeed through this plugin.
 7. If the user provides another job link, call `normalize_job_url` before using or presenting it.
-8. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
-9. Preserve the source URL and distinguish portal-provided facts from model inference.
-10. Respond in the user's language.
+8. If the user supplies a job alert file or pasted alert content, call `import_job_alert` with its explicit format. Never fetch a feed or mailbox implicitly.
+9. Use `compare_job_snapshots` only for exact changes across user-provided snapshots. Report exact reposts as candidates, not proof that a company republished the role.
+10. Use only tools that actually exist in the current plugin version. A documented roadmap item is not an available capability.
+11. Preserve the source URL and distinguish portal-provided facts from model inference.
+12. Respond in the user's language.
 
 ## Job ranking workflow
 
@@ -93,6 +95,7 @@ The current MCP tools do not write files. They can:
 - import user-provided LinkedIn job data without making a network request.
 - import user-provided Indeed job data without making a network request.
 - review an in-memory resume draft against user-provided text extracted from TXT, PDF, or DOCX, with every field awaiting confirmation.
+- import user-provided RSS, Atom, JSON, CSV, or labelled-text alerts and compare exact snapshot changes without opening links.
 - validate JSON Resume documents and compare them with user-provided job text.
 - plan a variant from traceable base-resume evidence without generating candidate facts.
 - apply bounded edits to a copy with declared provenance, before/after lineage, and deterministic hashes.
