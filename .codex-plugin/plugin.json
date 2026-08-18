@@ -1,6 +1,6 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Local job discovery and truthful ATS-oriented resume workflows, backed by MCP.",
   "author": {
     "name": "abelvalle",
@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "Zar Jobs AI Connector",
     "shortDescription": "Find jobs and build verified ATS-oriented resumes.",
-    "longDescription": "Discover and review job opportunities through authorized sources, import resume drafts with field-by-field confirmation, then validate, tailor and export evidence-grounded JSON Resume variants locally.",
+    "longDescription": "Review jobs from authorized or user-provided sources, create traceable resume variants, export editable ATS-oriented documents, and audit application kits locally.",
     "developerName": "abelvalle",
     "category": "Productivity",
     "capabilities": [
@@ -36,9 +36,13 @@
       "Resume creation",
       "Resume import review",
       "Resume variants",
+      "Traceable resume editing",
       "ATS-safe templates",
       "Offline ATS checks",
       "Portable PDF export",
+      "Editable DOCX export",
+      "Universal job import",
+      "Application kit audit",
       "Read only",
       "MCP"
     ],
@@ -48,7 +52,7 @@
     "defaultPrompt": [
       "Find backend jobs on InfoJobs in Zaragoza.",
       "List jobs from my Tecnoempleo RSS alert.",
-      "Review this PDF resume field by field, then create a truthful variant for this job with an ATS-safe template."
+      "Review this resume, create a truthful variant, and prepare a local application kit for this job."
     ]
   },
   "mcpServers": "./.mcp.json"
