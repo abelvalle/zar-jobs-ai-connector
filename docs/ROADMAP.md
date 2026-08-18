@@ -155,6 +155,20 @@ Criterios de aceptación:
 - extracción automática de nombre, empresa y habilidades mediante Mammoth;
 - renderizado e inspección visual de las tres plantillas antes de publicar.
 
+## Hito 14 — Editor seguro y linaje de variantes ✅
+
+Objetivo: permitir que el asistente construya variantes reproducibles sin sobrescribir el CV base ni ocultar de dónde sale cada cambio.
+
+Criterios de aceptación:
+
+- operaciones explícitas `add`, `replace` y `remove` sobre una copia en memoria;
+- procedencia `base-resume` comprobada por ruta exacta o `user-confirmed` declarada;
+- protección frente a rutas de prototipo, índices ambiguos y entradas desproporcionadas;
+- linaje antes/después, hashes SHA-256, validación y auditoría en una sola respuesta;
+- comparación independiente con diferencias de campo y hashes deterministas;
+- revisión humana obligatoria y ausencia de persistencia;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

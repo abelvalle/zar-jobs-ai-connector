@@ -50,6 +50,8 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 - `validate_resume`: valida JSON Resume y requisitos mínimos.
 - `match_resume_to_job`: calcula coincidencia orientativa con el texto de una oferta.
 - `plan_resume_variant`: ordena evidencia existente por relevancia, conserva su ruta JSON y separa términos sin respaldo.
+- `apply_resume_changes`: aplica como máximo 50 operaciones explícitas sobre una copia, conserva valores anterior y posterior, procedencia declarada y hashes SHA-256, y ejecuta validación y auditoría.
+- `compare_resume_versions`: calcula diferencias de campo y hashes deterministas entre el CV base y una variante.
 - `audit_resume_variant`: señala hechos estructurados, habilidades y cifras que no aparecen en el CV base.
 - `check_resume_ats`: ejecuta controles offline sobre la plantilla HTML elegida.
 - `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.
@@ -69,6 +71,15 @@ El conector no incorpora un parser binario. El cliente que ya tiene acceso al ar
 La respuesta no repite el documento de origen ni lo guarda. Devuelve cada ruta y valor del borrador con soporte `exact`, `partial` o `unmatched`, siempre con `confirmed: false`. Primero se revisan los campos parciales y no encontrados; luego el usuario confirma todos los campos. Solo después se usa `validate_resume` y se considera ese documento un CV base.
 
 Este mecanismo detecta diferencias de texto, no significado ni autoría. Un valor marcado como exacto también requiere confirmación humana.
+
+## Edición trazable
+
+`apply_resume_changes` nunca modifica el objeto base. Cada operación `add`, `replace` o `remove` indica una ruta acotada y una fuente declarada:
+
+- `base-resume`: el valor debe coincidir exactamente con otra ruta existente del CV base;
+- `user-confirmed`: el usuario ha confirmado el valor, pero sigue pendiente la revisión final.
+
+La herramienta rechaza claves de prototipo, rutas inexistentes, inserciones ambiguas y valores superiores a 20 KB. Devuelve el documento resultante, el linaje completo, hashes SHA-256 deterministas y los resultados de `validate_resume` y `audit_resume_variant`. No prueba por sí sola que una afirmación sea verdadera ni guarda documentos.
 
 ## Límites
 

@@ -60,8 +60,10 @@ try {
   assert.deepEqual(
     listed.tools.map((tool) => tool.name).sort(),
     [
+      "apply_resume_changes",
       "audit_resume_variant",
       "check_resume_ats",
+      "compare_resume_versions",
       "get_connector_status",
       "get_infojobs_job",
       "get_portal_capabilities",
@@ -184,6 +186,35 @@ try {
     auditedVariant.structuredContent.result.status,
     "no-structural-additions-detected"
   );
+
+  const editedVariant = await client.callTool({
+    name: "apply_resume_changes",
+    arguments: {
+      baseResume: smokeResume,
+      changes: [{
+        operation: "replace",
+        path: "basics.summary",
+        value: "Backend engineer focused on Java services.",
+        source: "user-confirmed"
+      }]
+    }
+  });
+  assert.equal(editedVariant.structuredContent.result.status, "review-required");
+  assert.notEqual(
+    editedVariant.structuredContent.result.baseHash,
+    editedVariant.structuredContent.result.variantHash
+  );
+
+  const comparedVariant = await client.callTool({
+    name: "compare_resume_versions",
+    arguments: {
+      baseResume: smokeResume,
+      variantResume: editedVariant.structuredContent.result.variantResume
+    }
+  });
+  assert.ok(comparedVariant.structuredContent.result.differences.some(
+    (item) => item.path === "basics.summary"
+  ));
 
   const capabilities = await client.callTool({
     name: "get_portal_capabilities",

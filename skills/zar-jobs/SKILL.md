@@ -38,8 +38,8 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 3. Call `review_resume_import` with the extracted text, source format, and draft. Show every `unmatched` and `partial` field first, but require the user to confirm every field, including `exact` matches. Never treat the draft as a base resume before that confirmation.
 4. Call `validate_resume` after corrections and confirmation.
 5. For a specific offer, call `match_resume_to_job`, then `plan_resume_variant`. Treat missing terms as questions or evidence gaps, never instructions to add them.
-6. Create a separate variant by selecting, reordering, or truthfully rephrasing only the evidence paths returned by the plan. Never overwrite the base document.
-7. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
+6. Call `apply_resume_changes` to create a separate variant. Use `base-resume` only for an exact value copied from its declared `sourcePath`; use `user-confirmed` for user-approved wording. Never overwrite the base document.
+7. Call `compare_resume_versions` when the user needs a readable diff, then inspect the included validation and audit. `audit_resume_variant` remains available for a direct audit. Always request human review and resolve every issue before presenting the variant as usable.
 8. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
 9. Call `render_resume_html`, `render_resume_pdf`, or `render_resume_docx` only after validation and the variant audit. Use PDF for a fixed final document, DOCX for an editable final document, and HTML for a printable intermediate. Offer `classic`, `compact`, or `technical`; do not imply that visual style changes ATS guarantees.
 10. Save returned HTML, PDF, or DOCX only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to a render tool; `fileName` is only a safe suggested filename.
@@ -61,6 +61,8 @@ The current MCP tools do not write files. They can:
 - review an in-memory resume draft against user-provided text extracted from TXT, PDF, or DOCX, with every field awaiting confirmation.
 - validate JSON Resume documents and compare them with user-provided job text.
 - plan a variant from traceable base-resume evidence without generating candidate facts.
+- apply bounded edits to a copy with declared provenance, before/after lineage, and deterministic hashes.
+- compare resume versions at field level without storing them.
 - audit tailored variants against a base resume for selected unsupported additions.
 - render editable, text-based A4 DOCX files in memory without Word or a server.
 - render escaped, printable, single-column HTML and check its ATS structure offline.

@@ -56,6 +56,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
 - `plan_resume_variant`: prioriza evidencia existente y devuelve rutas trazables para preparar una variante.
+- `apply_resume_changes`: crea una variante sin alterar el CV base y conserva origen, antes/después y hashes.
+- `compare_resume_versions`: devuelve diferencias de campo, validación y auditoría entre dos versiones.
 - `audit_resume_variant`: señala posibles afirmaciones nuevas frente al CV base.
 - `check_resume_ats`: evalúa la estructura HTML con reglas offline.
 - `render_resume_html`: genera HTML escapado con plantilla `classic`, `compact` o `technical`.
@@ -66,7 +68,7 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Currículums
 
-El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS, PDF o DOCX editable con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
+El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, aplica cambios explícitos con linaje y hashes, compara cada variante con sus hechos de origen y genera HTML ATS, PDF o DOCX editable con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 

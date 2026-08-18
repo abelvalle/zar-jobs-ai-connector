@@ -23,6 +23,10 @@ import {
 import { renderResumePdf } from "./resumes/resume-pdf.mjs";
 import { renderResumeDocx } from "./resumes/resume-docx.mjs";
 import {
+  applyResumeChanges,
+  compareResumeVersions,
+} from "./resumes/resume-editor.mjs";
+import {
   RESUME_IMPORT_FORMATS,
   reviewResumeImport,
 } from "./resumes/resume-import.mjs";
@@ -765,6 +769,67 @@ export function createZarJobsServer() {
     },
     async ({ baseResume, variantResume }) =>
       resumeToolResult(auditResumeVariant(baseResume, variantResume)),
+  );
+
+  server.registerTool(
+    "apply_resume_changes",
+    {
+      title: "Create a traceable resume variant",
+      description:
+        "Apply explicit edits to a validated base resume without mutating or storing it. Every value records declared provenance and the result includes validation, audit, hashes, and human-review gates.",
+      inputSchema: {
+        baseResume: resumeDocumentSchema,
+        changes: z.array(z.object({
+          operation: z.enum(["add", "replace", "remove"]),
+          path: z.string().min(1).max(200),
+          value: z.unknown().optional(),
+          source: z.enum(["base-resume", "user-confirmed"]),
+          sourcePath: z.string().min(1).max(200).optional(),
+          note: z.string().max(500).optional(),
+        })).min(1).max(50),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ baseResume, changes }) => {
+      try {
+        return resumeToolResult(applyResumeChanges(baseResume, changes));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "compare_resume_versions",
+    {
+      title: "Compare two resume versions",
+      description:
+        "Compare a proposed resume variant with its validated base, returning deterministic hashes, field-level differences, validation, and unsupported-addition audit without storing either document.",
+      inputSchema: {
+        baseResume: resumeDocumentSchema,
+        variantResume: resumeDocumentSchema,
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ baseResume, variantResume }) => {
+      try {
+        return resumeToolResult(compareResumeVersions(baseResume, variantResume));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
   );
 
   server.registerTool(
