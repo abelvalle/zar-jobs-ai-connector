@@ -54,7 +54,7 @@ const smokeResume = {
 };
 
 try {
-  await client.connect(transport);
+  await client.connect(transport, { timeout: portable ? 180_000 : 60_000 });
 
   const listed = await client.listTools();
   assert.deepEqual(
