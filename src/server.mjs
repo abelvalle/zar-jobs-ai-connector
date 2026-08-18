@@ -21,6 +21,7 @@ import {
   validateResume,
 } from "./resumes/resume-tools.mjs";
 import { renderResumePdf } from "./resumes/resume-pdf.mjs";
+import { renderResumeDocx } from "./resumes/resume-docx.mjs";
 import {
   RESUME_IMPORT_FORMATS,
   reviewResumeImport,
@@ -581,6 +582,64 @@ export function createZarJobsServer() {
     async ({ resume, fileName, template }) => {
       try {
         const { buffer, ...result } = await renderResumePdf(
+          resume,
+          fileName,
+          template ?? "classic",
+        );
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: `memory://zar-jobs/resumes/${encodeURIComponent(result.fileName)}`,
+                mimeType: result.mimeType,
+                blob: buffer.toString("base64"),
+              },
+            },
+            { type: "text", text: JSON.stringify(result, null, 2) },
+          ],
+          structuredContent: { result },
+        };
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "render_resume_docx",
+    {
+      title: "Render an editable ATS-oriented resume DOCX",
+      description:
+        "Render a validated JSON Resume as an in-memory, text-based DOCX without a browser, server, or filesystem write.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        fileName: z.string().min(6).max(120).optional(),
+        template: z.enum(RESUME_TEMPLATES).optional(),
+      },
+      outputSchema: {
+        result: z.object({
+          format: z.literal("docx"),
+          mimeType: z.literal(
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          ),
+          encoding: z.literal("base64"),
+          template: z.enum(RESUME_TEMPLATES),
+          fileName: z.string(),
+          bytes: z.number().int().positive(),
+          stored: z.literal(false),
+        }),
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, fileName, template }) => {
+      try {
+        const { buffer, ...result } = await renderResumeDocx(
           resume,
           fileName,
           template ?? "classic",

@@ -41,8 +41,8 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 6. Create a separate variant by selecting, reordering, or truthfully rephrasing only the evidence paths returned by the plan. Never overwrite the base document.
 7. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
 8. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
-9. Call `render_resume_html` or `render_resume_pdf` only after validation and the variant audit. Use PDF when the user asks for a final document; use HTML when they want an editable or printable intermediate. Offer `classic`, `compact`, or `technical`; do not imply that visual style changes ATS guarantees.
-10. Save returned HTML or PDF only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to `render_resume_pdf`; its optional `fileName` is only a safe suggested filename.
+9. Call `render_resume_html`, `render_resume_pdf`, or `render_resume_docx` only after validation and the variant audit. Use PDF for a fixed final document, DOCX for an editable final document, and HTML for a printable intermediate. Offer `classic`, `compact`, or `technical`; do not imply that visual style changes ATS guarantees.
+10. Save returned HTML, PDF, or DOCX only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to a render tool; `fileName` is only a safe suggested filename.
 11. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
 
 ## Current version
@@ -62,6 +62,7 @@ The current MCP tools do not write files. They can:
 - validate JSON Resume documents and compare them with user-provided job text.
 - plan a variant from traceable base-resume evidence without generating candidate facts.
 - audit tailored variants against a base resume for selected unsupported additions.
+- render editable, text-based A4 DOCX files in memory without Word or a server.
 - render escaped, printable, single-column HTML and check its ATS structure offline.
 - render a text-based PDF in memory without a browser, server, or automatic filesystem write.
 - choose among three single-column ATS-oriented visual templates without changing candidate facts.

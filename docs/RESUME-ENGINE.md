@@ -9,6 +9,8 @@ Zar Jobs reutiliza dos paquetes MIT del repositorio público [JSON Resume](https
 
 La exportación usa [PDFKit](https://github.com/foliojs/pdfkit), también MIT, para producir texto PDF directamente en Node.js. No interpreta HTML arbitrario: renderiza el mismo JSON Resume ya validado con la misma estructura lineal, evitando incorporar un navegador.
 
+La salida editable usa [docx](https://github.com/dolanmiu/docx), también MIT, para construir OOXML directamente en Node.js. No automatiza Word ni necesita LibreOffice en tiempo de ejecución.
+
 El conector conserva Node.js y `stdio`. No añade web, servidor, cuenta, base de datos ni proveedor de IA.
 
 ## Alternativas evaluadas
@@ -36,6 +38,8 @@ resumes/
     empresa-puesto.resume.json
   output/
     empresa-puesto.html
+    empresa-puesto.pdf
+    empresa-puesto.docx
 ```
 
 El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conservar un nombre distinto y ser revisada por la persona antes de utilizarla.
@@ -50,8 +54,9 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 - `check_resume_ats`: ejecuta controles offline sobre la plantilla HTML elegida.
 - `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.
 - `render_resume_pdf`: genera un PDF A4 multipágina, limitado a 10 páginas y 2 MB, y lo devuelve como recurso MCP en memoria.
+- `render_resume_docx`: genera un DOCX A4 editable, limitado a 2 MB, y lo devuelve como recurso MCP en memoria.
 
-Las salidas aceptan `classic`, `compact` o `technical`. Las tres conservan el mismo contenido, orden lineal y fuentes estándar; solo cambian tamaños, espaciado, líneas y un acento oscuro en `technical`.
+Las salidas aceptan `classic`, `compact` o `technical`. Las tres conservan el mismo contenido, orden lineal y fuentes estándar; solo cambian tamaños, espaciado, líneas y un acento oscuro en `technical`. El DOCX usa el preset interno `resume_a4`, con cabecera `resume_identity_header`, márgenes compactos y listas numeradas reales; no usa tablas, columnas, imágenes ni cuadros de texto.
 
 ## Importación guiada
 
@@ -71,6 +76,6 @@ Ninguna herramienta puede garantizar que un CV supere un ATS o una evaluación d
 
 Una palabra ausente nunca se añade automáticamente. Primero debe estar respaldada por el CV base o ser confirmada por el usuario. La auditoría de variantes tampoco comprende el significado completo de una reformulación, por lo que la revisión humana continúa siendo obligatoria.
 
-Las salidas HTML y PDF se generan desde el mismo documento validado. El PDF contiene texto seleccionable y extraíble, no una captura de pantalla. La prueba automatizada vuelve a leerlo con PDF.js y comprueba nombre, empresa y habilidades. La fuente estándar actual está orientada a alfabetos latinos; otros sistemas de escritura requieren una fuente portable adicional antes de poder considerarse soportados.
+Las salidas HTML, PDF y DOCX se generan desde el mismo documento validado. PDF y DOCX contienen texto seleccionable y extraíble, no una captura de pantalla. Las pruebas automatizadas vuelven a leerlos con PDF.js y Mammoth para comprobar nombre, empresa y habilidades. La fuente estándar actual está orientada a alfabetos latinos; otros sistemas de escritura requieren una fuente portable adicional antes de poder considerarse soportados.
 
-El conector no escribe el PDF. Devuelve el binario codificado dentro de un recurso MCP y un nombre sugerido; Codex, Claude u otro cliente solo debe guardarlo cuando el usuario lo pida y en una ruta bajo su control.
+El conector no escribe el PDF ni el DOCX. Devuelve cada binario codificado dentro de un recurso MCP y un nombre sugerido; Codex, Claude u otro cliente solo debe guardarlo cuando el usuario lo pida y en una ruta bajo su control.

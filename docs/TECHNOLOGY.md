@@ -12,6 +12,7 @@
 | CV estructurado | `@jsonresume/schema` | Estándar abierto y validación portable del CV |
 | Validación ATS | `@jsonresume/ats-validator` | Controles HTML deterministas y offline |
 | PDF | `pdfkit` | PDF multipágina con texto real, sin navegador ni binarios nativos |
+| DOCX | `docx` | OOXML editable con texto real, sin Word, servidor ni binarios nativos |
 | Pruebas | `node:test` | Incluido en Node.js |
 | Distribución | Marketplaces Git + `npx` | Instalación desde GitHub sin servicio alojado |
 | Automatización | GitHub Actions | Validación en Linux, Windows y macOS para `develop` y `master` |
@@ -55,4 +56,4 @@ Los usuarios nunca introducirán contraseñas de portales en el plugin.
 
 `get_connector_status` comprueba solo si estas variables contienen un valor no vacío. Su respuesta puede incluir el nombre de una variable ausente, pero nunca su contenido.
 
-Las herramientas de currículum no necesitan variables, cuentas ni servicios externos. `render_resume_pdf` usa PDFKit en el mismo proceso y devuelve un recurso MCP en memoria. PDF.js se usa únicamente como dependencia de desarrollo para demostrar en las pruebas que el texto puede extraerse; los usuarios no lo instalan con el paquete publicado. No se añade Playwright, Chromium, Python ni servidor.
+Las herramientas de currículum no necesitan variables, cuentas ni servicios externos. `render_resume_pdf` y `render_resume_docx` usan PDFKit y docx en el mismo proceso y devuelven recursos MCP en memoria. PDF.js y Mammoth se usan únicamente como dependencias de desarrollo para demostrar en las pruebas que el texto puede extraerse; los usuarios no los instalan con el paquete publicado. No se añade Playwright, Chromium, Python ni servidor.

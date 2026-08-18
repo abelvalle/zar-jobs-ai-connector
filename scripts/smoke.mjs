@@ -72,6 +72,7 @@ try {
       "match_resume_to_job",
       "normalize_job_url",
       "plan_resume_variant",
+      "render_resume_docx",
       "render_resume_html",
       "render_resume_pdf",
       "review_resume_import",
@@ -116,6 +117,24 @@ try {
   assert.equal(renderedPdf.structuredContent.result.stored, false);
   assert.equal(pdfResource.resource.mimeType, "application/pdf");
   assert.match(Buffer.from(pdfResource.resource.blob, "base64").subarray(0, 5).toString("ascii"), /^%PDF-/);
+
+  const renderedDocx = await client.callTool({
+    name: "render_resume_docx",
+    arguments: {
+      resume: smokeResume,
+      fileName: "example-tech-backend.docx",
+      template: "technical"
+    }
+  });
+  const docxResource = renderedDocx.content.find((item) => item.type === "resource");
+  assert.equal(
+    renderedDocx.structuredContent.result.mimeType,
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  );
+  assert.equal(renderedDocx.structuredContent.result.template, "technical");
+  assert.equal(renderedDocx.structuredContent.result.stored, false);
+  assert.equal(docxResource.resource.mimeType, renderedDocx.structuredContent.result.mimeType);
+  assert.equal(Buffer.from(docxResource.resource.blob, "base64").subarray(0, 2).toString("ascii"), "PK");
 
   const atsResume = await client.callTool({
     name: "check_resume_ats",

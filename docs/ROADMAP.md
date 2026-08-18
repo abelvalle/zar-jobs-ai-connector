@@ -141,6 +141,20 @@ Criterios de aceptación:
 - los borradores incompletos devuelven también sus errores de validación;
 - la documentación obliga a revisión humana antes de validar, adaptar o exportar.
 
+## Hito 13 — Exportación DOCX editable ✅
+
+Objetivo: ofrecer un formato editable equivalente a las salidas ATS existentes sin depender de Word, LibreOffice, una web o un servidor.
+
+Criterios de aceptación:
+
+- generación OOXML local con `docx` y desde el mismo JSON Resume validado;
+- documento A4 de una columna, con texto y listas reales, sin tablas, imágenes ni cuadros de texto;
+- plantillas `classic`, `compact` y `technical` con el mismo contenido y orden;
+- resultado como recurso MCP en memoria, sin rutas ni escrituras implícitas;
+- límite de 200 KB de entrada y 2 MB de salida;
+- extracción automática de nombre, empresa y habilidades mediante Mammoth;
+- renderizado e inspección visual de las tres plantillas antes de publicar.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

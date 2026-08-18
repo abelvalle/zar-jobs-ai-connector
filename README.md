@@ -60,12 +60,13 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `check_resume_ats`: evalúa la estructura HTML con reglas offline.
 - `render_resume_html`: genera HTML escapado con plantilla `classic`, `compact` o `technical`.
 - `render_resume_pdf`: genera el mismo diseño ATS como PDF con texto extraíble y lo devuelve en memoria.
+- `render_resume_docx`: genera un DOCX editable, A4 y de una columna con texto extraíble y lo devuelve en memoria.
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Currículums
 
-El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS o PDF con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
+El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS, PDF o DOCX editable con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 

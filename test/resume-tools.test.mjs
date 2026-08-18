@@ -12,6 +12,7 @@ import {
   validateResume,
 } from "../src/resumes/resume-tools.mjs";
 import { renderResumePdf } from "../src/resumes/resume-pdf.mjs";
+import { renderResumeDocx } from "../src/resumes/resume-docx.mjs";
 
 const baseResume = {
   meta: { language: "es-ES" },
@@ -191,6 +192,43 @@ test("rejects paths and non-PDF names for portable output", async () => {
   await assert.rejects(
     renderResumePdf(baseResume, "resume.txt"),
     /plain PDF filename/,
+  );
+});
+
+test("renders editable DOCX files with extractable text in every template", async () => {
+  const mammoth = await import("mammoth");
+
+  for (const template of RESUME_TEMPLATES) {
+    const result = await renderResumeDocx(
+      baseResume,
+      `${template}-resume.docx`,
+      template,
+    );
+    const extracted = await mammoth.extractRawText({ buffer: result.buffer });
+
+    assert.equal(result.mimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    assert.equal(result.fileName, `${template}-resume.docx`);
+    assert.equal(result.template, template);
+    assert.equal(result.stored, false);
+    assert.equal(result.buffer.subarray(0, 2).toString("ascii"), "PK");
+    assert.match(extracted.value, /Alex Example/);
+    assert.match(extracted.value, /Example Tech/);
+    assert.match(extracted.value, /Java/);
+  }
+});
+
+test("rejects paths, non-DOCX names, and unknown DOCX templates", async () => {
+  await assert.rejects(
+    renderResumeDocx(baseResume, "../resume.docx"),
+    /plain DOCX filename/,
+  );
+  await assert.rejects(
+    renderResumeDocx(baseResume, "resume.pdf"),
+    /plain DOCX filename/,
+  );
+  await assert.rejects(
+    renderResumeDocx(baseResume, "resume.docx", "decorative"),
+    /Unknown resume template/,
   );
 });
 
