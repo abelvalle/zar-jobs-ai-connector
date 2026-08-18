@@ -62,8 +62,11 @@ assert.equal(claudeMarketplace.version, packageJson.version);
 assert.equal(claudeMarketplace.plugins.length, 1);
 assert.equal(claudeMarketplace.plugins[0].name, packageJson.name);
 assert.equal(claudeMarketplace.plugins[0].version, packageJson.version);
-assert.equal(claudeMarketplace.plugins[0].source.source, "github");
-assert.equal(claudeMarketplace.plugins[0].source.repo, "abelvalle/zar-jobs-ai-connector");
+assert.equal(claudeMarketplace.plugins[0].source.source, "url");
+assert.equal(
+  claudeMarketplace.plugins[0].source.url,
+  "https://github.com/abelvalle/zar-jobs-ai-connector.git"
+);
 assert.equal(claudeMarketplace.plugins[0].source.ref, `v${packageJson.version}`);
 
 const mcpServer = mcpConfig.mcpServers?.["zar-jobs"];

@@ -10,8 +10,8 @@
     {
       "name": "zar-jobs-ai-connector",
       "source": {
-        "source": "github",
-        "repo": "abelvalle/zar-jobs-ai-connector",
+        "source": "url",
+        "url": "https://github.com/abelvalle/zar-jobs-ai-connector.git",
         "ref": "v1.1.0"
       },
       "description": "Review authorized job sources, confirm imported resume drafts, and create evidence-grounded variants with ATS-safe templates and portable PDF export.",
