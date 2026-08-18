@@ -5,17 +5,17 @@
     "email": "26121474+abelvalle@users.noreply.github.com"
   },
   "description": "Local job connectors and truthful ATS-oriented resume tools for AI assistants.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "plugins": [
     {
       "name": "zar-jobs-ai-connector",
       "source": {
         "source": "url",
         "url": "https://github.com/abelvalle/zar-jobs-ai-connector.git",
-        "ref": "v1.5.0"
+        "ref": "v1.6.0"
       },
-      "description": "Review jobs, create traceable or anonymous resumes, compare evidenced conditions, and analyze an observed application funnel locally.",
-      "version": "1.5.0",
+      "description": "Review jobs and CVs with traceable evidence, including a recruiter-style rubric that never predicts hiring or submits applications.",
+      "version": "1.6.0",
       "author": {
         "name": "abelvalle"
       },

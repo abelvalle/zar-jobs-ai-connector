@@ -1,6 +1,6 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Local job discovery and truthful ATS-oriented resume workflows, backed by MCP.",
   "author": {
     "name": "abelvalle",
@@ -58,6 +58,7 @@
       "Evidence-backed offer conditions",
       "Anonymous resume bundles",
       "Application funnel analytics",
+      "Recruiter-style resume review",
       "Read only",
       "MCP"
     ],
@@ -65,7 +66,7 @@
     "privacyPolicyURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/PRIVACY.md",
     "termsOfServiceURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/TERMS.md",
     "defaultPrompt": [
-      "Review this resume, create a truthful variant, and prepare a local application kit for this job.",
+      "Review my CV with the recruiter-style rubric and prioritize truthful improvements.",
       "Compare these jobs with my explicit preferences and explain every ranking factor.",
       "Prepare an evidence-backed interview plan for this role."
     ]
