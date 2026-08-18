@@ -184,6 +184,20 @@ Criterios de aceptación:
 - sin red, scraping, almacenamiento, cuenta o servidor;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 16 — Kit de candidatura trazable ✅
+
+Objetivo: coordinar CV, carta y respuestas de formulario con evidencia común y una parada obligatoria antes de cualquier envío.
+
+Criterios de aceptación:
+
+- esquema de carta con rutas del CV, términos no respaldados y preguntas de revisión;
+- planificación de hasta 20 respuestas sin generar automáticamente su contenido;
+- auditoría determinista por frase, evidencia y cifras, con limitaciones explícitas;
+- manifiesto con nombres seguros, plantilla, checklist y herramientas de renderizado siguientes;
+- `finalApprovalRequired: true` y `submissionPerformed: false` invariables;
+- sin escritura, navegación, formulario, cuenta, mensaje o candidatura automática;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

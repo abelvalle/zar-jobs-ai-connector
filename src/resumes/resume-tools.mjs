@@ -447,7 +447,8 @@ function numericClaims(value) {
 
 function rankedKeywords(text, limit) {
   const counts = new Map();
-  for (const token of normalizeText(text).split(/[^a-z0-9#+.]+/)) {
+  for (const rawToken of normalizeText(text).split(/[^a-z0-9#+.]+/)) {
+    const token = rawToken.replace(/^\.+|\.+$/g, "");
     if (token.length < 3 || STOP_WORDS.has(token) || /^\d+$/.test(token)) continue;
     counts.set(token, (counts.get(token) ?? 0) + 1);
   }

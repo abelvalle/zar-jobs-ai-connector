@@ -29,6 +29,7 @@ skills/zar-jobs/SKILL.md
 src/cli.mjs
 src/connector-status.mjs
 src/server.mjs
+src/applications/*.mjs
 src/portals/*.mjs
 src/resumes/*.mjs
 test/*.test.mjs

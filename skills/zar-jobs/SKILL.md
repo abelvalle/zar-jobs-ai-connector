@@ -45,6 +45,13 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 10. Save returned HTML, PDF, or DOCX only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to a render tool; `fileName` is only a safe suggested filename.
 11. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
 
+## Application kit workflow
+
+1. Call `plan_cover_letter` and `plan_screening_answers` before drafting application text. Use only returned resume evidence or facts the user confirms in the current conversation.
+2. Audit every draft with `audit_application_text`. Show all flagged sentences and do not treat a clean result as proof of truth.
+3. Call `prepare_application_kit` to coordinate filenames and the final checklist. Render the requested resume formats only after review.
+4. Stop before any submission, message, profile change, or external write. The user must open the destination and approve the final application manually.
+
 ## Current version
 
 The current MCP tools do not write files. They can:
@@ -68,6 +75,8 @@ The current MCP tools do not write files. They can:
 - render escaped, printable, single-column HTML and check its ATS structure offline.
 - render a text-based PDF in memory without a browser, server, or automatic filesystem write.
 - choose among three single-column ATS-oriented visual templates without changing candidate facts.
+- plan and audit cover letters and screening answers against traceable resume evidence.
+- prepare a local application-kit manifest that always requires final human approval and never submits.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 

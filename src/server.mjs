@@ -13,6 +13,12 @@ import {
 import { normalizeJobUrl } from "./portals/url-normalizer.mjs";
 import { fingerprintJobs, reviewJobImport } from "./jobs/job-import.mjs";
 import {
+  auditApplicationText,
+  planCoverLetter,
+  planScreeningAnswers,
+  prepareApplicationKit,
+} from "./applications/application-tools.mjs";
+import {
   analyzeResumeAts,
   analyzeResumeJobMatch,
   auditResumeVariant,
@@ -533,6 +539,137 @@ export function createZarJobsServer() {
     async ({ jobs }) => {
       try {
         return resumeToolResult(fingerprintJobs(jobs));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_cover_letter",
+    {
+      title: "Plan a truthful cover letter",
+      description:
+        "Create an evidence-backed cover-letter outline from a validated resume and user-provided job description. It returns source paths and gaps, not generated prose.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+        target: z.object({
+          company: z.string().min(1).max(200).optional(),
+          role: z.string().min(1).max(200).optional(),
+        }).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription, target }) => {
+      try {
+        return resumeToolResult(planCoverLetter(resume, jobDescription, target));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_screening_answers",
+    {
+      title: "Plan truthful screening answers",
+      description:
+        "Map up to 20 application questions to traceable resume evidence and identify where user input is needed. It does not generate or submit answers.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        questions: z.array(z.string().min(1).max(2_000)).min(1).max(20),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, questions }) => {
+      try {
+        return resumeToolResult(planScreeningAnswers(resume, questions));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "audit_application_text",
+    {
+      title: "Audit application text",
+      description:
+        "Compare a draft cover letter or screening answer with a validated resume and optional job text. It flags selected unsupported claims but cannot prove semantic truth.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        applicationText: z.string().min(1).max(100_000),
+        jobDescription: z.string().min(1).max(100_000).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, applicationText, jobDescription }) => {
+      try {
+        return resumeToolResult(auditApplicationText(
+          resume,
+          applicationText,
+          jobDescription ?? "",
+        ));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "prepare_application_kit",
+    {
+      title: "Prepare a reviewed application kit manifest",
+      description:
+        "Coordinate resume evidence, cover-letter and screening-answer audits, filenames, and final review steps. It does not write files or submit an application.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+        target: z.object({
+          company: z.string().min(1).max(200),
+          role: z.string().min(1).max(200),
+        }),
+        coverLetter: z.string().min(1).max(100_000).optional(),
+        screeningAnswers: z.array(z.object({
+          question: z.string().min(1).max(2_000),
+          answer: z.string().min(1).max(100_000),
+        })).max(20).optional(),
+        template: z.enum(RESUME_TEMPLATES).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async (input) => {
+      try {
+        return resumeToolResult(prepareApplicationKit({
+          ...input,
+          screeningAnswers: input.screeningAnswers ?? [],
+          template: input.template ?? "classic",
+        }));
       } catch (error) {
         return resumeToolError(error);
       }

@@ -61,6 +61,7 @@ try {
     listed.tools.map((tool) => tool.name).sort(),
     [
       "apply_resume_changes",
+      "audit_application_text",
       "audit_resume_variant",
       "check_resume_ats",
       "compare_resume_versions",
@@ -74,7 +75,10 @@ try {
       "list_tecnoempleo_alert_jobs",
       "match_resume_to_job",
       "normalize_job_url",
+      "plan_cover_letter",
       "plan_resume_variant",
+      "plan_screening_answers",
+      "prepare_application_kit",
       "render_resume_docx",
       "render_resume_html",
       "render_resume_pdf",
@@ -217,6 +221,53 @@ try {
   assert.ok(comparedVariant.structuredContent.result.differences.some(
     (item) => item.path === "basics.summary"
   ));
+
+  const coverPlan = await client.callTool({
+    name: "plan_cover_letter",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Example Corp seeks a Backend Engineer with Java and Kubernetes.",
+      target: { company: "Example Corp", role: "Backend Engineer" }
+    }
+  });
+  assert.equal(coverPlan.structuredContent.result.generatedText, false);
+  assert.ok(coverPlan.structuredContent.result.evidence.every((item) => item.sourcePath));
+
+  const screeningPlan = await client.callTool({
+    name: "plan_screening_answers",
+    arguments: {
+      resume: smokeResume,
+      questions: ["Describe your Java experience."]
+    }
+  });
+  assert.equal(screeningPlan.structuredContent.result.generatedAnswers, false);
+  assert.ok(screeningPlan.structuredContent.result.questions[0].evidence.length > 0);
+
+  const applicationAudit = await client.callTool({
+    name: "audit_application_text",
+    arguments: {
+      resume: smokeResume,
+      applicationText: "I increased revenue by 75%.",
+      jobDescription: "Example Corp seeks a Backend Engineer."
+    }
+  });
+  assert.equal(applicationAudit.structuredContent.result.status, "review-required");
+
+  const applicationKit = await client.callTool({
+    name: "prepare_application_kit",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Example Corp seeks a Backend Engineer with Java.",
+      target: { company: "Example Corp", role: "Backend Engineer" },
+      template: "technical"
+    }
+  });
+  assert.equal(applicationKit.structuredContent.result.finalApprovalRequired, true);
+  assert.equal(applicationKit.structuredContent.result.submissionPerformed, false);
+  assert.deepEqual(
+    applicationKit.structuredContent.result.nextTools,
+    ["render_resume_pdf", "render_resume_docx"]
+  );
 
   const capabilities = await client.callTool({
     name: "get_portal_capabilities",

@@ -65,6 +65,10 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `render_resume_html`: genera HTML escapado con plantilla `classic`, `compact` o `technical`.
 - `render_resume_pdf`: genera el mismo diseño ATS como PDF con texto extraíble y lo devuelve en memoria.
 - `render_resume_docx`: genera un DOCX editable, A4 y de una columna con texto extraíble y lo devuelve en memoria.
+- `plan_cover_letter`: prepara una carta desde evidencia trazable, sin redactar hechos.
+- `plan_screening_answers`: relaciona preguntas de formulario con evidencia y lagunas.
+- `audit_application_text`: señala afirmaciones seleccionadas sin respaldo en borradores.
+- `prepare_application_kit`: coordina auditorías, nombres de archivo y revisión final, sin enviar nada.
 
 El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
@@ -73,6 +77,8 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, aplica cambios explícitos con linaje y hashes, compara cada variante con sus hechos de origen y genera HTML ATS, PDF o DOCX editable con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
+
+Las cartas y respuestas se planifican y auditan contra el CV base. El kit final solo es un manifiesto local para generar PDF/DOCX y revisar los borradores; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
 
 ## Desarrollo
 
