@@ -10,6 +10,8 @@ Zar Jobs AI Connector se ejecuta en el equipo del usuario mediante MCP por `stdi
 
 La primera ejecución descarga mediante `npx` la versión etiquetada que declara el plugin. Las siguientes ejecuciones reutilizan la caché local de npm.
 
+Si el propio CLI de Codex o Claude falla antes de cargar plugins, comprueba primero su compatibilidad con la versión de Node activa. Ese fallo del anfitrión es independiente del proceso MCP, que se valida con Node.js 22 en Linux, Windows y macOS.
+
 ## Codex y ChatGPT de escritorio
 
 Añade el repositorio como marketplace e instala el plugin:

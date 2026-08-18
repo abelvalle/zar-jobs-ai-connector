@@ -81,6 +81,8 @@ npm.cmd run smoke
 npm.cmd run smoke:portable
 ```
 
+CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependencias de ejecución están fijadas a versiones exactas para que una etiqueta publicada sea reproducible.
+
 ## Documentación
 
 - [Instalación](docs/INSTALLATION.md)

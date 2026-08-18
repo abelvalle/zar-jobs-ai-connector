@@ -102,6 +102,19 @@ Criterios de aceptación:
 - orden recomendado de secciones sin modificar el CV;
 - revisión humana y auditoría posterior obligatorias.
 
+## Hito 10 — Cadena de suministro y portabilidad reforzadas ✅
+
+Objetivo: hacer reproducible la instalación publicada y comprobar el mismo paquete en los tres sistemas de escritorio objetivo.
+
+Criterios de aceptación:
+
+- todas las dependencias de ejecución fijadas a versiones exactas;
+- `package-lock.json` coherente y auditoría sin vulnerabilidades conocidas;
+- CI con Node.js 22 en Linux, Windows y macOS;
+- smoke del paquete portable en los tres sistemas;
+- instalación y actualización reales desde el marketplace comprobadas después de publicar;
+- comprobación de Claude Code con un runtime Node compatible, separada de fallos del CLI anfitrión.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.
