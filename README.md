@@ -52,6 +52,7 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `import_tecnoempleo_rss`: procesa en memoria el XML que aporta el usuario.
 - `import_linkedin_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
 - `import_indeed_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
+- `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
 - `plan_resume_variant`: prioriza evidencia existente y devuelve rutas trazables para preparar una variante.
@@ -64,7 +65,7 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Currículums
 
-El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS o PDF con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
+El plugin usa el estándar abierto JSON Resume para crear un CV base y variantes independientes por oferta. Codex, Claude u otro cliente puede extraer el texto de un TXT, PDF o DOCX aportado por el usuario y revisar el borrador campo a campo con `review_resume_import`; el MCP no interpreta ni almacena el binario. Después valida el contenido, compara cada variante con sus hechos de origen y genera HTML ATS o PDF con texto extraíble en tres diseños de una columna. Todo se procesa localmente y en memoria.
 
 Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan superar un ATS o una evaluación de IA externos. Consulta [docs/RESUME-ENGINE.md](docs/RESUME-ENGINE.md).
 

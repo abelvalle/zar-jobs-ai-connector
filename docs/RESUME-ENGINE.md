@@ -42,6 +42,7 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 
 ## Herramientas
 
+- `review_resume_import`: contrasta un borrador JSON Resume con texto extraído de TXT, PDF o DOCX y marca cada campo como coincidencia exacta, parcial o no encontrada; ninguno queda confirmado automáticamente.
 - `validate_resume`: valida JSON Resume y requisitos mínimos.
 - `match_resume_to_job`: calcula coincidencia orientativa con el texto de una oferta.
 - `plan_resume_variant`: ordena evidencia existente por relevancia, conserva su ruta JSON y separa términos sin respaldo.
@@ -51,6 +52,18 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 - `render_resume_pdf`: genera un PDF A4 multipágina, limitado a 10 páginas y 2 MB, y lo devuelve como recurso MCP en memoria.
 
 Las salidas aceptan `classic`, `compact` o `technical`. Las tres conservan el mismo contenido, orden lineal y fuentes estándar; solo cambian tamaños, espaciado, líneas y un acento oscuro en `technical`.
+
+## Importación guiada
+
+El conector no incorpora un parser binario. El cliente que ya tiene acceso al archivo del usuario —Codex, Claude u otro asistente compatible— extrae su texto y prepara un borrador JSON Resume. Después llama a `review_resume_import` con:
+
+- `sourceFormat`: `text`, `pdf-extracted` o `docx-extracted`;
+- `sourceText`: texto extraído, limitado a 200.000 caracteres;
+- `resume`: borrador en memoria.
+
+La respuesta no repite el documento de origen ni lo guarda. Devuelve cada ruta y valor del borrador con soporte `exact`, `partial` o `unmatched`, siempre con `confirmed: false`. Primero se revisan los campos parciales y no encontrados; luego el usuario confirma todos los campos. Solo después se usa `validate_resume` y se considera ese documento un CV base.
+
+Este mecanismo detecta diferencias de texto, no significado ni autoría. Un valor marcado como exacto también requiere confirmación humana.
 
 ## Límites
 

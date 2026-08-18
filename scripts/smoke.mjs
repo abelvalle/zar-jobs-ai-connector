@@ -74,6 +74,7 @@ try {
       "plan_resume_variant",
       "render_resume_html",
       "render_resume_pdf",
+      "review_resume_import",
       "search_infojobs_jobs",
       "validate_resume"
     ]
@@ -142,6 +143,19 @@ try {
   assert.ok(variantPlan.structuredContent.result.supportedKeywords.includes("java"));
   assert.ok(variantPlan.structuredContent.result.unsupportedKeywords.includes("kubernetes"));
   assert.ok(variantPlan.structuredContent.result.evidence.every((item) => item.sourcePath));
+
+  const importReview = await client.callTool({
+    name: "review_resume_import",
+    arguments: {
+      resume: smokeResume,
+      sourceFormat: "pdf-extracted",
+      sourceText:
+        "Alex Example Backend Engineer alex@example.com +34 600 000 000 Example Tech Built Java services",
+    }
+  });
+  assert.equal(importReview.structuredContent.result.status, "confirmation-required");
+  assert.equal(importReview.structuredContent.result.stored, false);
+  assert.ok(importReview.structuredContent.result.fields.every((item) => item.confirmed === false));
 
   const auditedVariant = await client.callTool({
     name: "audit_resume_variant",

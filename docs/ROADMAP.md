@@ -128,6 +128,19 @@ Criterios de aceptación:
 - extracción real de nombre, empresa y habilidades en cada PDF;
 - revisión visual de las tres páginas de muestra antes de publicar.
 
+## Hito 12 — Importación guiada y confirmación de CV ✅
+
+Objetivo: convertir texto aportado por el usuario desde TXT, PDF o DOCX en un borrador revisable sin aceptar afirmaciones automáticamente.
+
+Criterios de aceptación:
+
+- el cliente extrae el texto del archivo y el MCP no necesita parser binario, web ni servidor;
+- comparación local con límite de 200.000 caracteres y sin persistencia;
+- cada campo conserva su ruta JSON y se clasifica como exacto, parcial o no encontrado;
+- todos los campos permanecen `confirmed: false`, incluso si coinciden literalmente;
+- los borradores incompletos devuelven también sus errores de validación;
+- la documentación obliga a revisión humana antes de validar, adaptar o exportar.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

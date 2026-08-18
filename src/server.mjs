@@ -21,6 +21,10 @@ import {
   validateResume,
 } from "./resumes/resume-tools.mjs";
 import { renderResumePdf } from "./resumes/resume-pdf.mjs";
+import {
+  RESUME_IMPORT_FORMATS,
+  reviewResumeImport,
+} from "./resumes/resume-import.mjs";
 
 const capabilitySchema = z.object({
   portal: z.enum(PORTALS),
@@ -453,6 +457,36 @@ export function createZarJobsServer() {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         structuredContent: { result },
       };
+    },
+  );
+
+  server.registerTool(
+    "review_resume_import",
+    {
+      title: "Review an imported resume draft",
+      description:
+        "Compare an in-memory JSON Resume draft with text the user extracted from a TXT, PDF, or DOCX file. Every field remains unconfirmed and no source text is stored.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        sourceText: z.string().min(1).max(200_000),
+        sourceFormat: z.enum(RESUME_IMPORT_FORMATS).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, sourceText, sourceFormat }) => {
+      try {
+        return resumeToolResult(
+          reviewResumeImport(resume, sourceText, sourceFormat ?? "text"),
+        );
+      } catch (error) {
+        return resumeToolError(error);
+      }
     },
   );
 

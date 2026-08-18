@@ -34,14 +34,16 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 ## Resume workflow
 
 1. Obtain the user's existing CV or confirmed facts. Do not infer personal claims from a job description.
-2. Build one JSON Resume base document and call `validate_resume` before tailoring it.
-3. For a specific offer, call `match_resume_to_job`, then `plan_resume_variant`. Treat missing terms as questions or evidence gaps, never instructions to add them.
-4. Create a separate variant by selecting, reordering, or truthfully rephrasing only the evidence paths returned by the plan. Never overwrite the base document.
-5. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
-6. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
-7. Call `render_resume_html` or `render_resume_pdf` only after validation and the variant audit. Use PDF when the user asks for a final document; use HTML when they want an editable or printable intermediate. Offer `classic`, `compact`, or `technical`; do not imply that visual style changes ATS guarantees.
-8. Save returned HTML or PDF only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to `render_resume_pdf`; its optional `fileName` is only a safe suggested filename.
-9. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
+2. When the user supplies TXT, PDF, or DOCX, use the host client's document-reading capability to extract text and draft JSON Resume. The MCP does not accept or parse the binary file.
+3. Call `review_resume_import` with the extracted text, source format, and draft. Show every `unmatched` and `partial` field first, but require the user to confirm every field, including `exact` matches. Never treat the draft as a base resume before that confirmation.
+4. Call `validate_resume` after corrections and confirmation.
+5. For a specific offer, call `match_resume_to_job`, then `plan_resume_variant`. Treat missing terms as questions or evidence gaps, never instructions to add them.
+6. Create a separate variant by selecting, reordering, or truthfully rephrasing only the evidence paths returned by the plan. Never overwrite the base document.
+7. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
+8. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
+9. Call `render_resume_html` or `render_resume_pdf` only after validation and the variant audit. Use PDF when the user asks for a final document; use HTML when they want an editable or printable intermediate. Offer `classic`, `compact`, or `technical`; do not imply that visual style changes ATS guarantees.
+10. Save returned HTML or PDF only when the user asked for a file, using a distinct company-and-role filename in the user's workspace. Never pass a path to `render_resume_pdf`; its optional `fileName` is only a safe suggested filename.
+11. Keep CV data out of the plugin repository, public repositories, logs, and marketplace caches unless the user explicitly chooses a private or public destination.
 
 ## Current version
 
@@ -56,6 +58,7 @@ The current MCP tools do not write files. They can:
 - import user-provided Tecnoempleo RSS content without a network request or storage.
 - import user-provided LinkedIn job data without making a network request.
 - import user-provided Indeed job data without making a network request.
+- review an in-memory resume draft against user-provided text extracted from TXT, PDF, or DOCX, with every field awaiting confirmation.
 - validate JSON Resume documents and compare them with user-provided job text.
 - plan a variant from traceable base-resume evidence without generating candidate facts.
 - audit tailored variants against a base resume for selected unsupported additions.
