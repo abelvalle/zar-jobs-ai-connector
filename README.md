@@ -59,6 +59,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `review_application_tracker`: calcula métricas y seguimientos desde registros aportados en memoria.
 - `plan_application_update`: prepara una copia y un parche revisable sin escribir el tracker.
 - `export_followup_calendar`: genera un calendario ICS local sin conectarse a servicios externos.
+- `plan_interview`: prepara temas, preguntas y evidencia trazable sin generar respuestas.
+- `audit_interview_answer`: revisa afirmaciones, estructura STAR y relevancia literal de un borrador.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
@@ -89,6 +91,8 @@ La priorización de ofertas es determinista y explicable: cada resultado conserv
 
 El seguimiento de candidaturas también es portable: el cliente aporta los registros y puede guardar la copia actualizada o importar un calendario ICS. El MCP no mantiene base de datos ni sincroniza cuentas. Consulta [docs/APPLICATION-TRACKING.md](docs/APPLICATION-TRACKING.md).
 
+La preparación de entrevistas parte del CV confirmado: diferencia temas respaldados y lagunas, y audita borradores sin certificar su verdad o calidad. Consulta [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md).
+
 ## Desarrollo
 
 ```powershell
@@ -118,6 +122,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Motor de currículums](docs/RESUME-ENGINE.md)
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
 - [Seguimiento local de candidaturas](docs/APPLICATION-TRACKING.md)
+- [Preparación de entrevistas](docs/INTERVIEW-PREP.md)
 - [Seguridad y privacidad](docs/SECURITY-PRIVACY.md)
 - [Soporte](SUPPORT.md)
 - [Contribución y ramas](CONTRIBUTING.md)

@@ -20,6 +20,11 @@ import {
   reviewApplicationTracker,
 } from "./tracking/application-tracker.mjs";
 import {
+  auditInterviewAnswer,
+  INTERVIEW_STAGES,
+  planInterview,
+} from "./interviews/interview-tools.mjs";
+import {
   auditApplicationText,
   planCoverLetter,
   planScreeningAnswers,
@@ -691,6 +696,72 @@ export function createZarJobsServer() {
     async ({ records, asOf }) => {
       try {
         return resumeToolResult(reviewApplicationTracker(records, asOf));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_interview",
+    {
+      title: "Plan evidence-backed interview preparation",
+      description:
+        "Build a question and evidence plan from a validated resume and user-provided job description. Unsupported topics remain explicit gaps and no answers are generated.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+        target: z.object({
+          company: z.string().min(1).max(200).optional(),
+          role: z.string().min(1).max(200).optional(),
+          stage: z.enum(INTERVIEW_STAGES).optional(),
+        }).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription, target }) => {
+      try {
+        return resumeToolResult(planInterview(resume, jobDescription, target));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "audit_interview_answer",
+    {
+      title: "Audit a draft interview answer",
+      description:
+        "Check a draft answer for selected unsupported claims, STAR labels, and literal question relevance. It cannot prove truth or interview quality.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        question: z.string().min(1).max(2_000),
+        answer: z.string().min(1).max(100_000),
+        jobDescription: z.string().min(1).max(100_000).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, question, answer, jobDescription }) => {
+      try {
+        return resumeToolResult(auditInterviewAnswer(
+          resume,
+          question,
+          answer,
+          jobDescription ?? "",
+        ));
       } catch (error) {
         return resumeToolError(error);
       }

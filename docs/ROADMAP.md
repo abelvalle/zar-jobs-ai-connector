@@ -228,6 +228,22 @@ Criterios de aceptación:
 - ninguna escritura, sincronización, contacto o candidatura externa;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 19 — Preparación y auditoría de entrevistas ✅
+
+Objetivo: convertir la evidencia confirmada del CV en un plan de preparación y revisar respuestas sin inventar historias ni presentar heurísticas como verificación.
+
+Criterios de aceptación:
+
+- planes diferenciados para seis fases habituales de entrevista;
+- temas respaldados y tarjetas con rutas exactas al CV;
+- lagunas convertidas en preguntas de confirmación o respuestas honestas;
+- preguntas técnicas, conductuales y de motivación sin respuestas generadas;
+- auditoría de cifras y afirmaciones seleccionadas frente al CV;
+- comprobación orientativa de etiquetas STAR y relevancia literal;
+- `generatedAnswers: false`, `truthVerified: false` y revisión humana invariables;
+- sin grabación, perfilado, puntuación del candidato, red ni almacenamiento;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

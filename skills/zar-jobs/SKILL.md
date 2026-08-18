@@ -68,6 +68,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 4. Use `export_followup_calendar` only when the user wants a portable ICS. Save or import it only to a destination the user chooses; never imply account synchronization.
 5. A tracker status is user-maintained operational state. It is not proof that the plugin applied, contacted anyone, or received a portal update.
 
+## Interview workflow
+
+1. Call `plan_interview` with the validated resume and user-provided job description. Present supported topics with their evidence paths before gaps.
+2. For gaps, ask the user for truthful evidence or prepare an explicit no-experience response. Never invent a STAR story, metric, tool, or responsibility.
+3. Draft an answer only from selected evidence and current-conversation facts, then call `audit_interview_answer`.
+4. Resolve every flagged claim. Treat STAR and relevance checks as limited structural hints, never proof of truth or answer quality.
+5. Do not record audio or video, profile the interviewer or candidate, or score hiring suitability.
+
 ## Current version
 
 The current MCP tools do not write files. They can:
@@ -95,6 +103,7 @@ The current MCP tools do not write files. They can:
 - prepare a local application-kit manifest that always requires final human approval and never submits.
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
+- plan interview preparation from traceable CV evidence and audit a draft answer without certifying truth or hiring quality.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.
 

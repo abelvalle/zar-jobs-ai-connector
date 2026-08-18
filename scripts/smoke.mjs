@@ -62,6 +62,7 @@ try {
     [
       "apply_resume_changes",
       "audit_application_text",
+      "audit_interview_answer",
       "audit_resume_variant",
       "check_resume_ats",
       "compare_job_fit",
@@ -79,6 +80,7 @@ try {
       "normalize_job_url",
       "plan_application_update",
       "plan_cover_letter",
+      "plan_interview",
       "plan_resume_variant",
       "plan_screening_answers",
       "prepare_application_kit",
@@ -273,6 +275,30 @@ try {
     applicationKit.structuredContent.result.nextTools,
     ["render_resume_pdf", "render_resume_docx"]
   );
+
+  const interviewPlan = await client.callTool({
+    name: "plan_interview",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Example Corp seeks a Backend Engineer with Java and Kubernetes.",
+      target: { company: "Example Corp", role: "Backend Engineer", stage: "technical" }
+    }
+  });
+  assert.equal(interviewPlan.structuredContent.result.generatedAnswers, false);
+  assert.ok(interviewPlan.structuredContent.result.gapQuestions.some(
+    (item) => item.topic === "kubernetes"
+  ));
+
+  const interviewAudit = await client.callTool({
+    name: "audit_interview_answer",
+    arguments: {
+      resume: smokeResume,
+      question: "What result did you achieve?",
+      answer: "Result: I increased revenue by 75%."
+    }
+  });
+  assert.equal(interviewAudit.structuredContent.result.status, "review-required");
+  assert.equal(interviewAudit.structuredContent.result.truthVerified, false);
 
   const capabilities = await client.callTool({
     name: "get_portal_capabilities",
