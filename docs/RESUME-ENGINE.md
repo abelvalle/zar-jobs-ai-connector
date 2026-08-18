@@ -44,6 +44,7 @@ El CV base nunca se sobrescribe al preparar una oferta. Cada variante debe conse
 
 - `validate_resume`: valida JSON Resume y requisitos mínimos.
 - `match_resume_to_job`: calcula coincidencia orientativa con el texto de una oferta.
+- `plan_resume_variant`: ordena evidencia existente por relevancia, conserva su ruta JSON y separa términos sin respaldo.
 - `audit_resume_variant`: señala hechos estructurados, habilidades y cifras que no aparecen en el CV base.
 - `check_resume_ats`: ejecuta controles offline sobre la representación HTML.
 - `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.

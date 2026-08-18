@@ -89,6 +89,19 @@ Criterios de aceptación:
 - prueba real de extracción de nombre, empresa y habilidades mediante PDF.js;
 - smoke local y portable en verde.
 
+## Hito 9 — Planificador de variantes con evidencia ✅
+
+Objetivo: convertir la comparación con una oferta en un plan explicable sin redactar ni añadir hechos automáticamente.
+
+Criterios de aceptación:
+
+- priorización de resumen, experiencia, proyectos, habilidades, formación, certificados e idiomas existentes;
+- cada evidencia conserva su ruta dentro del JSON Resume base;
+- términos respaldados y no respaldados aparecen por separado;
+- los términos sin respaldo generan preguntas, nunca afirmaciones;
+- orden recomendado de secciones sin modificar el CV;
+- revisión humana y auditoría posterior obligatorias.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

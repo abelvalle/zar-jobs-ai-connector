@@ -35,8 +35,8 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 
 1. Obtain the user's existing CV or confirmed facts. Do not infer personal claims from a job description.
 2. Build one JSON Resume base document and call `validate_resume` before tailoring it.
-3. For a specific offer, call `match_resume_to_job`. Treat missing terms as questions or evidence gaps, never instructions to add them.
-4. Create a separate variant by selecting, reordering, or truthfully rephrasing facts from the base. Never overwrite the base document.
+3. For a specific offer, call `match_resume_to_job`, then `plan_resume_variant`. Treat missing terms as questions or evidence gaps, never instructions to add them.
+4. Create a separate variant by selecting, reordering, or truthfully rephrasing only the evidence paths returned by the plan. Never overwrite the base document.
 5. Call `audit_resume_variant` with both documents and always request human review. If it returns `review-required`, show every issue and resolve it before presenting the variant as usable.
 6. Call `check_resume_ats`; improve only structure and supported wording. State that the score is heuristic.
 7. Call `render_resume_html` or `render_resume_pdf` only after validation and the variant audit. Use PDF when the user asks for a final document; use HTML when they want an editable or printable intermediate.
@@ -57,6 +57,7 @@ The current MCP tools do not write files. They can:
 - import user-provided LinkedIn job data without making a network request.
 - import user-provided Indeed job data without making a network request.
 - validate JSON Resume documents and compare them with user-provided job text.
+- plan a variant from traceable base-resume evidence without generating candidate facts.
 - audit tailored variants against a base resume for selected unsupported additions.
 - render escaped, printable, single-column HTML and check its ATS structure offline.
 - render a text-based PDF in memory without a browser, server, or automatic filesystem write.

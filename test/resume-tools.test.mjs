@@ -6,6 +6,7 @@ import {
   analyzeResumeAts,
   analyzeResumeJobMatch,
   auditResumeVariant,
+  planResumeVariant,
   renderResumeHtml,
   validateResume,
 } from "../src/resumes/resume-tools.mjs";
@@ -97,6 +98,29 @@ test("compares resume evidence with a job description without adding claims", ()
   assert.ok(result.matchedSkills.includes("PostgreSQL"));
   assert.ok(result.missingKeywords.includes("kubernetes"));
   assert.equal(result.reviewRequired, true);
+});
+
+test("plans a variant with traceable existing evidence", () => {
+  const result = planResumeVariant(
+    baseResume,
+    "Backend Engineer con Java, PostgreSQL, Kubernetes y automatización de despliegues.",
+  );
+
+  assert.equal(result.status, "plan-ready");
+  assert.equal(result.humanReviewRequired, true);
+  assert.ok(result.supportedKeywords.includes("java"));
+  assert.ok(result.unsupportedKeywords.includes("kubernetes"));
+  assert.ok(result.evidence.some((item) => item.sourcePath === "work[0].highlights[1]"));
+  assert.ok(result.evidence.every((item) => item.text && item.sourcePath));
+  assert.ok(result.reviewQuestions.some((item) => item.keyword === "kubernetes"));
+  assert.match(result.disclaimer, /does not create candidate facts/);
+});
+
+test("rejects variant planning for an invalid base resume", () => {
+  assert.throws(
+    () => planResumeVariant({ basics: {} }, "Backend Engineer"),
+    /Invalid resume/,
+  );
 });
 
 test("accepts a reordered variant that introduces no selected factual additions", () => {

@@ -54,6 +54,7 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `import_indeed_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.
+- `plan_resume_variant`: prioriza evidencia existente y devuelve rutas trazables para preparar una variante.
 - `audit_resume_variant`: señala posibles afirmaciones nuevas frente al CV base.
 - `check_resume_ats`: evalúa la estructura HTML con reglas offline.
 - `render_resume_html`: genera HTML escapado, imprimible y de una sola columna.

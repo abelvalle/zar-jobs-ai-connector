@@ -15,6 +15,7 @@ import {
   analyzeResumeAts,
   analyzeResumeJobMatch,
   auditResumeVariant,
+  planResumeVariant,
   renderResumeHtml,
   validateResume,
 } from "./resumes/resume-tools.mjs";
@@ -598,6 +599,33 @@ export function createZarJobsServer() {
     async ({ resume, jobDescription }) => {
       try {
         return resumeToolResult(analyzeResumeJobMatch(resume, jobDescription));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_resume_variant",
+    {
+      title: "Plan a truthful resume variant",
+      description:
+        "Rank existing resume evidence for a user-provided job description and return traceable source paths, unsupported terms, and review questions without creating candidate facts.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription }) => {
+      try {
+        return resumeToolResult(planResumeVariant(resume, jobDescription));
       } catch (error) {
         return resumeToolError(error);
       }

@@ -71,6 +71,7 @@ try {
       "list_tecnoempleo_alert_jobs",
       "match_resume_to_job",
       "normalize_job_url",
+      "plan_resume_variant",
       "render_resume_html",
       "render_resume_pdf",
       "search_infojobs_jobs",
@@ -123,6 +124,17 @@ try {
     }
   });
   assert.ok(matchedResume.structuredContent.result.missingKeywords.includes("kubernetes"));
+
+  const variantPlan = await client.callTool({
+    name: "plan_resume_variant",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Backend Engineer with Java, PostgreSQL, and Kubernetes"
+    }
+  });
+  assert.ok(variantPlan.structuredContent.result.supportedKeywords.includes("java"));
+  assert.ok(variantPlan.structuredContent.result.unsupportedKeywords.includes("kubernetes"));
+  assert.ok(variantPlan.structuredContent.result.evidence.every((item) => item.sourcePath));
 
   const auditedVariant = await client.callTool({
     name: "audit_resume_variant",

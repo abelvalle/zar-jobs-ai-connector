@@ -140,6 +140,59 @@ export function analyzeResumeJobMatch(resume, jobDescription) {
   };
 }
 
+export function planResumeVariant(resume, jobDescription) {
+  const validation = validateResume(resume);
+  if (!validation.valid) {
+    throw new Error(`Invalid resume: ${validation.errors[0].path} ${validation.errors[0].message}`);
+  }
+  if (!hasText(jobDescription)) {
+    throw new TypeError("jobDescription is required");
+  }
+
+  const jobKeywords = rankedKeywords(jobDescription, 25);
+  const allEvidence = resumeEvidence(resume)
+    .map((item) => ({
+      ...item,
+      matchedKeywords: jobKeywords.filter((keyword) => normalizeText(item.text).includes(keyword)),
+    }))
+    .filter((item) => item.matchedKeywords.length > 0)
+    .map((item) => ({ ...item, score: item.matchedKeywords.length }))
+    .sort((a, b) => b.score - a.score || a.sourcePath.localeCompare(b.sourcePath));
+  const evidence = allEvidence.slice(0, 12);
+  const supportedKeywords = unique(allEvidence.flatMap((item) => item.matchedKeywords));
+  const unsupportedKeywords = jobKeywords.filter((keyword) => !supportedKeywords.includes(keyword));
+  const availableSections = unique(resumeEvidence(resume).map((item) => item.section));
+  const sectionOrder = availableSections
+    .map((section, defaultOrder) => ({
+      section,
+      score: unique(
+        evidence.filter((item) => item.section === section).flatMap((item) => item.matchedKeywords),
+      ).length,
+      defaultOrder,
+    }))
+    .sort((a, b) => b.score - a.score || a.defaultOrder - b.defaultOrder)
+    .map(({ section }) => section);
+
+  return {
+    status: "plan-ready",
+    supportedKeywords,
+    unsupportedKeywords,
+    evidence,
+    sectionOrder,
+    reviewQuestions: unsupportedKeywords.slice(0, 8).map((keyword) => ({
+      keyword,
+      question: `Can you confirm truthful evidence for "${keyword}"?`,
+    })),
+    instructions: [
+      "Reorder or emphasize only the listed evidence paths.",
+      "Do not add unsupported keywords unless the user confirms evidence.",
+      "Audit the completed variant against the base resume before rendering it.",
+    ],
+    humanReviewRequired: true,
+    disclaimer: "This plan ranks existing resume evidence; it does not create candidate facts.",
+  };
+}
+
 export function auditResumeVariant(baseResume, variantResume) {
   const baseValidation = validateResume(baseResume);
   const variantValidation = validateResume(variantResume);
@@ -180,6 +233,60 @@ export function auditResumeVariant(baseResume, variantResume) {
 
 function invalidResume(path, message) {
   return { valid: false, standard: "JSON Resume 1.x", errors: [{ path, message }], warnings: [] };
+}
+
+function resumeEvidence(resume) {
+  const items = [];
+  addEvidence(items, "summary", "basics.summary", resume.basics?.summary);
+  for (const [index, work] of (resume.work ?? []).entries()) {
+    addEvidence(items, "work", `work[${index}].summary`, work.summary);
+    for (const [highlightIndex, highlight] of (work.highlights ?? []).entries()) {
+      addEvidence(items, "work", `work[${index}].highlights[${highlightIndex}]`, highlight);
+    }
+  }
+  for (const [index, project] of (resume.projects ?? []).entries()) {
+    addEvidence(items, "projects", `projects[${index}].description`, project.description || project.summary);
+    for (const [highlightIndex, highlight] of (project.highlights ?? []).entries()) {
+      addEvidence(items, "projects", `projects[${index}].highlights[${highlightIndex}]`, highlight);
+    }
+  }
+  for (const [index, skill] of (resume.skills ?? []).entries()) {
+    addEvidence(
+      items,
+      "skills",
+      `skills[${index}]`,
+      joinPresent([skill.name, ...(skill.keywords ?? [])], ", "),
+    );
+  }
+  for (const [index, certificate] of (resume.certificates ?? []).entries()) {
+    addEvidence(
+      items,
+      "certificates",
+      `certificates[${index}]`,
+      joinPresent([certificate.name, certificate.issuer], " - "),
+    );
+  }
+  for (const [index, education] of (resume.education ?? []).entries()) {
+    addEvidence(
+      items,
+      "education",
+      `education[${index}]`,
+      joinPresent([education.studyType, education.area, education.institution], " - "),
+    );
+  }
+  for (const [index, language] of (resume.languages ?? []).entries()) {
+    addEvidence(
+      items,
+      "languages",
+      `languages[${index}]`,
+      joinPresent([language.language, language.fluency], " - "),
+    );
+  }
+  return items;
+}
+
+function addEvidence(items, section, sourcePath, text) {
+  if (hasText(text)) items.push({ section, sourcePath, text });
 }
 
 function renderWork(items, title, present) {
