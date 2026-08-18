@@ -89,6 +89,8 @@ For a job URL, report:
 - extracted external ID when available;
 - any verification still required.
 
+For a job copied from an unsupported or unknown portal, call `review_job_import` with the user-provided source text and draft. Show `partial` and `unmatched` fields first, but require confirmation of every field. Use `fingerprint_jobs` only for exact local deduplication; never treat a merely similar role as a duplicate.
+
 For a resume variant, report:
 
 - base validation status;

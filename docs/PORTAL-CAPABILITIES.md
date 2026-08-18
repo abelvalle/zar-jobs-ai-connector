@@ -78,6 +78,14 @@ Las APIs documentadas por Indeed se orientan a integraciones autorizadas, especi
 - marca la importación como `user-provided` y `unverified`;
 - no inicia sesión, navega, busca, extrae ni aplica automáticamente en Indeed.
 
+## Importación universal
+
+`review_job_import` permite pegar texto procedente de cualquier portal, página corporativa, correo o documento. El cliente prepara un borrador y el MCP contrasta título, empresa, ubicación, modalidad, contrato, salario, fecha y descripción con el texto aportado. Las coincidencias se clasifican como `exact`, `partial` o `unmatched`, pero todas conservan `confirmed: false` y `verificationStatus: unverified`.
+
+La URL es opcional, debe usar HTTPS y no puede incluir credenciales. Se normaliza sin abrirla. `fingerprint_jobs` genera huellas SHA-256 mediante, por orden, identificador externo, URL normalizada o identidad empresa/puesto/ubicación. Solo agrupa claves exactas; no usa similitud difusa ni decide que dos ofertas parecidas sean la misma.
+
+Ambas herramientas funcionan en memoria, sin red, scraping, cuenta ni persistencia.
+
 ## Regla de cierre
 
 Si la evidencia de una oferta o candidatura no identifica claramente el portal, la empresa, el puesto o el estado, el plugin devolverá `unverified` y pedirá revisión humana. Nunca inferirá un avance o rechazo a partir de una alerta genérica.

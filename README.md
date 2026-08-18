@@ -52,6 +52,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `import_tecnoempleo_rss`: procesa en memoria el XML que aporta el usuario.
 - `import_linkedin_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
 - `import_indeed_job`: estructura una oferta aportada por el usuario y la marca `unverified`.
+- `review_job_import`: revisa una oferta pegada desde cualquier portal sin abrir su URL y deja todos los campos sin confirmar.
+- `fingerprint_jobs`: agrupa solo duplicados exactos mediante huellas deterministas locales.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `match_resume_to_job`: calcula coincidencias orientativas con una oferta.

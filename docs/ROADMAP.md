@@ -169,6 +169,21 @@ Criterios de aceptación:
 - revisión humana obligatoria y ausencia de persistencia;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 15 — Importación universal y duplicados exactos ✅
+
+Objetivo: incorporar ofertas de cualquier origen aportado por el usuario sin añadir otro adaptador, navegar ni depender de acuerdos de API.
+
+Criterios de aceptación:
+
+- texto y borrador estructurado en memoria, con límite de 200.000 caracteres;
+- URL HTTPS opcional normalizada sin abrirla y con credenciales incrustadas prohibidas;
+- campos `exact`, `partial` o `unmatched`, siempre no confirmados y no verificados;
+- validación explícita de título y empresa;
+- huellas SHA-256 deterministas por identificador, URL o identidad de la oferta;
+- agrupación solo de duplicados exactos, sin similitud difusa;
+- sin red, scraping, almacenamiento, cuenta o servidor;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

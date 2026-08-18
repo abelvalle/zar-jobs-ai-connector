@@ -12,7 +12,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "check": "node --check src/cli.mjs && node --check src/server.mjs && node --check src/connector-status.mjs && node --check src/resumes/resume-tools.mjs && node --check src/resumes/resume-pdf.mjs && node --check src/resumes/resume-docx.mjs && node --check src/resumes/resume-editor.mjs && node --check src/resumes/resume-import.mjs && node --check src/portals/capabilities.mjs && node --check src/portals/indeed-manual-import.mjs && node --check src/portals/infojobs-client.mjs && node --check src/portals/linkedin-manual-import.mjs && node --check src/portals/tecnoempleo-rss-client.mjs && node --check src/portals/url-normalizer.mjs && node --check scripts/infojobs-live-smoke.mjs && node --check scripts/tecnoempleo-live-smoke.mjs && node --check scripts/validate-plugin.mjs",
+    "check": "node --check src/cli.mjs && node --check src/server.mjs && node --check src/connector-status.mjs && node --check src/jobs/job-import.mjs && node --check src/resumes/resume-tools.mjs && node --check src/resumes/resume-pdf.mjs && node --check src/resumes/resume-docx.mjs && node --check src/resumes/resume-editor.mjs && node --check src/resumes/resume-import.mjs && node --check src/portals/capabilities.mjs && node --check src/portals/indeed-manual-import.mjs && node --check src/portals/infojobs-client.mjs && node --check src/portals/linkedin-manual-import.mjs && node --check src/portals/tecnoempleo-rss-client.mjs && node --check src/portals/url-normalizer.mjs && node --check scripts/infojobs-live-smoke.mjs && node --check scripts/tecnoempleo-live-smoke.mjs && node --check scripts/validate-plugin.mjs",
     "test": "node --test",
     "validate:plugin": "node scripts/validate-plugin.mjs",
     "smoke": "node scripts/smoke.mjs",

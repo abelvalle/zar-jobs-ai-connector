@@ -11,6 +11,7 @@ import {
   importTecnoempleoRss,
 } from "./portals/tecnoempleo-rss-client.mjs";
 import { normalizeJobUrl } from "./portals/url-normalizer.mjs";
+import { fingerprintJobs, reviewJobImport } from "./jobs/job-import.mjs";
 import {
   analyzeResumeAts,
   analyzeResumeJobMatch,
@@ -462,6 +463,79 @@ export function createZarJobsServer() {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         structuredContent: { result },
       };
+    },
+  );
+
+  server.registerTool(
+    "review_job_import",
+    {
+      title: "Review a job imported from any portal",
+      description:
+        "Compare a structured job draft with user-provided posting text without opening the URL. Every field remains unverified and unconfirmed, including exact text matches.",
+      inputSchema: {
+        sourceText: z.string().min(1).max(200_000),
+        sourceLabel: z.string().min(1).max(100).optional(),
+        job: z.object({
+          title: z.string().min(1).max(200).optional(),
+          company: z.string().min(1).max(200).optional(),
+          location: z.string().min(1).max(300).optional(),
+          url: z.string().min(1).max(2048).optional(),
+          externalId: z.string().min(1).max(200).optional(),
+          publishedAt: z.string().min(1).max(100).optional(),
+          workplaceType: z.string().min(1).max(100).optional(),
+          employmentType: z.string().min(1).max(100).optional(),
+          salary: z.string().min(1).max(300).optional(),
+          description: z.string().min(1).max(100_000).optional(),
+        }),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ sourceText, sourceLabel, job }) => {
+      try {
+        return resumeToolResult(reviewJobImport(sourceText, job, sourceLabel));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "fingerprint_jobs",
+    {
+      title: "Find deterministic duplicate jobs",
+      description:
+        "Create local exact fingerprints for up to 200 job records and group only deterministic duplicates. It performs no fuzzy matching, network access, or storage.",
+      inputSchema: {
+        jobs: z.array(z.object({
+          id: z.string().min(1).max(200).optional(),
+          source: z.string().min(1).max(100).optional(),
+          externalId: z.string().min(1).max(200).optional(),
+          url: z.string().min(1).max(2048).optional(),
+          title: z.string().min(1).max(200).optional(),
+          company: z.string().min(1).max(200).optional(),
+          location: z.string().min(1).max(300).optional(),
+        })).min(1).max(200),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ jobs }) => {
+      try {
+        return resumeToolResult(fingerprintJobs(jobs));
+      } catch (error) {
+        return resumeToolError(error);
+      }
     },
   );
 

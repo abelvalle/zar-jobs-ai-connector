@@ -64,6 +64,7 @@ try {
       "audit_resume_variant",
       "check_resume_ats",
       "compare_resume_versions",
+      "fingerprint_jobs",
       "get_connector_status",
       "get_infojobs_job",
       "get_portal_capabilities",
@@ -77,6 +78,7 @@ try {
       "render_resume_docx",
       "render_resume_html",
       "render_resume_pdf",
+      "review_job_import",
       "review_resume_import",
       "search_infojobs_jobs",
       "validate_resume"
@@ -283,6 +285,37 @@ try {
   });
   assert.equal(importedIndeed.isError, undefined);
   assert.equal(importedIndeed.structuredContent.result.externalId, "abc123def4567890");
+
+  const reviewedGenericJob = await client.callTool({
+    name: "review_job_import",
+    arguments: {
+      sourceLabel: "jobs.example.org",
+      sourceText: "Example Tech seeks a Backend Engineer in Zaragoza with Java.",
+      job: {
+        title: "Backend Engineer",
+        company: "Example Tech",
+        location: "Zaragoza",
+        url: "https://jobs.example.org/backend?utm_source=email"
+      }
+    }
+  });
+  assert.equal(reviewedGenericJob.structuredContent.result.job.portal, "unknown");
+  assert.equal(reviewedGenericJob.structuredContent.result.networkAccess, false);
+  assert.ok(reviewedGenericJob.structuredContent.result.fields.every(
+    (field) => field.confirmed === false
+  ));
+
+  const fingerprintedJobs = await client.callTool({
+    name: "fingerprint_jobs",
+    arguments: {
+      jobs: [
+        { source: "indeed", externalId: "abc123" },
+        { source: "Indeed", externalId: "abc123" }
+      ]
+    }
+  });
+  assert.equal(fingerprintedJobs.structuredContent.result.duplicateCount, 1);
+  assert.equal(fingerprintedJobs.structuredContent.result.fuzzyMatching, false);
 
   console.log("MCP smoke test passed.");
 } finally {
