@@ -13,3 +13,11 @@ V1.7 incorpora el Hito 29: coach de evidencia y logros.
 ## Seguridad
 
 No se generan logros automáticamente, no se modifica el CV base y no se escribe ni envía información. Toda redacción requiere evidencia confirmada y revisión humana.
+
+## Evidencia de publicación
+
+- 131 pruebas unitarias;
+- 53 herramientas MCP locales;
+- 6 prompts MCP nativos y 3 recursos;
+- smoke local y paquete portable;
+- validación de skill, manifests de Codex y Claude y marketplace.
