@@ -58,7 +58,10 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 1. Call `plan_cover_letter` and `plan_screening_answers` before drafting application text. Use only returned resume evidence or facts the user confirms in the current conversation.
 2. Audit every draft with `audit_application_text`. Show all flagged sentences and do not treat a clean result as proof of truth.
 3. Call `prepare_application_kit` to coordinate filenames and the final checklist. Render the requested resume formats only after review.
-4. Stop before any submission, message, profile change, or external write. The user must open the destination and approve the final application manually.
+4. Call `audit_resume_privacy` before sharing documents. Show finding paths and recommendations without repeating the sensitive values.
+5. Use `render_application_bundle` only when the user wants one portable ZIP. The returned resource remains in memory until the user explicitly chooses where to save it.
+6. Open and review every bundled file and checksum manifest.
+7. Stop before any submission, message, profile change, or external write. The user must open the destination and approve the final application manually.
 
 ## Application tracking workflow
 
@@ -101,6 +104,7 @@ The current MCP tools do not write files. They can:
 - choose among three single-column ATS-oriented visual templates without changing candidate facts.
 - plan and audit cover letters and screening answers against traceable resume evidence.
 - prepare a local application-kit manifest that always requires final human approval and never submits.
+- audit selected resume privacy risks without echoing values and render a checksummed application ZIP in memory.
 - score one job or compare up to 20 jobs with fixed explainable rules, explicit unknowns, and human review.
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
 - plan interview preparation from traceable CV evidence and audit a draft answer without certifying truth or hiring quality.

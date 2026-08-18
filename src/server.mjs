@@ -31,6 +31,10 @@ import {
   prepareApplicationKit,
 } from "./applications/application-tools.mjs";
 import {
+  auditResumePrivacy,
+  renderApplicationBundle,
+} from "./applications/application-bundle.mjs";
+import {
   analyzeResumeAts,
   analyzeResumeJobMatch,
   auditResumeVariant,
@@ -943,6 +947,85 @@ export function createZarJobsServer() {
           screeningAnswers: input.screeningAnswers ?? [],
           template: input.template ?? "classic",
         }));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "audit_resume_privacy",
+    {
+      title: "Audit selected resume privacy risks",
+      description:
+        "Report paths and categories for selected sensitive fields and tracked URLs without returning their values. Legal and market-specific review remains the user's responsibility.",
+      inputSchema: { resume: resumeDocumentSchema },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume }) => {
+      try {
+        return resumeToolResult(auditResumePrivacy(resume));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "render_application_bundle",
+    {
+      title: "Render a reviewed application ZIP",
+      description:
+        "Create an in-memory ZIP with PDF, DOCX, optional drafts, checksums, privacy findings, and mandatory review gates. It never writes or submits anything.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+        target: z.object({
+          company: z.string().min(1).max(200),
+          role: z.string().min(1).max(200),
+        }),
+        coverLetter: z.string().min(1).max(100_000).optional(),
+        screeningAnswers: z.array(z.object({
+          question: z.string().min(1).max(2_000),
+          answer: z.string().min(1).max(100_000),
+        })).max(20).optional(),
+        template: z.enum(RESUME_TEMPLATES).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async (input) => {
+      try {
+        const { buffer, ...result } = await renderApplicationBundle({
+          ...input,
+          screeningAnswers: input.screeningAnswers ?? [],
+          template: input.template ?? "classic",
+        });
+        return {
+          content: [
+            {
+              type: "resource",
+              resource: {
+                uri: `memory://zar-jobs/applications/${encodeURIComponent(result.fileName)}`,
+                mimeType: result.mimeType,
+                blob: buffer.toString("base64"),
+              },
+            },
+            { type: "text", text: JSON.stringify(result, null, 2) },
+          ],
+          structuredContent: { result },
+        };
       } catch (error) {
         return resumeToolError(error);
       }

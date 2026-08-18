@@ -244,6 +244,22 @@ Criterios de aceptación:
 - sin grabación, perfilado, puntuación del candidato, red ni almacenamiento;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 20 — Privacidad y paquete de candidatura ✅
+
+Objetivo: entregar una candidatura portable y verificable sin ocultar riesgos de privacidad ni introducir almacenamiento o envío automático.
+
+Criterios de aceptación:
+
+- auditoría por rutas para identificadores, nacimiento, foto, dirección y seguimiento web;
+- ningún valor sensible devuelto por la auditoría;
+- PDF y DOCX generados desde el mismo CV validado;
+- carta y respuestas opcionales auditadas antes de empaquetar;
+- ZIP en memoria con manifiesto, tipos MIME, tamaños y SHA-256 de cada payload;
+- fechas de las entradas ZIP fijas y límite total de 5 MB;
+- `finalApprovalRequired: true`, `submissionPerformed: false` y `stored: false` invariables;
+- ninguna escritura, carga, sincronización o candidatura externa;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

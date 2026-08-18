@@ -63,6 +63,7 @@ try {
       "apply_resume_changes",
       "audit_application_text",
       "audit_interview_answer",
+      "audit_resume_privacy",
       "audit_resume_variant",
       "check_resume_ats",
       "compare_job_fit",
@@ -84,6 +85,7 @@ try {
       "plan_resume_variant",
       "plan_screening_answers",
       "prepare_application_kit",
+      "render_application_bundle",
       "render_resume_docx",
       "render_resume_html",
       "render_resume_pdf",
@@ -275,6 +277,29 @@ try {
     applicationKit.structuredContent.result.nextTools,
     ["render_resume_pdf", "render_resume_docx"]
   );
+
+  const privacyAudit = await client.callTool({
+    name: "audit_resume_privacy",
+    arguments: { resume: smokeResume }
+  });
+  assert.equal(privacyAudit.structuredContent.result.valuesReturned, false);
+  assert.equal(privacyAudit.structuredContent.result.stored, false);
+
+  const applicationBundle = await client.callTool({
+    name: "render_application_bundle",
+    arguments: {
+      resume: smokeResume,
+      jobDescription: "Example Corp seeks a Backend Engineer with Java.",
+      target: { company: "Example Corp", role: "Backend Engineer" },
+      coverLetter: "I built Java services at Example Tech.",
+      template: "technical"
+    }
+  });
+  const bundleResource = applicationBundle.content.find((item) => item.type === "resource");
+  assert.equal(applicationBundle.structuredContent.result.submissionPerformed, false);
+  assert.equal(applicationBundle.structuredContent.result.finalApprovalRequired, true);
+  assert.equal(bundleResource.resource.mimeType, "application/zip");
+  assert.equal(Buffer.from(bundleResource.resource.blob, "base64").subarray(0, 2).toString("ascii"), "PK");
 
   const interviewPlan = await client.callTool({
     name: "plan_interview",

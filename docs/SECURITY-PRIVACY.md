@@ -14,9 +14,11 @@ El conector se ejecuta como subproceso del cliente MCP mediante `stdio`. No abre
 
 No utiliza base de datos, cuentas ni telemetría. Las consultas y resultados no se escriben en disco. La caché de npm contiene código y dependencias del release, no datos de empleo.
 
-Los CV contienen datos personales. Las herramientas procesan el CV, sus variantes y el PDF generado en memoria y no escriben archivos; Codex, Claude u otro cliente solo debe guardarlos en una ruta elegida por el usuario. Nunca deben guardarse dentro de la caché o del repositorio público del plugin.
+Los CV contienen datos personales. Las herramientas procesan el CV, sus variantes, documentos y ZIP generados en memoria y no escriben archivos; Codex, Claude u otro cliente solo debe guardarlos en una ruta elegida por el usuario. Nunca deben guardarse dentro de la caché o del repositorio público del plugin.
 
 Los nombres PDF aceptan solo un nombre simple terminado en `.pdf`, nunca una ruta. La exportación se limita a 200 KB de entrada, 10 páginas y 2 MB de salida.
+
+`audit_resume_privacy` identifica rutas seleccionadas de documento nacional, fecha de nacimiento, foto, dirección postal y URLs con seguimiento. No devuelve sus valores y no sustituye el análisis legal o cultural del mercado de destino. `render_application_bundle` limita el ZIP a 5 MB, añade checksums y conserva `finalApprovalRequired: true`, `submissionPerformed: false` y `stored: false`.
 
 ## Credenciales
 
