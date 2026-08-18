@@ -81,6 +81,10 @@ import {
   renderAnonymousResumeBundle,
 } from "./resumes/resume-anonymizer.mjs";
 import { reviewResumeAsRecruiter } from "./resumes/resume-recruiter-review.mjs";
+import {
+  auditAchievementRewrite,
+  planAchievementInterview,
+} from "./resumes/resume-achievement-coach.mjs";
 import { registerZarJobsGuidance } from "./mcp/guidance.mjs";
 import {
   importPortableWorkspace,
@@ -1578,6 +1582,63 @@ export function createZarJobsServer() {
     async ({ resume, jobDescription, targetRole }) => {
       try {
         return resumeToolResult(reviewResumeAsRecruiter(resume, { jobDescription, targetRole }));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_resume_achievement_interview",
+    {
+      title: "Plan an evidence interview for resume achievements",
+      description:
+        "Identify missing action, scale, and outcome evidence in confirmed resume entries and return focused questions without generating achievements or metrics.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        targetRole: z.string().min(1).max(200).optional(),
+        maxQuestions: z.number().int().min(1).max(20).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, targetRole, maxQuestions }) => {
+      try {
+        return resumeToolResult(planAchievementInterview(resume, { targetRole, maxQuestions }));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "audit_resume_achievement_rewrite",
+    {
+      title: "Audit a proposed resume achievement rewrite",
+      description:
+        "Compare one proposed achievement with its source and candidate-confirmed evidence. New metrics remain blocked and every rewrite requires human confirmation.",
+      inputSchema: {
+        sourcePath: z.string().min(1).max(300),
+        sourceText: z.string().min(1).max(5_000),
+        confirmedEvidence: z.array(z.string().min(1).max(5_000)).min(1).max(20),
+        proposedText: z.string().min(1).max(5_000),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async (input) => {
+      try {
+        return resumeToolResult(auditAchievementRewrite(input));
       } catch (error) {
         return resumeToolError(error);
       }

@@ -92,6 +92,8 @@ Ninguna herramienta puede garantizar que un CV supere un ATS o una evaluación d
 
 La rúbrica recruiter tampoco representa la opinión de una persona ni una probabilidad de entrevista. Evalúa señales visibles y reproducibles del documento. No considera atributos protegidos y no debe utilizarse para decidir si una persona merece ser contratada.
 
+El coach de evidencia revisa cada logro para localizar acción, escala o resultado ausentes. Sus preguntas y la auditoría de reescritura mantienen separadas la redacción del modelo y la evidencia confirmada por el candidato; una auditoría limpia tampoco certifica la verdad.
+
 Una palabra ausente nunca se añade automáticamente. Primero debe estar respaldada por el CV base o ser confirmada por el usuario. La auditoría de variantes tampoco comprende el significado completo de una reformulación, por lo que la revisión humana continúa siendo obligatoria.
 
 Las salidas HTML, PDF y DOCX se generan desde el mismo documento validado. PDF y DOCX contienen texto seleccionable y extraíble, no una captura de pantalla. Las pruebas automatizadas vuelven a leerlos con PDF.js y Mammoth para comprobar nombre, empresa y habilidades. La fuente estándar actual está orientada a alfabetos latinos; otros sistemas de escritura requieren una fuente portable adicional antes de poder considerarse soportados.

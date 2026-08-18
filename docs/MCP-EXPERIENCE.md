@@ -1,11 +1,12 @@
 # Experiencia MCP nativa
 
-Zar Jobs publica cinco prompts y tres recursos MCP además de sus herramientas. Los clientes compatibles pueden mostrarlos directamente sin comandos propios del proveedor.
+Zar Jobs publica seis prompts y tres recursos MCP además de sus herramientas. Los clientes compatibles pueden mostrarlos directamente sin comandos propios del proveedor.
 
 ## Prompts
 
 - `review-job`: revisa una oferta aportada por el usuario y consulta primero las capacidades del portal.
 - `review-resume-as-recruiter`: combina una rúbrica local con una primera lectura cualitativa sin fingir un recruiter humano ni predecir contratación.
+- `strengthen-resume-achievements`: entrevista al candidato para obtener evidencia real y audita cada propuesta.
 - `tailor-resume`: guía una variante separada, trazable y auditada del CV.
 - `prepare-application`: coordina CV, borradores y privacidad y se detiene antes del envío.
 - `prepare-interview`: crea un plan basado en evidencia para una fase concreta.

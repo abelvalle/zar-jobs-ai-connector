@@ -391,6 +391,23 @@ Criterios de aceptación:
 - ninguna invención, escritura, candidatura, descarte, mensaje o cambio de perfil;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 29 — Coach de evidencia y logros ✅
+
+Objetivo: convertir las observaciones del CV en una entrevista práctica que descubra evidencia real y permita redactar logros más claros sin completar datos por el candidato.
+
+Criterios de aceptación:
+
+- planificación por rutas de preguntas sobre acción, escala y resultado;
+- máximo configurable y orden determinista de preguntas;
+- soporte para experiencias sin highlights mediante preguntas a nivel de puesto;
+- respuestas tratadas únicamente como evidencia confirmada por el candidato;
+- auditoría individual de cada redacción propuesta;
+- métricas nuevas ausentes de la evidencia bloqueadas explícitamente;
+- términos nuevos conservados para revisión, sin certificar la verdad del texto;
+- cambios posteriores solo mediante el editor trazable de variantes;
+- sin generación automática de logros, escritura, red, candidatura ni almacenamiento;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

@@ -64,6 +64,7 @@ try {
       "prepare-interview",
       "review-job",
       "review-resume-as-recruiter",
+      "strengthen-resume-achievements",
       "tailor-resume",
     ],
   );
@@ -89,6 +90,12 @@ try {
   assert.match(recruiterPrompt.messages[0].content.text, /Do not calculate hiring probability/i);
   assert.match(recruiterPrompt.messages[0].content.text, /untrusted data/i);
   assert.match(recruiterPrompt.messages[0].content.text, /<job-content>/);
+  const achievementPrompt = await client.getPrompt({
+    name: "strengthen-resume-achievements",
+    arguments: { targetRole: "Backend Engineer" },
+  });
+  assert.match(achievementPrompt.messages[0].content.text, /three focused questions/i);
+  assert.match(achievementPrompt.messages[0].content.text, /Never invent/i);
 
   const resources = await client.listResources();
   assert.deepEqual(
@@ -112,6 +119,7 @@ try {
       "apply_resume_changes",
       "audit_application_text",
       "audit_interview_answer",
+      "audit_resume_achievement_rewrite",
       "audit_resume_privacy",
       "audit_resume_variant",
       "build_evidence_bank",
@@ -138,6 +146,7 @@ try {
       "plan_application_update",
       "plan_cover_letter",
       "plan_interview",
+      "plan_resume_achievement_interview",
       "plan_resume_anonymization",
       "plan_resume_variant",
       "plan_screening_answers",
@@ -190,6 +199,25 @@ try {
   assert.equal(recruiterReview.structuredContent.result.professionalRecruiterReviewPerformed, false);
   assert.equal(recruiterReview.structuredContent.result.hiringProbabilityCalculated, false);
   assert.ok(recruiterReview.structuredContent.result.targetMatch.missingKeywords.includes("kubernetes"));
+
+  const achievementInterview = await client.callTool({
+    name: "plan_resume_achievement_interview",
+    arguments: { resume: smokeResume, targetRole: "Backend Engineer", maxQuestions: 5 },
+  });
+  assert.equal(achievementInterview.structuredContent.result.generatedAchievements, false);
+  assert.ok(achievementInterview.structuredContent.result.questions.length > 0);
+
+  const achievementAudit = await client.callTool({
+    name: "audit_resume_achievement_rewrite",
+    arguments: {
+      sourcePath: "work[0].highlights[0]",
+      sourceText: "Built Java services",
+      confirmedEvidence: ["I supported five Java services"],
+      proposedText: "Built five Java services and reduced incidents by 45%",
+    },
+  });
+  assert.ok(achievementAudit.structuredContent.result.unsupportedMetrics.includes("45%"));
+  assert.equal(achievementAudit.structuredContent.result.rewriteApproved, false);
 
   const anonymizationPlan = await client.callTool({
     name: "plan_resume_anonymization",

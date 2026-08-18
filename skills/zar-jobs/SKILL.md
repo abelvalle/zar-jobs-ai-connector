@@ -17,7 +17,7 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 - Treat the user's confirmed base resume as the source of truth for candidate facts.
 - Never invent employers, roles, dates, degrees, certifications, skills, languages, metrics, authorship, or contact details to improve a score.
 - Never promise that a local ATS score guarantees acceptance by an external system.
-- Prefer the native `review-job`, `review-resume-as-recruiter`, `tailor-resume`, `prepare-application`, or `prepare-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
+- Prefer the native `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `tailor-resume`, `prepare-application`, or `prepare-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
 - Read `zar-jobs://guides/capabilities` or `zar-jobs://guides/privacy` when the host exposes MCP resources and the relevant boundary is unclear. These resources are static guidance, not user data.
 
 ## Workflow
@@ -87,6 +87,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 5. Never consider or infer protected traits. Do not recommend adding a photo, age, gender, ethnicity, disability, marital status, nationality, or other sensitive characteristics.
 6. Treat unsupported target terms as questions. Apply a change only through the traceable resume workflow after the user confirms its evidence.
 
+## Achievement evidence coaching
+
+1. Call `plan_resume_achievement_interview` on the confirmed base resume and show the source paths with missing action, scope, or outcome signals.
+2. Ask no more than three returned questions at a time. Record only facts and metrics the candidate explicitly confirms.
+3. Draft alternative wording from the original entry plus those answers. Do not infer scale, ownership, outcomes, technologies, dates, or metrics.
+4. Call `audit_resume_achievement_rewrite` for every proposal. Remove or reconfirm unsupported metrics and review every new significant term.
+5. Apply accepted wording only through `apply_resume_changes` with `source: user-confirmed`. Never overwrite the base resume or imply that wording guarantees an interview.
+
 ## Application kit workflow
 
 1. Call `plan_cover_letter` and `plan_screening_answers` before drafting application text. Use only returned resume evidence or facts the user confirms in the current conversation.
@@ -145,6 +153,7 @@ The current MCP tools do not write files. They can:
 - import user-provided Indeed job data without making a network request.
 - review an in-memory resume draft against user-provided text extracted from TXT, PDF, or DOCX, with every field awaiting confirmation.
 - review a validated resume with a six-dimension recruiter-style rubric, evidence paths, priorities, and explicit non-predictive limits.
+- interview the candidate for missing achievement evidence and audit proposed rewrites without inventing metrics.
 - import user-provided RSS, Atom, JSON, CSV, or labelled-text alerts and compare exact snapshot changes without opening links.
 - validate JSON Resume documents and compare them with user-provided job text.
 - localize document labels in six languages, prepare an explicitly non-official Europass mapping draft, and build a deterministic evidence bank.
