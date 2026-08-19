@@ -5,7 +5,7 @@
       "args": [
         "--yes",
         "--package",
-        "github:abelvalle/zar-jobs-ai-connector#v1.8.0",
+        "github:abelvalle/zar-jobs-ai-connector#v1.9.0",
         "zar-jobs-ai-connector"
       ]
     }

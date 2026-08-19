@@ -6,7 +6,7 @@ Conector local para buscar o importar ofertas de empleo y preparar currículums 
 
 ## Estado
 
-La versión 1.8.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
+La versión 1.9.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
 
 No hay servicio web, endpoint público, Docker, dominio, HTTPS de alojamiento ni base de datos que mantener.
 
@@ -157,6 +157,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 
 ## Documentación
 
+- [Novedades y evidencia de V1.9](docs/RELEASE-V1.9.md)
 - [Novedades y evidencia de V1.8](docs/RELEASE-V1.8.md)
 - [Novedades y evidencia de V1.7](docs/RELEASE-V1.7.md)
 - [Novedades y evidencia de V1.6](docs/RELEASE-V1.6.md)
