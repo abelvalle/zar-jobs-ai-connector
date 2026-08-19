@@ -1,6 +1,6 @@
 {
   "name": "zar-jobs-ai-connector",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Local job discovery and truthful ATS-oriented resume tools for AI assistants.",
   "private": true,
   "type": "module",
