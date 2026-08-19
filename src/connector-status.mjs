@@ -1,4 +1,4 @@
-export const CONNECTOR_VERSION = "2.0.0";
+export const CONNECTOR_VERSION = "2.0.1";
 
 export function getConnectorStatus(env = process.env) {
   const infoJobsMissing = missingVariables(env, [
