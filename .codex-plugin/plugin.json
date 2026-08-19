@@ -69,6 +69,10 @@
     "websiteURL": "https://github.com/abelvalle/zar-jobs-ai-connector",
     "privacyPolicyURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/PRIVACY.md",
     "termsOfServiceURL": "https://github.com/abelvalle/zar-jobs-ai-connector/blob/master/TERMS.md",
+    "brandColor": "#003EFC",
+    "composerIcon": "./assets/zar-jobs-icon.png",
+    "logo": "./assets/zar-jobs-icon.png",
+    "logoDark": "./assets/zar-jobs-icon.png",
     "defaultPrompt": [
       "Review my CV with the recruiter-style rubric and prioritize truthful improvements.",
       "Compare these jobs with my explicit preferences and explain every ranking factor.",

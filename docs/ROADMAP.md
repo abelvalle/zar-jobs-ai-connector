@@ -459,6 +459,21 @@ Criterios de aceptación:
 - sin atributos protegidos, audio, vídeo, login, red, escritura ni almacenamiento;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 33 — Identidad visual del plugin ✅
+
+Objetivo: sustituir el icono genérico del cliente por una marca propia, reconocible y coherente con el producto.
+
+Criterios de aceptación:
+
+- símbolo original que combina CV, letra Z y conexión;
+- silueta legible en tamaños pequeños;
+- transparencia real y contraste en interfaces claras y oscuras;
+- un único PNG portable usado como icono del compositor, logo y logo oscuro;
+- color de marca declarado en el manifiesto de Codex;
+- activo incluido dentro del paquete público, sin depender de una URL externa;
+- documentación de significado, paleta y usos;
+- manifiestos, paquete y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

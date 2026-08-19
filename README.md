@@ -1,5 +1,9 @@
 # Zar Jobs AI Connector
 
+<p align="center">
+  <img src="assets/zar-jobs-icon.png" alt="Zar Jobs AI Connector" width="112">
+</p>
+
 Conector local para buscar o importar ofertas de empleo y preparar currículums verificables desde asistentes de IA.
 
 > Installable GitHub plugin for Codex, ChatGPT desktop, Claude Code and compatible MCP clients.
@@ -159,6 +163,8 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 
 ## Documentación
 
+- [Identidad visual y uso del logo](docs/BRAND-ASSETS.md)
+- [Novedades y evidencia de V2.0.1](docs/RELEASE-V2.0.1.md)
 - [Novedades y evidencia de V2.0](docs/RELEASE-V2.0.md)
 - [Novedades y evidencia de V1.9](docs/RELEASE-V1.9.md)
 - [Novedades y evidencia de V1.8](docs/RELEASE-V1.8.md)
