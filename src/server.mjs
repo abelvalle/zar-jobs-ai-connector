@@ -85,6 +85,7 @@ import {
   auditAchievementRewrite,
   planAchievementInterview,
 } from "./resumes/resume-achievement-coach.mjs";
+import { analyzeJobSkillRadar } from "./resumes/job-skill-radar.mjs";
 import { registerZarJobsGuidance } from "./mcp/guidance.mjs";
 import {
   importPortableWorkspace,
@@ -1639,6 +1640,39 @@ export function createZarJobsServer() {
     async (input) => {
       try {
         return resumeToolResult(auditAchievementRewrite(input));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "analyze_job_skill_radar",
+    {
+      title: "Analyze skills across supplied jobs",
+      description:
+        "Count literal skill mentions across 2 to 20 user-supplied jobs and compare them with validated resume evidence. Results describe only that sample and never add skills or predict hiring.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobs: z.array(z.object({
+          id: z.string().min(1).max(200),
+          title: z.string().min(1).max(200),
+          company: z.string().min(1).max(200),
+          description: z.string().min(1).max(100_000),
+        })).min(2).max(20),
+        skillTerms: z.array(z.string().min(1).max(100)).min(1).max(100).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobs, skillTerms }) => {
+      try {
+        return resumeToolResult(analyzeJobSkillRadar(resume, jobs, { skillTerms }));
       } catch (error) {
         return resumeToolError(error);
       }

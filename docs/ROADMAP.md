@@ -408,6 +408,23 @@ Criterios de aceptación:
 - sin generación automática de logros, escritura, red, candidatura ni almacenamiento;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 30 — Skills Radar sobre muestras verificables ✅
+
+Objetivo: observar competencias recurrentes en varias ofertas aportadas por el usuario y contrastarlas con evidencia del CV sin presentar una muestra limitada como mercado ni convertir una ausencia en una carencia demostrada.
+
+Criterios de aceptación:
+
+- entre 2 y 20 ofertas identificadas y aportadas por el usuario;
+- vocabulario literal local ampliable con términos explícitos;
+- frecuencia, proporción y ofertas de origen por competencia;
+- evidencia del CV enlazada por rutas e identificadores;
+- separación entre `supported` y `unverified-gap`;
+- recurrencia limitada expresamente a la muestra;
+- prioridades de investigación que preguntan por evidencia antes de sugerir aprendizaje;
+- sin inferencia de mercado, causalidad, predicción, ranking de personas ni modificación del CV;
+- oferta tratada como dato no confiable, sin ejecutar instrucciones incrustadas;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

@@ -60,6 +60,7 @@ try {
   assert.deepEqual(
     prompts.prompts.map((prompt) => prompt.name).sort(),
     [
+      "analyze-skills-radar",
       "prepare-application",
       "prepare-interview",
       "review-job",
@@ -96,6 +97,12 @@ try {
   });
   assert.match(achievementPrompt.messages[0].content.text, /three focused questions/i);
   assert.match(achievementPrompt.messages[0].content.text, /Never invent/i);
+  const radarPrompt = await client.getPrompt({
+    name: "analyze-skills-radar",
+    arguments: { focusTerms: "Java, Kubernetes" },
+  });
+  assert.match(radarPrompt.messages[0].content.text, /untrusted data/i);
+  assert.match(radarPrompt.messages[0].content.text, /not the job market/i);
 
   const resources = await client.listResources();
   assert.deepEqual(
@@ -116,6 +123,7 @@ try {
     listed.tools.map((tool) => tool.name).sort(),
     [
       "analyze_application_funnel",
+      "analyze_job_skill_radar",
       "apply_resume_changes",
       "audit_application_text",
       "audit_interview_answer",
@@ -218,6 +226,20 @@ try {
   });
   assert.ok(achievementAudit.structuredContent.result.unsupportedMetrics.includes("45%"));
   assert.equal(achievementAudit.structuredContent.result.rewriteApproved, false);
+
+  const skillRadar = await client.callTool({
+    name: "analyze_job_skill_radar",
+    arguments: {
+      resume: smokeResume,
+      jobs: [
+        { id: "radar-1", title: "Backend Engineer", company: "Alpha", description: "Java, PostgreSQL, and Kubernetes." },
+        { id: "radar-2", title: "Platform Engineer", company: "Beta", description: "Kubernetes, Terraform, and Java." },
+      ],
+    },
+  });
+  assert.equal(skillRadar.structuredContent.result.sampleRepresentsMarket, false);
+  assert.equal(skillRadar.structuredContent.result.skills.find((item) => item.term === "java").resumeStatus, "supported");
+  assert.equal(skillRadar.structuredContent.result.skills.find((item) => item.term === "kubernetes").resumeStatus, "unverified-gap");
 
   const anonymizationPlan = await client.callTool({
     name: "plan_resume_anonymization",

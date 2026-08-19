@@ -71,6 +71,7 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `review_resume_as_recruiter`: revisa seis dimensiones de primera criba y prioriza mejoras sin fingir un recruiter humano ni predecir contratación.
 - `plan_resume_achievement_interview`: detecta logros sin acción, escala o resultado y devuelve preguntas para obtener evidencia real.
 - `audit_resume_achievement_rewrite`: bloquea métricas nuevas y conserva la revisión humana de cada redacción propuesta.
+- `analyze_job_skill_radar`: compara competencias literales de 2–20 ofertas aportadas con evidencia del CV y conserva las lagunas sin inferirlas.
 - `prepare_resume_locale`: localiza etiquetas en seis idiomas sin traducir ni alterar los hechos.
 - `prepare_europass_mapping`: crea un borrador trazable para transferencia manual, no un import oficial.
 - `build_evidence_bank`: extrae evidencia reutilizable con rutas, cifras y un hash determinista.
@@ -101,7 +102,7 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Prompts y recursos MCP
 
-Los clientes compatibles descubren seis flujos nativos: `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `tailor-resume`, `prepare-application` y `prepare-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
+Los clientes compatibles descubren siete flujos nativos: `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `tailor-resume`, `prepare-application` y `prepare-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
 
 ## Currículums
 
@@ -114,6 +115,8 @@ Estas comprobaciones mejoran la legibilidad para parsers, pero no garantizan sup
 La revisión recruiter añade una lectura general o dirigida a una oferta con seis dimensiones, fortalezas por rutas y preguntas para descubrir evidencia real. No usa atributos protegidos ni calcula probabilidades de contratación. Consulta [docs/RECRUITER-REVIEW.md](docs/RECRUITER-REVIEW.md).
 
 El coach de evidencia convierte esas preguntas en una entrevista guiada y audita cada nueva redacción contra respuestas confirmadas. No completa métricas por su cuenta. Consulta [docs/EVIDENCE-COACH.md](docs/EVIDENCE-COACH.md).
+
+Skills Radar resume las competencias recurrentes dentro de una muestra de ofertas aportada por el usuario y las contrasta con rutas del CV. No afirma representar el mercado. Consulta [docs/SKILLS-RADAR.md](docs/SKILLS-RADAR.md).
 
 Las cartas y respuestas se planifican y auditan contra el CV base. El kit final puede ser un manifiesto o un ZIP local con PDF, DOCX, borradores opcionales y checksums; nunca envía candidaturas. Consulta [docs/APPLICATION-KIT.md](docs/APPLICATION-KIT.md).
 
@@ -165,6 +168,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 - [Motor de currículums](docs/RESUME-ENGINE.md)
 - [Revisión recruiter del CV](docs/RECRUITER-REVIEW.md)
 - [Coach de evidencia y logros](docs/EVIDENCE-COACH.md)
+- [Skills Radar](docs/SKILLS-RADAR.md)
 - [Interoperabilidad y CV multilingüe](docs/RESUME-INTEROPERABILITY.md)
 - [Ranking explicable de ofertas](docs/JOB-RANKING.md)
 - [Bandeja universal de alertas](docs/JOB-INBOX.md)

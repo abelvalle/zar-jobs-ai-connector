@@ -94,6 +94,8 @@ La rúbrica recruiter tampoco representa la opinión de una persona ni una proba
 
 El coach de evidencia revisa cada logro para localizar acción, escala o resultado ausentes. Sus preguntas y la auditoría de reescritura mantienen separadas la redacción del modelo y la evidencia confirmada por el candidato; una auditoría limpia tampoco certifica la verdad.
 
+Skills Radar compara el banco de evidencia con términos literales presentes en una muestra acotada de ofertas. La ausencia de coincidencia se conserva como pregunta y la frecuencia nunca se presenta como una estimación del mercado.
+
 Una palabra ausente nunca se añade automáticamente. Primero debe estar respaldada por el CV base o ser confirmada por el usuario. La auditoría de variantes tampoco comprende el significado completo de una reformulación, por lo que la revisión humana continúa siendo obligatoria.
 
 Las salidas HTML, PDF y DOCX se generan desde el mismo documento validado. PDF y DOCX contienen texto seleccionable y extraíble, no una captura de pantalla. Las pruebas automatizadas vuelven a leerlos con PDF.js y Mammoth para comprobar nombre, empresa y habilidades. La fuente estándar actual está orientada a alfabetos latinos; otros sistemas de escritura requieren una fuente portable adicional antes de poder considerarse soportados.

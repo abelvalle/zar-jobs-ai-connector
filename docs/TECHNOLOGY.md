@@ -76,3 +76,5 @@ La analítica del tracker usa contadores, cocientes y una mediana deterministas 
 La revisión recruiter reutiliza la validación, el banco de evidencias y la coincidencia literal existentes. La puntuación se calcula con aritmética JavaScript sobre presencia, longitudes, rutas, fechas y métricas visibles; no añade un modelo, servicio de IA, dataset de selección ni atributos demográficos. El prompt del cliente aporta la explicación cualitativa y debe conservar la misma frontera no predictiva.
 
 El coach de evidencia usa reglas locales reproducibles para detectar señales de acción, escala y resultado. La auditoría compara métricas literales y conserva términos nuevos para revisión; no usa un modelo embebido ni certifica la verdad del texto.
+
+Skills Radar normaliza texto y cuenta coincidencias literales sobre un catálogo local ampliable por el usuario. Reutiliza el banco SHA-256 del CV para enlazar evidencia; no incorpora scraping, telemetría, modelos, estadísticas inferenciales ni un dataset externo del mercado.
