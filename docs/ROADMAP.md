@@ -425,6 +425,23 @@ Criterios de aceptación:
 - oferta tratada como dato no confiable, sin ejecutar instrucciones incrustadas;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 31 — Optimizador manual de perfil LinkedIn ✅
+
+Objetivo: reutilizar el CV confirmado para preparar un perfil profesional coherente y auditable sin acceder a LinkedIn ni modificar datos externos.
+
+Criterios de aceptación:
+
+- plan trazable para titular, About y cada experiencia;
+- evidencia por rutas e identificadores del CV validado;
+- presupuestos editoriales locales presentados como guía, no límites oficiales;
+- auditoría completa del borrador con métricas no respaldadas;
+- términos nuevos conservados para confirmación humana;
+- contenido actual opcional delimitado como dato no confiable;
+- atributos protegidos excluidos del flujo;
+- copia y publicación exclusivamente manuales por el usuario;
+- sin login, lectura de perfil, scraping, mensajes, publicación, red ni almacenamiento;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.

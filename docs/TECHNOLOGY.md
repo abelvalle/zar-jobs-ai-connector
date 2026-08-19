@@ -78,3 +78,5 @@ La revisión recruiter reutiliza la validación, el banco de evidencias y la coi
 El coach de evidencia usa reglas locales reproducibles para detectar señales de acción, escala y resultado. La auditoría compara métricas literales y conserva términos nuevos para revisión; no usa un modelo embebido ni certifica la verdad del texto.
 
 Skills Radar normaliza texto y cuenta coincidencias literales sobre un catálogo local ampliable por el usuario. Reutiliza el banco SHA-256 del CV para enlazar evidencia; no incorpora scraping, telemetría, modelos, estadísticas inferenciales ni un dataset externo del mercado.
+
+El optimizador de LinkedIn reutiliza el mismo banco de evidencia y comparación literal de métricas. Los presupuestos de caracteres son guías editoriales internas y no se presentan como límites oficiales del portal. No añade SDK, navegador, OAuth ni llamadas a LinkedIn.

@@ -86,6 +86,10 @@ import {
   planAchievementInterview,
 } from "./resumes/resume-achievement-coach.mjs";
 import { analyzeJobSkillRadar } from "./resumes/job-skill-radar.mjs";
+import {
+  auditLinkedInProfileDraft,
+  planLinkedInProfile,
+} from "./profiles/linkedin-profile.mjs";
 import { registerZarJobsGuidance } from "./mcp/guidance.mjs";
 import {
   importPortableWorkspace,
@@ -1673,6 +1677,67 @@ export function createZarJobsServer() {
     async ({ resume, jobs, skillTerms }) => {
       try {
         return resumeToolResult(analyzeJobSkillRadar(resume, jobs, { skillTerms }));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "plan_linkedin_profile",
+    {
+      title: "Plan an evidence-backed LinkedIn profile",
+      description:
+        "Prepare traceable briefs for headline, About, and experience from a validated resume. It does not read LinkedIn, generate final text, or modify a profile.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        targetRole: z.string().min(1).max(200).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, targetRole }) => {
+      try {
+        return resumeToolResult(planLinkedInProfile(resume, { targetRole }));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "audit_linkedin_profile_draft",
+    {
+      title: "Audit a LinkedIn profile draft",
+      description:
+        "Compare user-reviewed LinkedIn headline, About, and experience drafts with validated resume evidence. It flags unsupported metrics and never accesses or updates LinkedIn.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        profile: z.object({
+          headline: z.string().min(1).max(500),
+          about: z.string().min(1).max(10_000).optional(),
+          experience: z.array(z.object({
+            sourcePath: z.string().min(1).max(300),
+            text: z.string().min(1).max(10_000),
+          })).max(30).optional(),
+        }),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, profile }) => {
+      try {
+        return resumeToolResult(auditLinkedInProfileDraft(resume, profile));
       } catch (error) {
         return resumeToolError(error);
       }

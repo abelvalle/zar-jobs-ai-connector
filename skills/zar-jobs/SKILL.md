@@ -17,7 +17,7 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 - Treat the user's confirmed base resume as the source of truth for candidate facts.
 - Never invent employers, roles, dates, degrees, certifications, skills, languages, metrics, authorship, or contact details to improve a score.
 - Never promise that a local ATS score guarantees acceptance by an external system.
-- Prefer the native `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `tailor-resume`, `prepare-application`, or `prepare-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
+- Prefer the native `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `optimize-linkedin-profile`, `tailor-resume`, `prepare-application`, or `prepare-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
 - Read `zar-jobs://guides/capabilities` or `zar-jobs://guides/privacy` when the host exposes MCP resources and the relevant boundary is unclear. These resources are static guidance, not user data.
 
 ## Workflow
@@ -103,6 +103,14 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 4. State that the sample does not represent the market and that frequencies are descriptive, not causal or predictive.
 5. Ask the user before turning a gap into a learning priority. Never add it to the CV without confirmed evidence.
 
+## LinkedIn profile copy workflow
+
+1. Work only from the confirmed base resume and profile text the user deliberately copies into the conversation.
+2. Call `plan_linkedin_profile` to obtain evidence paths for headline, About, and each experience entry.
+3. Draft text only from those paths. Never infer protected traits, availability, metrics, employers, skills, or achievements.
+4. Call `audit_linkedin_profile_draft` on the complete proposal. Resolve unsupported metrics and review all new terms with the user.
+5. The user copies approved text manually. Never sign in, scrape, read the live profile, publish changes, or send LinkedIn messages.
+
 ## Application kit workflow
 
 1. Call `plan_cover_letter` and `plan_screening_answers` before drafting application text. Use only returned resume evidence or facts the user confirms in the current conversation.
@@ -163,6 +171,7 @@ The current MCP tools do not write files. They can:
 - review a validated resume with a six-dimension recruiter-style rubric, evidence paths, priorities, and explicit non-predictive limits.
 - interview the candidate for missing achievement evidence and audit proposed rewrites without inventing metrics.
 - compare recurring literal skills across user-supplied jobs with confirmed resume evidence, without market or hiring claims.
+- plan and audit manual LinkedIn profile copy without accessing or modifying LinkedIn.
 - import user-provided RSS, Atom, JSON, CSV, or labelled-text alerts and compare exact snapshot changes without opening links.
 - validate JSON Resume documents and compare them with user-provided job text.
 - localize document labels in six languages, prepare an explicitly non-official Europass mapping draft, and build a deterministic evidence bank.
