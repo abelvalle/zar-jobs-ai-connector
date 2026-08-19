@@ -6,7 +6,7 @@ Conector local para buscar o importar ofertas de empleo y preparar currículums 
 
 ## Estado
 
-La versión 1.9.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
+La versión 2.0.0 se distribuye directamente desde este repositorio público como marketplace de Codex y Claude Code. El cliente de IA inicia un proceso MCP local por `stdio` cuando lo necesita y lo cierra al terminar.
 
 No hay servicio web, endpoint público, Docker, dominio, HTTPS de alojamiento ni base de datos que mantener.
 
