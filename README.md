@@ -66,6 +66,8 @@ La matriz completa y sus fuentes están en [docs/PORTAL-CAPABILITIES.md](docs/PO
 - `export_followup_calendar`: genera un calendario ICS local sin conectarse a servicios externos.
 - `plan_interview`: prepara temas, preguntas y evidencia trazable sin generar respuestas.
 - `audit_interview_answer`: revisa afirmaciones, estructura STAR y relevancia literal de un borrador.
+- `start_interview_simulation`: crea una práctica determinista de 3–10 preguntas, una por turno.
+- `review_interview_simulation`: resume respuestas pendientes, cobertura STAR y afirmaciones a revisar sin puntuar al candidato.
 - `review_resume_import`: compara un borrador con texto extraído de TXT, PDF o DOCX y deja cada campo pendiente de confirmación.
 - `validate_resume`: valida un documento JSON Resume sin guardarlo.
 - `review_resume_as_recruiter`: revisa seis dimensiones de primera criba y prioriza mejoras sin fingir un recruiter humano ni predecir contratación.
@@ -104,7 +106,7 @@ El proyecto nunca envía candidaturas, mensajes o cambios de perfil.
 
 ## Prompts y recursos MCP
 
-Los clientes compatibles descubren ocho flujos nativos: `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `optimize-linkedin-profile`, `tailor-resume`, `prepare-application` y `prepare-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
+Los clientes compatibles descubren nueve flujos nativos: `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `optimize-linkedin-profile`, `tailor-resume`, `prepare-application`, `prepare-interview` y `practice-interview`. También pueden leer guías locales de capacidades, privacidad y contrato del CV mediante recursos `zar-jobs://`. Todo se incluye en el paquete y funciona sin servidor ni red. Consulta [docs/MCP-EXPERIENCE.md](docs/MCP-EXPERIENCE.md).
 
 ## Currículums
 
@@ -138,7 +140,7 @@ La analítica del embudo usa solo fechas y dimensiones aportadas por el usuario,
 
 El workspace portable mueve CV, preferencias, ofertas y tracker entre clientes compatibles. Por defecto elimina contacto, notas libres y respuestas; el modo completo requiere consentimiento explícito en exportación e importación. Consulta [docs/PORTABLE-WORKSPACE.md](docs/PORTABLE-WORKSPACE.md).
 
-La preparación de entrevistas parte del CV confirmado: diferencia temas respaldados y lagunas, y audita borradores sin certificar su verdad o calidad. Consulta [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md).
+La preparación de entrevistas parte del CV confirmado: diferencia temas respaldados y lagunas, y audita borradores sin certificar su verdad o calidad. La simulación añade una secuencia de 3–10 preguntas, espera cada respuesta del candidato y cierra con observaciones descriptivas, nunca con una nota o predicción de contratación. Consulta [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md) y [docs/INTERVIEW-SIMULATOR.md](docs/INTERVIEW-SIMULATOR.md).
 
 ## Desarrollo
 
@@ -157,6 +159,7 @@ CI repite estas puertas con Node.js 22 en Linux, Windows y macOS. Las dependenci
 
 ## Documentación
 
+- [Novedades y evidencia de V2.0](docs/RELEASE-V2.0.md)
 - [Novedades y evidencia de V1.9](docs/RELEASE-V1.9.md)
 - [Novedades y evidencia de V1.8](docs/RELEASE-V1.8.md)
 - [Novedades y evidencia de V1.7](docs/RELEASE-V1.7.md)

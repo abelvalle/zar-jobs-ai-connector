@@ -40,6 +40,12 @@ import {
   planInterview,
 } from "./interviews/interview-tools.mjs";
 import {
+  INTERVIEW_QUESTION_LIMITS,
+  INTERVIEW_SIMULATION_VERSION,
+  reviewInterviewSimulation,
+  startInterviewSimulation,
+} from "./interviews/interview-simulator.mjs";
+import {
   auditApplicationText,
   planCoverLetter,
   planScreeningAnswers,
@@ -208,6 +214,27 @@ const indeedManualJobSchema = z.object({
 });
 
 const resumeDocumentSchema = z.record(z.string(), z.unknown());
+const interviewSimulationQuestionSchema = z.object({
+  id: z.string().min(1).max(50),
+  category: z.string().min(1).max(100),
+  prompt: z.string().min(1).max(2_000),
+  topic: z.string().min(1).max(200).optional(),
+  evidencePaths: z.array(z.string().min(1).max(500)).max(20),
+  source: z.string().min(1).max(100).optional(),
+});
+const interviewSimulationSchema = z.object({
+  version: z.literal(INTERVIEW_SIMULATION_VERSION),
+  mode: z.string().optional(),
+  target: z.object({
+    company: z.string().nullable(),
+    role: z.string().nullable(),
+    stage: z.enum(INTERVIEW_STAGES),
+  }).optional(),
+  questionCount: z.number().int().optional(),
+  questions: z.array(interviewSimulationQuestionSchema)
+    .min(INTERVIEW_QUESTION_LIMITS.min)
+    .max(INTERVIEW_QUESTION_LIMITS.max),
+});
 const portableWorkspaceSchema = z.record(z.string(), z.unknown());
 const jobRankingPreferencesSchema = z.object({
   titleKeywords: z.array(z.string().min(1).max(100)).max(50).optional(),
@@ -939,6 +966,84 @@ export function createZarJobsServer() {
           question,
           answer,
           jobDescription ?? "",
+        ));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "start_interview_simulation",
+    {
+      title: "Start an evidence-backed interview simulation",
+      description:
+        "Create a deterministic one-question-at-a-time practice session from a validated resume and user-provided job description. It generates no answers, hiring score, or prediction.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+        target: z.object({
+          company: z.string().min(1).max(200).optional(),
+          role: z.string().min(1).max(200).optional(),
+          stage: z.enum(INTERVIEW_STAGES).optional(),
+        }).optional(),
+        questionCount: z.number().int()
+          .min(INTERVIEW_QUESTION_LIMITS.min)
+          .max(INTERVIEW_QUESTION_LIMITS.max)
+          .optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription, target, questionCount }) => {
+      try {
+        return resumeToolResult(startInterviewSimulation(
+          resume,
+          jobDescription,
+          target,
+          questionCount,
+        ));
+      } catch (error) {
+        return resumeToolError(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "review_interview_simulation",
+    {
+      title: "Review an interview practice session",
+      description:
+        "Audit the candidate's supplied answers, report pending questions and structural coverage, and flag unsupported claims without producing a hiring score or prediction.",
+      inputSchema: {
+        resume: resumeDocumentSchema,
+        jobDescription: z.string().min(1).max(100_000),
+        simulation: interviewSimulationSchema,
+        answers: z.array(z.object({
+          questionId: z.string().min(1).max(50),
+          answer: z.string().min(1).max(100_000),
+        })).max(INTERVIEW_QUESTION_LIMITS.max).optional(),
+      },
+      outputSchema: { result: z.unknown() },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ resume, jobDescription, simulation, answers }) => {
+      try {
+        return resumeToolResult(reviewInterviewSimulation(
+          resume,
+          jobDescription,
+          simulation,
+          answers,
         ));
       } catch (error) {
         return resumeToolError(error);

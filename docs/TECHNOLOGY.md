@@ -80,3 +80,5 @@ El coach de evidencia usa reglas locales reproducibles para detectar señales de
 Skills Radar normaliza texto y cuenta coincidencias literales sobre un catálogo local ampliable por el usuario. Reutiliza el banco SHA-256 del CV para enlazar evidencia; no incorpora scraping, telemetría, modelos, estadísticas inferenciales ni un dataset externo del mercado.
 
 El optimizador de LinkedIn reutiliza el mismo banco de evidencia y comparación literal de métricas. Los presupuestos de caracteres son guías editoriales internas y no se presentan como límites oficiales del portal. No añade SDK, navegador, OAuth ni llamadas a LinkedIn.
+
+El simulador de entrevistas compone preguntas deterministas sobre el plan y las lagunas existentes. La sesión completa viaja en cada llamada: no usa base de datos, memoria de servidor, audio, vídeo, reconocimiento emocional ni un modelo de selección. La revisión agrega contadores descriptivos y reutiliza la auditoría de afirmaciones; nunca calcula una nota de contratación.

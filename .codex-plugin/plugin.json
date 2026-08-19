@@ -47,6 +47,7 @@
       "Application tracking",
       "Follow-up calendar export",
       "Interview preparation",
+      "Interactive interview simulation",
       "Resume privacy audit",
       "Application ZIP export",
       "Universal job alert inbox",
@@ -71,7 +72,7 @@
     "defaultPrompt": [
       "Review my CV with the recruiter-style rubric and prioritize truthful improvements.",
       "Compare these jobs with my explicit preferences and explain every ranking factor.",
-      "Prepare an evidence-backed interview plan for this role."
+      "Practice this interview one question at a time and audit only my own answers."
     ]
   },
   "mcpServers": "./.mcp.json"

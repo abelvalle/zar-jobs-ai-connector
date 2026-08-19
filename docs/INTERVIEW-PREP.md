@@ -28,3 +28,7 @@ Estas comprobaciones tienen límites deliberados:
 - una estructura STAR completa no convierte una afirmación sin respaldo en válida.
 
 Todas las respuestas mantienen `truthVerified: false` y requieren revisión humana.
+
+## Práctica por turnos
+
+`start_interview_simulation` y `review_interview_simulation` reutilizan este mismo contrato para practicar una pregunta cada vez. La sesión no se guarda y no contiene una respuesta ideal ni una puntuación. Consulta [INTERVIEW-SIMULATOR.md](INTERVIEW-SIMULATOR.md) para el flujo completo y sus límites.

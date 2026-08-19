@@ -17,7 +17,7 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 - Treat the user's confirmed base resume as the source of truth for candidate facts.
 - Never invent employers, roles, dates, degrees, certifications, skills, languages, metrics, authorship, or contact details to improve a score.
 - Never promise that a local ATS score guarantees acceptance by an external system.
-- Prefer the native `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `optimize-linkedin-profile`, `tailor-resume`, `prepare-application`, or `prepare-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
+- Prefer the native `review-job`, `review-resume-as-recruiter`, `strengthen-resume-achievements`, `analyze-skills-radar`, `optimize-linkedin-profile`, `tailor-resume`, `prepare-application`, `prepare-interview`, or `practice-interview` prompt when the host exposes MCP prompts. They preserve the same consent and evidence boundaries; they do not grant additional authority.
 - Read `zar-jobs://guides/capabilities` or `zar-jobs://guides/privacy` when the host exposes MCP resources and the relevant boundary is unclear. These resources are static guidance, not user data.
 
 ## Workflow
@@ -152,7 +152,9 @@ Use Zar Jobs AI Connector for job discovery and review through official or expli
 2. For gaps, ask the user for truthful evidence or prepare an explicit no-experience response. Never invent a STAR story, metric, tool, or responsibility.
 3. Draft an answer only from selected evidence and current-conversation facts, then call `audit_interview_answer`.
 4. Resolve every flagged claim. Treat STAR and relevance checks as limited structural hints, never proof of truth or answer quality.
-5. Do not record audio or video, profile the interviewer or candidate, or score hiring suitability.
+5. For a full practice, call `start_interview_simulation`, ask exactly one returned question, and wait for the candidate's own answer. Never supply an answer on the candidate's behalf.
+6. After the final turn, call `review_interview_simulation`. Present pending counts, claim flags, and STAR coverage only as observations about that session.
+7. Do not record audio or video, profile the interviewer or candidate, score hiring suitability, rank the person, or predict hiring.
 
 ## Current version
 
@@ -192,6 +194,7 @@ The current MCP tools do not write files. They can:
 - review up to 500 in-memory application records, plan an explicit update, and export follow-ups as ICS without persistence or account access.
 - calculate a descriptive application funnel and segment it by declared portal, role, resume variant, or fit band without causal claims, ranking, or persistence.
 - plan interview preparation from traceable CV evidence and audit a draft answer without certifying truth or hiring quality.
+- run a deterministic one-question-at-a-time interview practice and review only candidate-supplied answers without a hiring score or prediction.
 - review, export, and import a versioned portable workspace with redaction, credential rejection, checksums, and explicit personal-data consent.
 
 Automated LinkedIn or Indeed search and account-linked status checks are unavailable. Tecnoempleo remains limited to the user's own RSS alert by product decision.

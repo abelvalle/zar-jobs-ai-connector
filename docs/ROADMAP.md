@@ -442,6 +442,23 @@ Criterios de aceptación:
 - sin login, lectura de perfil, scraping, mensajes, publicación, red ni almacenamiento;
 - pruebas unitarias y smoke local y portable en verde.
 
+## Hito 32 — Simulador de entrevistas V2.0 ✅
+
+Objetivo: practicar entrevistas completas por turnos con preguntas derivadas de evidencia y lagunas reales, sin responder por el candidato ni convertir la práctica en una decisión de selección.
+
+Criterios de aceptación:
+
+- sesiones deterministas de 3 a 10 preguntas para seis fases;
+- una pregunta por turno y espera explícita de la respuesta del candidato;
+- rutas del CV visibles en cada pregunta respaldada;
+- lagunas convertidas en oportunidades para una respuesta honesta, no experiencia inventada;
+- auditoría individual de cada respuesta mediante el contrato existente;
+- resumen de pendientes, revisiones y cobertura STAR limitado a la sesión;
+- sin respuesta ideal automática, nota de contratación, ranking ni predicción;
+- oferta delimitada como dato no confiable;
+- sin atributos protegidos, audio, vídeo, login, red, escritura ni almacenamiento;
+- pruebas unitarias y smoke local y portable en verde.
+
 ## Releases
 
 Cada versión estable alinea `develop` y `master`, actualiza ambos manifiestos y fija la misma etiqueta en `.mcp.json`.
